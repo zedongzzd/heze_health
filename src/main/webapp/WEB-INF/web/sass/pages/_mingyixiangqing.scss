@@ -1,0 +1,114 @@
+.specialist{
+    position: relative;
+    height: rem(310px);
+    background: url(../img/专家详情_01.png)center center no-repeat;
+    background-size: 100%;
+    .icon{
+        position: absolute;
+        height: rem(88px);
+    }
+    .icon-back{
+        background-position: rem(20px);
+    }
+    .icon-share{
+        right: 0;
+    }
+    .portrait{
+        height: rem(118px);
+        width: rem(118px);
+        top: rem(70px);
+        left: rem(250px);
+        border-radius: rem(58px);
+    }
+    label{
+        display: inline-block;
+    }
+    .info{
+        position: absolute;
+        bottom: 0;
+        left: rem(160px);
+        height: rem(100px);
+        width: rem(320px);
+        .doctor-name{
+            width: rem(110px);
+        }
+        .interest{
+            line-height: rem(46px);
+            margin-left: rem(70px);
+        }
+        .score{
+            line-height: rem(46px);
+            margin-left: rem(55px);
+        }
+    }
+}
+.paibanbiao-content{
+    padding: rem(20px) 0;
+    height: rem(220px);
+
+    line-height: rem(220px);
+    background-color: white;
+    border-bottom: 1px solid #ccc;
+    .duty-roster{
+        margin: 0 auto;
+
+    }
+    .duty-roster,td,tr,th{
+    text-align: center;
+    border: 1px solid #ccc;
+    color: #666;
+
+    th,tr{
+        height: rem(70px);
+        width: rem(150px);
+    }
+
+}
+}
+
+.summary{
+    padding: rem(10px) 0;
+    @extend .bg-white;
+    border-bottom: 1px solid #ccc;
+    width:100%;
+    label{
+        display: inline-block;
+        line-height: rem(48px);
+        margin-left:rem(20px);
+    }
+    .title1{
+      max-width:rem(400px);
+      min-width:rem(400px);
+
+      @extend .ellipsis;
+    }
+    .title2{
+
+        max-width:rem(180px);
+        @extend .ellipsis;
+    }
+    .inro{
+      margin: 0 rem(20px);
+      text-align: justify;
+    }
+    .text{
+
+    }
+    .icon-list{
+
+    }
+}
+.content-appointment{
+    height: rem(88px);
+    line-height: rem(88px);
+    span{
+        display: inline-block;
+    }
+    .date1{
+        width: rem(130px);
+        padding-left: rem(60px);
+    }
+    .date2{
+        width: rem(180px);
+    }
+}

@@ -1,0 +1,321 @@
+.famous-depart-list>a{
+  @extend .fl;
+  width: 50%;
+
+  &:after{
+    @extend .clearfix-after;
+  }
+}
+
+.famous-depart-list{
+  position:relative;
+  padding: 0 rem(20px);
+  @extend .bg-white;
+  @extend .fl;
+  overflow: hidden;
+  
+
+  .famous-depart-img{
+    width: rem(80px);
+    width: rem(80px);
+    margin: rem(25px) rem(30px) rem(25px) rem(50px) ;
+  }
+
+  &:before{
+    content : "";
+    position:absolute;
+    width:1px;
+    height:100%;
+    background:#eaeef2;
+    left:50%;
+  }
+
+  &:after{
+    @extend .clearfix-after;
+  }
+
+  .famous-depart-item{
+    width: 50%;
+    height: rem(130px);
+    box-sizing: border-box;
+    @extend .fl;
+    @include flexbox-parent;
+
+
+
+    &:after{
+      @extend .clearfix-after;
+    }
+
+    .icon{
+      height: inherit;
+      margin: 0 rem(30px) 0 rem(50px);
+      @extend .fl;
+
+      &:after{
+        @extend .clearfix-after;
+      }
+    }
+
+    .content{
+      @include vertical-center(rem(130px));
+      @extend .fl;
+      @include flexbox-child;
+
+      &:after{
+        @extend .clearfix-after;
+      }
+    }
+  }
+}
+.view-famous-depart{
+  .famous-doctor-list{
+    float:none;
+  }
+}
+
+.famous-doctor-list{
+  @extend .bg-white;
+  @extend .fl;
+  width: 100%;
+
+  &:after{
+    @extend .clearfix-after;
+  }
+
+  .famous-doctor-item{
+    width: 100%;
+    @extend .fl;
+    position: relative;
+    padding: rem(20px) 0;
+    @include flexbox-parent;
+
+    &:after{
+      @extend .clearfix-after;
+      content: " ";
+      display: block;
+      width: 100%;
+      height: 1px;
+      background: #ccc;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+    img{
+      width:rem(110px);
+      height: rem(110px);
+      margin-right: rem(25px);
+      border-radius: rem(55px);
+      @extend .fl;
+      @extend .ml20;
+
+      &:after{
+        @extend .clearfix-after;
+      }
+    }
+
+    .doctor-info{
+      @extend .fl;
+      @extend .fz24;
+      line-height: rem(24px);
+      @include flexbox-child(1);
+
+      &:after{
+        @extend .clearfix-after;
+      }
+
+      .info-name{
+        color: #bbb;
+
+        span.name{
+          @extend .fz30;
+          color: black;
+          margin-right: rem(30px);
+        }
+      }
+
+      .info-hosp{
+        margin-top: rem(25px);
+
+        &:after{
+          @extend .clearfix-after;
+        }
+        &>div{
+          @extend .fl;
+          @extend .ellipsis;
+
+        }
+
+        .info-hospName{
+          width:rem(290px);
+          margin-right:rem(30px);
+        }
+
+        .info-departName{
+          width:rem(145px);
+          overflow: hidden;
+          white-space: nowrap;
+        }
+      }
+
+      .info-specialty{
+        color: #bcbcbc;
+        @extend .mt15;
+        @extend .fl;
+      }
+
+    }
+
+    .register{
+      width: rem(100px);
+      @include vertical-center(45px);
+      text-align: center;
+      @extend .fc-green;
+      box-sizing: border-box;
+      border: 1px solid $green;
+      border-radius: rem(10px);
+      position: absolute;
+      right:rem(20px);
+      bottom: 0.3125rem;
+      font-size: rem(24px);
+    }
+
+    .doctor-schedule{
+      width: rem(460px);
+      height:rem(70px);
+      overflow: hidden;
+      overflow-x: scroll;
+      @extend .mt20;
+      @extend .fl;
+
+
+      &:after{
+        @extend .clearfix-after;
+      }
+
+      .schedule-list{
+        @extend .fl;
+
+
+        &:after{
+          @extend .clearfix-after;
+        }
+
+        .schedule-item:first-child{
+          margin:0;
+        }
+
+        .schedule-item{
+          width: rem(100px);
+          height: rem(70px);
+          @extend .ml20;
+          @extend .fl;
+          text-align: center;
+          font-size: rem(24px);
+
+          &:after{
+            @extend .clearfix-after;
+          }
+
+          .item-date{
+            width: 100%;
+            @include vertical-center(rem(30px));
+            background: $green;
+            color:white;
+            font-size: rem(24px);
+            @extend .fl;
+
+            &:after{
+              @extend .clearfix-after;
+            }
+          }
+
+          .item-num{
+            width: 100%;
+            @include vertical-center(rem(40px));
+            border-width: 0px 1px 1px 1px;
+            border-style: solid;
+            box-sizing: border-box;
+            border-color: #ccc;
+            @extend .fl;
+
+            &:after{
+              @extend .clearfix-after;
+            }
+          }
+        }
+      }
+    }
+
+  }
+}
+
+.view-number-source{
+  .famous-doctor-item{
+    display: block;
+  }
+}
+
+.view-famous-depart{
+
+  .famous-doctor-list{
+    @extend .bg-white;
+
+    .famous-doctor-item{
+      padding-top: rem(40px);
+      padding-bottom:rem(65px);
+      &:before{
+        content: " ";
+        display: block;
+        height: rem(20px);
+        width: 100%;
+        background: $bgc;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+
+      .attention.green{
+        color: $green;
+
+      }
+
+      .attention{
+        width: rem(110px);
+        @include vertical-center(rem(50px));
+        @extend .fz24;
+        text-align: center;
+        position:absolute;
+        left:0;
+        bottom:rem(20px);
+        @extend .ml20;
+
+        &:after{
+          @extend .clearfix-after;
+        }
+      }
+
+    }
+  }
+}
+
+.view-favorite-doctor .famous-doctor-list .famous-doctor-item .attention{
+  width: rem(110px);
+  @include vertical-center(rem(50px));
+  @extend .fz24;
+  text-align: center;
+  position:absolute;
+  left:0;
+  bottom:rem(20px);
+  right:rem(20px);
+
+  &:after{
+    @extend .clearfix-after;
+  }
+}
+
+.view-doctor .famous-doctor-list .famous-doctor-item .register{
+  top:rem(20px);
+}

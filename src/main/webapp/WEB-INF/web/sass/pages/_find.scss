@@ -1,0 +1,169 @@
+.menu1{
+  @extend .full-width;
+  @extend .border-box;
+
+  .inspection{
+    width: rem(280px);
+    @include vertical-center(127px);
+    text-align: center;
+    margin: 0 auto;
+
+
+    .icon-green-inspection,.icon-green-inspection-report{
+      height: rem(127px);
+      @extend .fl;
+      margin-right: rem(20px);
+
+      &:after{
+        @extend .clearfix-after;
+      }
+
+
+    }
+
+    .content{
+      @include vertical-center(62px);
+      @extend .fl;
+
+      &:after{
+        @extend .clearfix-after;
+      }
+    }
+
+    .sub-name{
+      margin-top:rem(8px);
+      @extend .fz24;
+      @extend .fc-grey;
+    }
+  }
+}
+
+.menu2{
+  width: 50%;
+  height: rem(140px);
+  @extend .fl;
+  @extend .border-box;
+  @include horizontal-center-parent;
+
+  &:after{
+    @extend .clearfix-after;
+  }
+
+
+  .guide{
+    @include horizontal-center-child(rem(210px),rem(60px));
+
+    .icon-guide{
+      height: rem(60px);
+      @extend .fl;
+      margin-right: rem(20px);
+
+      &:after{
+        @extend .clearfix-after;
+      }
+    }
+
+    .content{
+      line-height: rem(60px);
+      @extend .fl;
+
+      &:after{
+        @extend .clearfix-after;
+      }
+    }
+
+  }
+
+  .pharmacy{
+    @include horizontal-center-child(rem(160px),rem(53px));
+
+    .icon-pharmacy{
+      height:rem(53px);
+      @extend .fl;
+      margin-right: rem(36px);
+
+      &:after{
+        @extend .clearfix-after;
+      }
+    }
+
+    .content{
+      line-height: rem(53px);
+      @extend .fl;
+
+      &:after{
+        @extend .clearfix-after;
+      }
+    }
+  }
+}
+
+.report {
+  overflow-x: scroll;
+  background: white;
+  font-size: 24px;
+
+  .report-content>div{
+    margin: 30px 0 10px;
+    padding: 0 20px;
+    width: 1280px;
+    @extend .fl;
+  }
+
+  table{
+    width: 1260px;
+    text-align: center;
+    margin: 0 20px;
+    border: 1px solid #ccc;
+
+    thead{
+      color: #666;
+    }
+    th,td{
+      height: 70px;
+      border-right: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+    }
+
+    th:last-child, td:last-child {
+      border-right: none;
+    }
+  }
+
+  .report-item{
+    width: 420px;
+    @extend .fl;
+
+    &:after{
+      @extend .clearfix-after;
+    }
+  }
+
+  .exam{
+    margin: 20px;
+    @extend .fl;
+    border: 1px solid #ccc;
+
+    &:after{
+      @extend .clearfix-after;
+    }
+
+    .exam-row{
+      @extend .fl;
+      padding: 10px;
+      line-height: 34px;
+
+      &:after{
+        @extend .clearfix-after;
+      }
+    }
+  }
+}
+
+.b1{
+  height: 1px;
+  background: #ccc;
+}
+.examD.report .report-content > div{
+  width: inherit;
+}

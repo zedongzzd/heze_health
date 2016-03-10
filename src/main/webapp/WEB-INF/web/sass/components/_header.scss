@@ -1,0 +1,49 @@
+header{
+  height: rem(88px);
+  @extend .bg-white;
+  border-bottom: 1px solid #ccc;
+  @include flexbox-parent;
+  box-sizing: border-box;
+
+  .icon{
+    width:rem(70px);
+    height: inherit;
+    @extend .fl;
+  }
+
+  .icon-left{
+    background-position: rem(20px);
+  }
+
+  .icon-right.icon-menu,.icon-right.icon-close{
+    background-position: rem(70px - 36px - 20px);
+  }
+
+  .title{
+    @extend .fz36;
+    text-align: center;
+    color: $green;
+    @include vertical-center(rem(88px));
+    @include flexbox-child;
+  }
+}
+
+
+
+.newest-msg{
+  background: $orange;
+  height: rem(75px);
+
+  .title{
+    @extend .fc-white;
+    @extend .fz30;
+    text-align: left;
+    @include vertical-center(75px);
+  }
+
+  .icon{
+    height: inherit;
+  }
+
+}
+

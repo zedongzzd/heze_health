@@ -1,0 +1,58 @@
+footer{
+  width: 100%;
+  height:rem(100px);
+  @extend .bg-white;
+  border-top: 1px solid #ccc;
+}
+
+footer a{
+  height: rem(100px);
+  width: 25%;
+  text-align: center;
+  @extend .fl;
+  @extend .fz24;
+}
+
+footer a.active{
+  color: $green;
+}
+
+footer a:before{
+  content:" ";
+  width:rem(56px);
+  height: rem(46px);
+  margin:rem(10px) auto;
+  display: block;
+}
+
+footer a.mine:before{
+  @extend .icon-mine;
+}
+
+footer a.register:before{
+  @extend .icon-register;
+}
+
+footer a.find:before{
+  @extend .icon-find;
+}
+
+footer a.doctor:before{
+  @extend .icon-doctor;
+}
+
+footer a.active.mine:before{
+  @extend .icon-mine-active;
+}
+
+footer a.active.register:before{
+  @extend .icon-register-active;
+}
+
+footer a.active.find:before{
+  @extend .icon-find-active;
+}
+
+footer a.active.doctor:before{
+  @extend .icon-doctor-active;
+}
