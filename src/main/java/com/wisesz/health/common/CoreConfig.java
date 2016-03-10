@@ -26,6 +26,7 @@ public class CoreConfig extends JFinalConfig {
 	// 配置常量值
 	@Override
 	public void configConstant(Constants me) {
+
 		// 开发者模式
 		me.setDevMode(Boolean.valueOf(systemConfig.getProperty("developMode", "true")));
 		// 编码
