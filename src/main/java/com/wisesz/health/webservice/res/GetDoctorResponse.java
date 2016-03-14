@@ -14,7 +14,7 @@ public class GetDoctorResponse extends Dom {
 	private static final long serialVersionUID = 1L;
 	private Integer ResultCode;
 	private String ErrorMsg;
-	private Doctors Doctor;
+	private Doctors Doctors;
 
 	public Integer getResultCode() {
 		return ResultCode;
@@ -32,11 +32,12 @@ public class GetDoctorResponse extends Dom {
 		ErrorMsg = errorMsg;
 	}
 
-	public Doctors getDoctor() {
-		return Doctor;
+	public Doctors getDoctors() {
+		return Doctors;
 	}
 
-	public void setDoctor(Doctors doctor) {
-		Doctor = doctor;
+	public void setDoctors(Doctors doctors) {
+		Doctors = doctors;
 	}
+
 }
