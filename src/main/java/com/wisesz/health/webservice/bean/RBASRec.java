@@ -21,7 +21,7 @@ public class RBASRec extends Dom {
 	private String ResNo;
 	// 可挂号数
 	private Integer Remain;
-
+	
 	public String getRBASId() {
 		return RBASId;
 	}
