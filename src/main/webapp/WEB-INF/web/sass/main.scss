@@ -1,5 +1,4 @@
 @charset "UTF-8";
-
 // compass 工具库
 @import "compass/utilities";
 // 基础引用
@@ -8,24 +7,9 @@
 @import "./helpers/functions";
 @import "./helpers/mixins";
 @import "./helpers/base";
-@import "./helpers/icons";
 // 组件
-@import "./components/header";
-@import "./components/footer";
-@import "./components/banner";
-@import "./components/search";
-@import "./components/dialogs";
-@import "./components/evaluate-star";
+@import "../js/components/header/header";
 // 页面
-@import "./pages/register";
-@import "./pages/doctor";
-@import "./pages/find";
-@import "./pages/mine";
-@import "./pages/mingyixiangqing";
-@import "./pages/notice";
-@import "./pages/help";
-
-@import "./amazeui";
 
 html{
   background: $bgc;
