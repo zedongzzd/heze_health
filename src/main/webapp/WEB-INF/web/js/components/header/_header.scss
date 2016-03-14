@@ -1,0 +1,8 @@
+header{
+  height: rem(188px);
+  @extend .bg-white;
+  border-bottom: 1px solid #ccc;
+  @include flexbox-parent;
+  box-sizing: border-box;
+
+}
