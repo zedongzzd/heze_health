@@ -2,7 +2,11 @@ package com.wisesz.health.webservice.res;
 
 import com.wisesz.health.webservice.bean.UserInfo;
 
-public class HisCheckPatientInfoResponse {
+import me.zzd.webapp.core.annotation.BindDom;
+import me.zzd.webapp.core.dom.Dom;
+
+@BindDom("Response")
+public class HisCheckPatientInfoResponse  extends Dom {
 	private Integer ResultCode;
 	private String ErrorMsg;
 	private UserInfo UserInfo;
