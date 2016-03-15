@@ -122,7 +122,6 @@ public class ManageController extends Controller {
 				d.setTitle(doc.getDoctorTitle());
 				d.setAddress(doc.getAdmitAddress());
 				d.setDeptId(doc.getDeptId());
-				d.setDept(doc.getDept());
 				batchs.add(d);
 			}
 			if (batchs.size() > 0) {
