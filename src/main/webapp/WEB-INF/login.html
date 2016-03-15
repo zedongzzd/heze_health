@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="utf8" data-ng-app="app">
+
+<head>
+<meta charset="utf-8" />
+<title>智慧医疗—后台登陆</title>
+<meta name="description" content="智慧医疗,无线苏州" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" href="/static/css/bootstrap.min.css"
+	type="text/css" />
+<link rel="stylesheet" href="/static/css/animate.css" type="text/css" />
+<link rel="stylesheet" href="/static/css/app.css" type="text/css" />
+</head>
+
+<body>
+	<div class="fade-in-right-big smooth">
+		<div class="container w-xxl w-auto-xs"
+			ng-controller="SigninFormController"
+			ng-init="app.settings.container = false;">
+			<a href class="navbar-brand block m-t">智慧医疗</a>
+			<div class="m-b-lg">
+				<div name="form" class="form-validation">
+					<div class="wrapper text-center" ng-class="authClass"
+						ng-show="authError" ng-bind="authError"></div>
+					<div class="list-group list-group-sm">
+						<div class="list-group-item">
+							<input type="text" placeholder="用户名"
+								class="form-control no-border" ng-model="user.name" required>
+						</div>
+						<div class="list-group-item">
+							<input type="password" placeholder="密码"
+								class="form-control no-border" ng-model="user.password" required>
+						</div>
+					</div>
+					<button type="submit" class="btn-lg btn-primary btn-block"
+						ng-click="login()" ng-disabled='form.$invalid'>登陆</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Angular -->
+	<script src="/static/js/angular.min.js"></script>
+	<script type="text/javascript">
+		'use strict';
+		var app = angular.module('app', []);
+		app.controller('SigninFormController', [ '$scope', '$http',
+				'$location', function($scope, $http, $location) {
+					$scope.user = {};
+					$scope.authError = "登陆你的账号";
+					$scope.authClass = "text-primary";
+					$scope.login = function() {
+						$http.post('/manage/doLogin', {
+							name : $scope.user.name,
+							password : $scope.user.password
+						}).then(function(response) {
+							var data = response.data;
+							if (data) {
+								if (data.resultCode == 0) {
+									$scope.authError = null;
+									$scope.authClass = "text-primary";
+									window.location.href = "${goto!'/manage'}";
+								} else {
+									$scope.authError = data.resultMsg;
+									$scope.authClass = "text-danger";
+									$scope.user = {};
+								}
+							} else {
+								$scope.authError = '服务器异常，请联系管理员';
+								$scope.authClass = "text-danger";
+							}
+						}, function(x) {
+							$scope.authError = '服务器异常，请联系管理员';
+							$scope.authClass = "text-danger";
+						});
+					};
+				} ]);
+	</script>
+</body>
+
+</html>
