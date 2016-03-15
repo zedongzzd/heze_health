@@ -1,5 +1,7 @@
 package com.wisesz.health.interceptor;
 
+import java.io.Serializable;
+
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
@@ -16,7 +18,11 @@ import com.wisesz.health.handler.StringHandler;
  *
  */
 public class ManageLoginInterceptor implements Interceptor {
-	public static class LoginUser {
+	public static class LoginUser implements Serializable{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		public String userName;
 		public String userPwd;
 	}
@@ -26,18 +32,22 @@ public class ManageLoginInterceptor implements Interceptor {
 		Controller c = inv.getController();
 		String flag = HttpHandler.getCookie(c.getRequest(), Const.Manage_Fag);
 		if (StringHandler.isEmpty(flag)) {
+			doIntercept(c);
+			return;
 		}
 		Object o = CacheHandler.cache(Const.Cache_Name_login, flag);
-
-		if (o!=null&&o instanceof LoginUser) {
-			if ("POST".equalsIgnoreCase(c.getRequest().getMethod().toUpperCase())) {
-				c.renderJson(RespFactory.newInstance(-500, "尚未登录！", null));
-			} else {
-				c.render("login.html");
-			}
-		} else {
+		if (o != null && o instanceof LoginUser) {
 			inv.invoke();
+		} else {
+			doIntercept(c);
 		}
 	}
 
+	public void doIntercept(Controller c) {
+		if ("POST".equalsIgnoreCase(c.getRequest().getMethod().toUpperCase())) {
+			c.renderJson(RespFactory.newInstance(-500, "尚未登录！", null));
+		} else {
+			c.render("login.html");
+		}
+	}
 }

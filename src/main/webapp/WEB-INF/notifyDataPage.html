@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="utf8">
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+	</head>
+
+	<body class="container container-fluid">
+		<div class="panel panel-default">
+			<div class="panel-heading">后台操作输出：<a style="color:blue;" onclick="$('#console').html('')">清空</a></div>
+			<div id="console" class="panel-body" style="min-height: 200px;max-height: 300px;overflow-x:hidden;overflow-y:auto;">
+			</div>
+		</div>
+		<h4><a class="btn btn-info" onclick="updateDepts();">同步更新科室</a></h4>
+		<h4><a class="btn btn-info" onclick="updateDocs();">同步更新医生</a></h4>
+		<script type="text/javascript" src="/static/js/jquery-1.11.0.js"></script>
+		<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+		<script type="text/javascript">
+			function updateDepts() {
+				//loading层
+				var index = layer.load(1, {
+					shade: [0.1, '#fff'] //0.1透明度的白色背景
+				});
+				$.ajax({
+					type: "POST",
+					url: "/manage/notifyDepts",
+					async: false,
+					success: function(data) {
+						if (data) {
+							$("#console").append($("<div>").html(data.resultMsg));
+						} else {
+							$("#console").append($("<div>").html("服务器出错，请联系管理员！"));
+						}
+					},
+					error: function() {
+						$("#console").append($("<div>").html("服务器连接异常，请检测网络！"));
+					}
+				});
+				layer.close(index);
+			}
+
+			function updateDocs() {
+				//loading层
+				var index = layer.load(1, {
+					shade: [0.1, '#fff'] //0.1透明度的白色背景
+				});
+				var list;
+				$.ajax({
+					type: "POST",
+					url: "/manage/getDepts",
+					async: false,
+					success: function(data) {
+						if (data) {
+							list = data.obj;
+							$("#console").append($("<div>").html(data.resultMsg));
+						} else {
+							$("#console").append($("<div>").html("服务器出错，请联系管理员！"));
+						}
+					},
+					error: function() {
+						$("#console").append($("<div>").html("服务器连接异常，请检测网络！"));
+					}
+				});
+				if (list && list.length > 0) {
+					for (var i in list) {
+						console.log(list[i]);
+						$.ajax({
+							type: "POST",
+							url: "/manage/notifyDocs",
+							async: true,
+							data: {
+								deptId: list[i].deptId
+							},
+							success: function(data) {
+								if (data) {
+									$("#console").append($("<div>").html(data.resultMsg));
+								} else {
+									$("#console").append($("<div>").html("服务器出错，请联系管理员！"));
+								}
+							},
+							error: function() {
+								$("#console").append($("<div>").html("服务器连接异常，请检测网络！"));
+							}
+						});
+					}
+				}
+				layer.close(index);
+			}
+		</script>
+	</body>
+
+</html>

@@ -11,6 +11,7 @@ public class Patient extends Model<Patient> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static Patient dao = new Patient();
 
 	public String getPatientId() {
 		return getStr("patientId");

@@ -11,5 +11,5 @@ public class Schedual extends Model<Schedual> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	public static Schedual dao = new Schedual();
 }

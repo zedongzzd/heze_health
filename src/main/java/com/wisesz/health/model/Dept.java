@@ -11,6 +11,7 @@ public class Dept extends Model<Dept> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static Dept dao = new Dept();
 
 	public String getDeptId() {
 		return getStr("deptId");

@@ -3,8 +3,6 @@
 
 <head>
 <meta charset="utf-8" />
-<title>智慧医疗—后台登陆</title>
-<meta name="description" content="智慧医疗,无线苏州" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
 <link rel="stylesheet" href="/static/css/bootstrap.min.css"
@@ -59,7 +57,7 @@
 								if (data.resultCode == 0) {
 									$scope.authError = null;
 									$scope.authClass = "text-primary";
-									window.location.href = "${goto!'/manage'}";
+									window.location.href = "/manage/notifyDataPage";
 								} else {
 									$scope.authError = data.resultMsg;
 									$scope.authClass = "text-danger";
