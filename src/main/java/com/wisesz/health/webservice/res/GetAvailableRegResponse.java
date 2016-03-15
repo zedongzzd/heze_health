@@ -2,9 +2,11 @@ package com.wisesz.health.webservice.res;
 
 import com.wisesz.health.webservice.bean.RBAS;
 
+import me.zzd.webapp.core.annotation.BindDom;
 import me.zzd.webapp.core.dom.Dom;
 
-public class GetAvailableRegResponse extends Dom{
+@BindDom("Response")
+public class GetAvailableRegResponse extends Dom {
 	/**
 	 * 
 	 */

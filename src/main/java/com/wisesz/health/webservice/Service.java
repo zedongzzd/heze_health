@@ -1,16 +1,25 @@
 package com.wisesz.health.webservice;
 
+import java.io.IOException;
+
 import com.wisesz.health.webservice.bean.RBAS;
 import com.wisesz.health.webservice.bean.RBASRec;
+import com.wisesz.health.webservice.bean.UserInfo;
+import com.wisesz.health.webservice.req.DoRegisterRequest;
 import com.wisesz.health.webservice.req.GetArrangementRequest;
 import com.wisesz.health.webservice.req.GetAvailableRegCountRequest;
+import com.wisesz.health.webservice.req.GetAvailableRegRequest;
 import com.wisesz.health.webservice.req.GetDeptRequest;
 import com.wisesz.health.webservice.req.GetDoctorRequest;
+import com.wisesz.health.webservice.req.HisCheckPatientInfoRequest;
 import com.wisesz.health.webservice.req.Request;
+import com.wisesz.health.webservice.res.DoRegisterResponse;
 import com.wisesz.health.webservice.res.GetArrangementResponse;
 import com.wisesz.health.webservice.res.GetAvailableRegCountResponse;
+import com.wisesz.health.webservice.res.GetAvailableRegResponse;
 import com.wisesz.health.webservice.res.GetDeptResponse;
 import com.wisesz.health.webservice.res.GetDoctorResponse;
+import com.wisesz.health.webservice.res.HisCheckPatientInfoResponse;
 
 import me.zzd.webapp.core.dom.XmlDocument;
 import me.zzd.webapp.core.dom.XmlElement;
@@ -54,24 +63,10 @@ public class Service {
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		GetArrangementResponse str = Service.getArrangement("20009030500001", "2016-03-15", "7", "1", "19");
-		RBAS rbas = str.getRBAS();
-		
-		
-		RBASRec[] ss = rbas.getRBASRec();
-		System.out.println(ss.length);
-		// RBAS rBAS=new RBAS();
-		// RBASRec rbasRec=new RBASRec();
-		// rbasRec.setRBASId("2016031529");
-		// rbasRec.setRBASDate("2016-3-15");
-		// rbasRec.setDeptId("29");
-		// //rbasRec.set
-		// RBASRec [] aaRecs={rbasRec};
-		// rBAS.setRBASRec(aaRecs);
-		// Service.getAvailableRegCount("002737", rBAS);
-
-	}
+//	public static void main(String[] args) {
+//		DoRegisterResponse response = Service.getDoRegister("0000763210", "2||130", "100001156498", "20090408",
+//				"15965872016", "CCB", null, "1");
+//	}
 
 	/**
 	 * 
@@ -115,8 +110,6 @@ public class Service {
 			request.setDoctorId(doctorId);
 			request.setDeptId(deptId);
 			Request message = new Request("I_00102", request);
-			System.out.println(SoapClient.connect(new HezeMessage(message.toDocument())).replaceAll("&lt;", "<")
-					.replaceAll("&gt;", ">"));
 			arrangement.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -125,7 +118,6 @@ public class Service {
 		return arrangement;
 	}
 
-	
 	/**
 	 * 1.4 查询可挂号数（医院无限号）
 	 * 
@@ -140,12 +132,95 @@ public class Service {
 			request.setTransactionId(transactionId);
 			request.setRBAS(rBAS);
 			Request message = new Request("I_00105", request);
-			System.out.println(SoapClient.connect(new HezeMessage(message.toDocument())).replaceAll("&lt;", "<")
-					.replaceAll("&gt;", ">"));
 			countResponse.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return countResponse;
+	}
+
+	/**
+	 * 1.5 查询可挂序列号（需要HIS支持，目前暂不支持）
+	 * 
+	 * @param transactionId
+	 * @param rBAS
+	 * @return
+	 */
+	public static GetAvailableRegResponse getAvailableReg(String transactionId, RBAS rBAS) {
+		GetAvailableRegResponse response = new GetAvailableRegResponse();
+		try {
+			GetAvailableRegRequest request = new GetAvailableRegRequest();
+			request.setTransactionId(transactionId);
+			request.setRBAS(rBAS);
+			Request message = new Request("I_00106", request);
+			response.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
+
+	/**
+	 * 1.6 病人信息校验
+	 * 
+	 * @param transactionId
+	 * @param cardNO
+	 * @param iDCard
+	 * @param name
+	 * @param type
+	 * @return
+	 */
+	public static HisCheckPatientInfoResponse getHisCheckPatientInfo(String transactionId, String cardNO, String iDCard,
+			String name, Integer type) {
+		HisCheckPatientInfoResponse response = new HisCheckPatientInfoResponse();
+		try {
+			HisCheckPatientInfoRequest request = new HisCheckPatientInfoRequest();
+			request.setCardNO(cardNO);
+			request.setIDCard(iDCard);
+			request.setName(name);
+			request.setTransactionId(transactionId);
+			request.setType(type);
+			Request message = new Request("I_00107", request);
+			response.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return response;
+	}
+
+	/**
+	 * 
+	 * @param patientId
+	 * @param rBASId
+	 * @param transactionId
+	 * @param bdate
+	 * @param phoneNumber
+	 * @param userID
+	 * @param clientAddress
+	 * @param method
+	 * @return
+	 */
+	public static DoRegisterResponse getDoRegister(String patientId, String rBASId, String transactionId, String bdate,
+			String phoneNumber, String userID, String clientAddress, String method) {
+		DoRegisterResponse response = new DoRegisterResponse();
+		try {
+			DoRegisterRequest request = new DoRegisterRequest();
+			request.setPatientId(patientId);
+			request.setRBASId(rBASId);
+			request.setTransactionId(transactionId);
+			request.setBdate(bdate);
+			request.setPhoneNumber(phoneNumber);
+			request.setUserID(userID);
+			request.setClientAddress(clientAddress);
+			request.setMethod(method);
+			Request message = new Request("I_00108", request);
+			System.out.println(SoapClient.connect(new HezeMessage(message.toDocument())).replaceAll("&lt;", "<").replaceAll("&gt;", ">"));
+			response.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return response;
 	}
 }
