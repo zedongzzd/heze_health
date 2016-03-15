@@ -18,7 +18,6 @@ import com.jfinal.render.ViewType;
 import me.zzd.webapp.core.plugin.AutoRouteBindPlugin;
 import me.zzd.webapp.core.plugin.AutoTableBindPlugin;
 import me.zzd.webapp.core.plugin.DruidPlugin;
-import me.zzd.webapp.core.plugin.QuartzPlugin;
 
 public class CoreConfig extends JFinalConfig {
 	private Properties systemConfig = loadPropertyFile("system.properties", "utf8");
@@ -57,15 +56,15 @@ public class CoreConfig extends JFinalConfig {
 	@Override
 	public void configPlugin(Plugins me) {
 		// 数据库配置
-//		DruidPlugin dp = new DruidPlugin(loadPropertyFile("db.properties", "utf8"));
-//		me.add(dp);
-//		AutoTableBindPlugin atbp = new AutoTableBindPlugin(dp, systemConfig.getProperty("modelScanPackage"));
-//		me.add(atbp);
+		DruidPlugin dp = new DruidPlugin(loadPropertyFile("db.properties", "utf8"));
+		me.add(dp);
+		AutoTableBindPlugin atbp = new AutoTableBindPlugin(dp, systemConfig.getProperty("modelScanPackage"));
+		me.add(atbp);
 		// ehcache
-//		me.add(new EhCachePlugin(PathKit.getRootClassPath() + "/ehcache.xml"));
+		me.add(new EhCachePlugin(PathKit.getRootClassPath() + "/ehcache.xml"));
 		// 定时器
-//		QuartzPlugin quartzPlugin = new QuartzPlugin();
-//		me.add(quartzPlugin);
+		// QuartzPlugin quartzPlugin = new QuartzPlugin();
+		// me.add(quartzPlugin);
 	}
 
 	@Override
