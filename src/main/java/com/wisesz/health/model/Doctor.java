@@ -45,14 +45,6 @@ public class Doctor extends Model<Doctor> {
 		return set("deptId", deptId);
 	}
 
-	public String getDept() {
-		return getStr("dept");
-	}
-
-	public Doctor setDept(String dept) {
-		return set("dept", dept);
-	}
-
 	public String getAddress() {
 		return getStr("address");
 	}
