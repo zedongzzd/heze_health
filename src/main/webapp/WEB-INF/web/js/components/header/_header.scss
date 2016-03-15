@@ -1,8 +1,13 @@
-header{
-  height: rem(188px);
+.header{
+  height: 45px;
   @extend .bg-white;
   border-bottom: 1px solid #ccc;
   @include flexbox-parent;
   box-sizing: border-box;
-
+  .header-title{
+      display: inline-block;
+      line-height: 45px;
+      text-align: center;
+      
+  }
 }
