@@ -2,8 +2,9 @@ package com.wisesz.health.webservice.res;
 
 import com.wisesz.health.webservice.bean.RBAS;
 
+import me.zzd.webapp.core.annotation.BindDom;
 import me.zzd.webapp.core.dom.Dom;
-
+@BindDom("Response")
 public class GetArrangementResponse extends Dom{
 	/**
 	 * 

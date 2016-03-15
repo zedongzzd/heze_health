@@ -22,7 +22,7 @@ public class GetAvailableRegCountRequest extends Dom {
 	public void setTransactionId(String transactionId) {
 		TransactionId = transactionId;
 	}
-
+	
 	public RBAS getRBAS() {
 		return RBAS;
 	}
