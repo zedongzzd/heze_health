@@ -44,7 +44,7 @@ public class HosptalController extends Controller {
 			pageSize = 15;
 		}
 		String sql = "SELECT * FROM t_dept  ORDER BY deptId  ASC limit ?,?";
-		List<Dept> list = Dept.dao.find(sql, page, pageSize);
+		List<Dept> list = Dept.dao.find(sql, (page - 1) * pageSize, pageSize);
 		renderJson(RespFactory.isOk("获取科室分页列表成功！", list));
 	}
 }
