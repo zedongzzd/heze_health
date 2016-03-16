@@ -43,17 +43,13 @@ public class HosptalController extends Controller {
 	 * 分页获取科室
 	 */
 	public void deptlist() {
-		int page = 0;
-		int pageSize = 0;
-		if (getPara("len") != null) {
-			pageSize = Integer.parseInt(getPara("len"));
-		} else {
-			pageSize = 15;
-		}
-		if (getPara("num") != null) {
-			page = Integer.parseInt(getPara("num"));
-		} else {
+		Integer page = getParaToInt("page");
+		Integer pageSize = getParaToInt("pageSize");
+		if (page == null) {
 			page = 1;
+		}
+		if (pageSize == null) {
+			pageSize = 15;
 		}
 		String sql = "SELECT * FROM t_dept  ORDER BY deptId  ASC limit ?,?";
 		List<Dept> list = Dept.dao.find(sql, page, pageSize);
