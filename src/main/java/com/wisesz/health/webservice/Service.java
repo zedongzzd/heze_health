@@ -1,10 +1,6 @@
 package com.wisesz.health.webservice;
 
-import java.io.IOException;
-
 import com.wisesz.health.webservice.bean.RBAS;
-import com.wisesz.health.webservice.bean.RBASRec;
-import com.wisesz.health.webservice.bean.UserInfo;
 import com.wisesz.health.webservice.req.DoRegisterRequest;
 import com.wisesz.health.webservice.req.GetArrangementRequest;
 import com.wisesz.health.webservice.req.GetAvailableRegCountRequest;
