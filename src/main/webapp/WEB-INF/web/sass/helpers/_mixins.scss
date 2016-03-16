@@ -27,3 +27,12 @@
   margin-left:-1 * ($width/2);
   margin-top:-1 * ($height/2);
 }
+
+@mixin hht($height){
+    height: $height;
+    line-height: $height;
+}
+
+@mixin fz($fz){
+    font-size: ($fz/64)*1rem;
+}
