@@ -1,19 +1,11 @@
 package com.wisesz.health.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
-import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
-import com.jfinal.ext.interceptor.POST;
 import com.jfinal.log.Log;
-import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
 import com.wisesz.health.common.Result.RespFactory;
 import com.wisesz.health.model.Dept;
 
