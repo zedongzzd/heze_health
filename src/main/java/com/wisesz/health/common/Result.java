@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Result<O> implements Serializable {
 
-	public static class RespFactory {
+public static class RespFactory {
 		public static final int isOK = 0;
 		public static final int isFail = 1;
 
