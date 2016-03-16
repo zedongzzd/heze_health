@@ -1,13 +1,13 @@
 .header{
-  height: 45px;
+  height: rem(80px);
   @extend .bg-white;
-  border-bottom: 1px solid #ccc;
   @include flexbox-parent;
   box-sizing: border-box;
   .header-title{
       display: inline-block;
-      line-height: 45px;
+      line-height: rem(80px);
       text-align: center;
-      
+      font-size:rem(34px);
+      @extend .fc-cyan
   }
 }
