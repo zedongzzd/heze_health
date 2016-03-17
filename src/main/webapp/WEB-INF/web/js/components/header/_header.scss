@@ -1,0 +1,13 @@
+.header{
+  height: rem(80px);
+  @extend .bg-white;
+  @include flexbox-parent;
+  box-sizing: border-box;
+  .header-title{
+      display: inline-block;
+      line-height: rem(80px);
+      text-align: center;
+      font-size:rem(34px);
+      @extend .fc-cyan
+  }
+}
