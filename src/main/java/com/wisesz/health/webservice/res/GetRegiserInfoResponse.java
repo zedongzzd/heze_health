@@ -2,9 +2,11 @@ package com.wisesz.health.webservice.res;
 
 import com.wisesz.health.webservice.bean.RegItems;
 
+import me.zzd.webapp.core.annotation.BindDom;
 import me.zzd.webapp.core.dom.Dom;
 
-public class GetRegiserInfoResponse extends Dom{
+@BindDom(value = "Response")
+public class GetRegiserInfoResponse extends Dom {
 	/**
 	 * 
 	 */
