@@ -95,7 +95,7 @@ public class Service {
 	 * @param deptId
 	 * @return
 	 */
-	public static GetArrangementResponse getArrangement(String transactionId, String rBASDate, String rBASDay,
+	public static GetArrangementResponse getArrangement(String transactionId, String rBASDate, Integer rBASDay,
 			String doctorId, String deptId) {
 		GetArrangementResponse arrangement = new GetArrangementResponse();
 		try {

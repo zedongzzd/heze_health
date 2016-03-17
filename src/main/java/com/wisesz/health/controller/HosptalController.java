@@ -1,13 +1,12 @@
 package com.wisesz.health.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
 import com.wisesz.health.common.Result.RespFactory;
-import com.wisesz.health.model.Dept;
+import com.wisesz.health.service.HospitalService;
 
 import me.zzd.webapp.core.annotation.BindController;
 
@@ -43,8 +42,6 @@ public class HosptalController extends Controller {
 		if (pageSize == null) {
 			pageSize = 15;
 		}
-		String sql = "SELECT * FROM t_dept  ORDER BY deptId  ASC limit ?,?";
-		List<Dept> list = Dept.dao.find(sql, (page - 1) * pageSize, pageSize);
-		renderJson(RespFactory.isOk("获取科室分页列表成功！", list));
+		renderJson(RespFactory.isOk("获取科室分页列表成功！", HospitalService.getDeptlist(page, pageSize)));
 	}
 }
