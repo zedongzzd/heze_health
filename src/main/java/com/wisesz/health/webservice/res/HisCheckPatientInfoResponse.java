@@ -7,6 +7,10 @@ import me.zzd.webapp.core.dom.Dom;
 
 @BindDom("Response")
 public class HisCheckPatientInfoResponse  extends Dom {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer ResultCode;
 	private String ErrorMsg;
 	private UserInfo UserInfo;

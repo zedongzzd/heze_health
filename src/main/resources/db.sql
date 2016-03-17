@@ -57,8 +57,10 @@ create table t_patient
    idCard               varchar(32),
    type                 int,
    uid                  varchar(20),
+   phone                varchar(20),
    primary key (patientId)
 );
+
 
 drop table if exists t_regist;
 
