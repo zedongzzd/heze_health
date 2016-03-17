@@ -7,6 +7,7 @@ import com.wisesz.health.webservice.req.GetAvailableRegCountRequest;
 import com.wisesz.health.webservice.req.GetAvailableRegRequest;
 import com.wisesz.health.webservice.req.GetDeptRequest;
 import com.wisesz.health.webservice.req.GetDoctorRequest;
+import com.wisesz.health.webservice.req.GetRegiserInfoRequest;
 import com.wisesz.health.webservice.req.HisCheckPatientInfoRequest;
 import com.wisesz.health.webservice.req.Request;
 import com.wisesz.health.webservice.res.DoRegisterResponse;
@@ -15,6 +16,7 @@ import com.wisesz.health.webservice.res.GetAvailableRegCountResponse;
 import com.wisesz.health.webservice.res.GetAvailableRegResponse;
 import com.wisesz.health.webservice.res.GetDeptResponse;
 import com.wisesz.health.webservice.res.GetDoctorResponse;
+import com.wisesz.health.webservice.res.GetRegiserInfoResponse;
 import com.wisesz.health.webservice.res.HisCheckPatientInfoResponse;
 
 import me.zzd.webapp.core.dom.XmlDocument;
@@ -55,16 +57,6 @@ public class Service {
 	}
 
 	/**
-	 * main
-	 * 
-	 * @param args
-	 */
-//	public static void main(String[] args) {
-//		DoRegisterResponse response = Service.getDoRegister("0000763210", "2||130", "100001156498", "20090408",
-//				"15965872016", "CCB", null, "1");
-//	}
-
-	/**
 	 * 
 	 * 1.2科室医生(只要专家医生)
 	 * 
@@ -95,7 +87,7 @@ public class Service {
 	 * @param deptId
 	 * @return
 	 */
-	public static GetArrangementResponse getArrangement(String transactionId, String rBASDate, String rBASDay,
+	public static GetArrangementResponse getArrangement(String transactionId, String rBASDate, Integer rBASDay,
 			String doctorId, String deptId) {
 		GetArrangementResponse arrangement = new GetArrangementResponse();
 		try {
@@ -211,10 +203,35 @@ public class Service {
 			request.setClientAddress(clientAddress);
 			request.setMethod(method);
 			Request message = new Request("I_00108", request);
-			System.out.println(SoapClient.connect(new HezeMessage(message.toDocument())).replaceAll("&lt;", "<").replaceAll("&gt;", ">"));
 			response.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return response;
+	}
+
+	/**
+	 * 
+	 * @param transactionId 暂无实际业务含义
+	 * @param patientId  HIS系统产生
+	 * @param userID 星锐互动的唯一编号CCB
+	 * @param clientAddress 暂不使用
+	 * @return
+	 */
+	public static GetRegiserInfoResponse getRegiserInfo(String transactionId, String patientId, String userID,
+			String clientAddress) {
+		GetRegiserInfoResponse response = new GetRegiserInfoResponse();
+		try {
+			GetRegiserInfoRequest request = new GetRegiserInfoRequest();
+			request.setTransactionId(transactionId);
+			request.setPatientId(patientId);
+			request.setUserID(userID);
+			request.setClientAddress(clientAddress);
+			Request message = new Request("I_00109", request);
+			response.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
+		} catch (Exception e) {
+			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return response;

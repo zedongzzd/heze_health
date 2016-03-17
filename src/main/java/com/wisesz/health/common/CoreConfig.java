@@ -18,6 +18,7 @@ import com.jfinal.render.ViewType;
 import me.zzd.webapp.core.plugin.AutoRouteBindPlugin;
 import me.zzd.webapp.core.plugin.AutoTableBindPlugin;
 import me.zzd.webapp.core.plugin.DruidPlugin;
+import me.zzd.webapp.core.plugin.QuartzPlugin;
 
 public class CoreConfig extends JFinalConfig {
 	private Properties systemConfig = loadPropertyFile("system.properties", "utf8");
@@ -27,7 +28,7 @@ public class CoreConfig extends JFinalConfig {
 	public void configConstant(Constants me) {
 
 		// 开发者模式
-		me.setDevMode(Boolean.valueOf(systemConfig.getProperty("developMode", "true")));
+		me.setDevMode(Boolean.valueOf(systemConfig.getProperty("developMode", "false")));
 		// 编码
 		me.setEncoding(systemConfig.getProperty("encoding", "utf8"));
 		// 默认错误页面
@@ -64,8 +65,8 @@ public class CoreConfig extends JFinalConfig {
 		// ehcache
 		me.add(new EhCachePlugin(PathKit.getRootClassPath() + "/ehcache.xml"));
 		// 定时器
-		// QuartzPlugin quartzPlugin = new QuartzPlugin();
-		// me.add(quartzPlugin);
+		QuartzPlugin quartzPlugin = new QuartzPlugin();
+		me.add(quartzPlugin);
 	}
 
 	@Override
