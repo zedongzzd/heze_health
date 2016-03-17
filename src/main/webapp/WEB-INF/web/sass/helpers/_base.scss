@@ -56,7 +56,7 @@ html{font-size: 64px;}
 .clearfix{display:inline-block;}
 .dp-inlb{display: inline-block;}
 .vm{vertical-align:center;}
-.vc{position: absolute;top: 50%;}
+.vc{position: absolute;top: 25%;left: 25%;}
 .pa{position: absolute;}
 .r10{right: rem(10px);}
 .r20{right: rem(20px);}
@@ -74,9 +74,11 @@ html{font-size: 64px;}
 .w30{width:rem(30px);}
 .w40{width:rem(40px);}
 .w50{width:rem(50px);}
-
+.w-40{width:40%;}
 .w-50{width:50%;}
+.w-60{width:60%;}
 .w-80{width: 50%;}
+.w-875{width: 87.5%;}
 .w-90{width: 90%;}
 .w60{width:rem(60px);}
 .w65{width: rem(65px);}
@@ -125,13 +127,17 @@ html{font-size: 64px;}
 .hht85{height: rem(85px);line-height: rem(85px);}
 .hht88{height: rem(88px);line-height: rem(88px);}
 .hht100{height: rem(100px);line-height: rem(100px);}
+.mhht100{min-height: rem(100px);line-height: rem(100px);}
 .hht115{height: rem(115px);line-height: rem(115px);}
 .hht140{height: rem(140px);line-height: rem(140px);}
 .hht185{height: rem(185px);line-height: rem(185px);}
-.bd{border: 1px solid #ccc;}
-.bdr{border-right:1px solid #ccc ;box-sizing: border-box;}
+.bd{border: rem(1px) solid #ccc;}
+.bdr{border-right:rem(1px) solid #ccc ;box-sizing: border-box;}
+.bdr-bg{border-right:rem(1px) solid #eaeef2 ;box-sizing: border-box;}
+.bdl-cyan-10{border-left:rem(8px) solid #1bbc9c ;box-sizing: border-box;}
+.bdl-bg-20{border-left:rem(20px) solid #eaeef2 ;box-sizing: border-box;}
 .bdt{border-top: 1px solid #ccc;}
-.bdb{border-bottom: 1px solid #ccc;}
+.bdb{border-bottom: 1px solid #ccc;box-sizing: border-box;}
 .bdtb{border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;}
 .bd-cyan{border: 1px solid #1bbc9c;}
 .bdb{border-bottom: 1px solid #ccc;}
@@ -174,6 +180,7 @@ html{font-size: 64px;}
 .ml50{margin-left:rem(50px);}
 .ml70{margin-left:rem(70px);}
 .ml100{margin-left:rem(100px);}
+.ml220{margin-left:rem(220px);}
 .mr5{margin-right:rem(5px);}
 .mr10{margin-right:rem(10px);}
 .mr15{margin-right:rem(15px);}
@@ -186,6 +193,7 @@ html{font-size: 64px;}
 .mlr5{margin-left: rem(5px);margin-right: rem(5px);}
 .mlr10{margin-left: rem(10px);margin-right: rem(10px);}
 .mlr20{margin-left: rem(20px);margin-right: rem(20px);}
+.mlr40{margin-left: rem(40px);margin-right: rem(40px);}
 .mlr100{margin-left: rem(20px);margin-right: rem(100px);}
 .p10{padding:rem(10px);}
 .p15{padding:rem(15px);}
@@ -232,6 +240,9 @@ html{font-size: 64px;}
 .bg-cyan{
     background-color: #1bbc9c;
 }
+.bg{
+    background-color: #eaeef2;
+}
 .dp-flex{
     display: flex;
 }
@@ -243,3 +254,5 @@ html{font-size: 64px;}
 .ovh{overflow: hidden;}
 .bdr-5{border-radius: rem(5px);}
 .bdr-10{border-radius: rem(10px);}
+
+.tf-y{overflow-y: scroll;}
