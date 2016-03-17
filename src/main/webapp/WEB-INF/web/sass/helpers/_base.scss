@@ -33,6 +33,7 @@ html{font-size: 64px;}
 .fb{font-weight:bold;}
 .fn{font-weight:normal;}
 .t2{text-indent:rem(20px);}
+.t20{text-indent:rem(20px);}
 .lh150{line-height:150%}
 .lh180{line-height:180%}
 .lh200{line-height:200%}
@@ -73,6 +74,10 @@ html{font-size: 64px;}
 .w30{width:rem(30px);}
 .w40{width:rem(40px);}
 .w50{width:rem(50px);}
+
+.w-50{width:50%;}
+.w-80{width: 50%;}
+.w-90{width: 90%;}
 .w60{width:rem(60px);}
 .w65{width: rem(65px);}
 .w70{width:rem(70px);}
@@ -137,6 +142,7 @@ html{font-size: 64px;}
 .m20{margin: rem(20px);}
 .m30{margin:rem(30px);}
 .mt-1{margin-top: rem(-1px);}
+.mt-2{margin-top: rem(-2px);}
 .mt5{margin-top:rem(5px);}
 .mt10{margin-top:rem(10px);}
 .mt15{margin-top:rem(15px);}
@@ -173,6 +179,7 @@ html{font-size: 64px;}
 .mr15{margin-right:rem(15px);}
 .mr20{margin-right:rem(20px);}
 .mr30{margin-right:rem(30px);}
+.mr40{margin-right:rem(40px);}
 .mr50{margin-right:rem(50px);}
 .mr100{margin-right:rem(100px);}
 .mlr{margin-left: auto;margin-right: auto;}
