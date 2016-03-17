@@ -94,9 +94,9 @@ create table t_regist
 create table t_schedual
 (
    id                   varchar(20) not null,
-   date                 varchar(10),
+   date                 varchar(10) not null,
    hospitalId           varchar(32),
-   deptId               varchar(10),
+   deptId               varchar(10) not null,
    deptName             varchar(50),
    subjectId            varchar(10),
    subject              varchar(100),
@@ -107,8 +107,8 @@ create table t_schedual
    groupCode            varchar(20),
    groupName            varchar(30),
    address              varchar(100),
-   resNo                int,
-   primary key (id)
+   resNo                varchar(3),
+   primary key (id, date)
 );
 
 
