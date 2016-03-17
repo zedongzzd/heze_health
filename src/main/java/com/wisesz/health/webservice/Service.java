@@ -1,5 +1,8 @@
 package com.wisesz.health.webservice;
 
+import java.io.IOException;
+
+import com.wisesz.health.common.Const;
 import com.wisesz.health.webservice.bean.RBAS;
 import com.wisesz.health.webservice.req.DoRegisterRequest;
 import com.wisesz.health.webservice.req.GetArrangementRequest;
@@ -53,16 +56,6 @@ public class Service {
 		}
 		return res;
 	}
-
-	/**
-	 * main
-	 * 
-	 * @param args
-	 */
-//	public static void main(String[] args) {
-//		DoRegisterResponse response = Service.getDoRegister("0000763210", "2||130", "100001156498", "20090408",
-//				"15965872016", "CCB", null, "1");
-//	}
 
 	/**
 	 * 
@@ -211,7 +204,8 @@ public class Service {
 			request.setClientAddress(clientAddress);
 			request.setMethod(method);
 			Request message = new Request("I_00108", request);
-			System.out.println(SoapClient.connect(new HezeMessage(message.toDocument())).replaceAll("&lt;", "<").replaceAll("&gt;", ">"));
+			System.out.println(SoapClient.connect(new HezeMessage(message.toDocument())).replaceAll("&lt;", "<")
+					.replaceAll("&gt;", ">"));
 			response.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
