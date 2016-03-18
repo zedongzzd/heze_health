@@ -189,7 +189,7 @@ public class Service {
 	 * @param method
 	 * @return
 	 */
-	public static DoRegisterResponse getDoRegister(String patientId, String rBASId, String transactionId, String bdate,
+	public static DoRegisterResponse doRegister(String patientId, String rBASId, String transactionId, String bdate,
 			String phoneNumber, String userID, String clientAddress, String method) {
 		DoRegisterResponse response = new DoRegisterResponse();
 		try {
