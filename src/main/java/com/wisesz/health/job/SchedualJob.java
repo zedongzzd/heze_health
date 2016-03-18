@@ -11,6 +11,7 @@ import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Db;
 import com.wisesz.health.common.Const;
 import com.wisesz.health.handler.DateHandler;
+import com.wisesz.health.handler.StringHandler;
 import com.wisesz.health.model.Dept;
 import com.wisesz.health.model.Schedual;
 import com.wisesz.health.webservice.Service;
@@ -27,6 +28,9 @@ public class SchedualJob implements Job {
 		List<Schedual> scList = new ArrayList<>();
 		for (Dept dpt : dpts) {
 			try {
+				if(StringHandler.isEmpty(dpt.getDeptId())){
+					continue;
+				}
 				GetArrangementResponse res = Service.getArrangement(Const.TransactionId, date, 7, null,
 						dpt.getDeptId());
 				if (res != null && res.getResultCode() == 0) {
@@ -63,4 +67,5 @@ public class SchedualJob implements Job {
 		}
 		Db.batchSave(scList, 500);
 	}
+	
 }
