@@ -9,9 +9,11 @@ import com.wisesz.health.common.Const;
 import com.wisesz.health.common.Result.RespFactory;
 import com.wisesz.health.handler.StringHandler;
 import com.wisesz.health.model.Patient;
+import com.wisesz.health.model.Regist;
 import com.wisesz.health.service.UserService;
 import com.wisesz.health.webservice.Service;
 import com.wisesz.health.webservice.bean.UserInfo;
+import com.wisesz.health.webservice.res.DoRegisterResponse;
 import com.wisesz.health.webservice.res.HisCheckPatientInfoResponse;
 
 import me.zzd.webapp.core.annotation.BindController;
@@ -167,6 +169,46 @@ public class UserController extends Controller {
 		} catch (Exception e) {
 			log.error("修改挂号人信息失败！", e);
 			renderJson(RespFactory.isFail("修改挂号人信息失败！"));
+		}
+	}
+	/**
+	 * 注册接口
+	 */
+	@Before(POST.class)
+	public void register(){
+		String patientId = getPara("patientId");
+		String rBASId = getPara("rBASId");
+		String bdate = getPara("bdate");
+		String transactionId = getPara("transactionId");
+		String userID = getPara("userID");
+		String clientAddress = getPara("clientAddress");
+		String method = getPara("method");
+		if(StringHandler.isEmpty(patientId) 
+				&& StringHandler.isEmpty(rBASId) 
+				&& StringHandler.isEmpty(bdate)){
+			renderJson(RespFactory.isFail("参数异常！"));
+			return;
+		}
+		/**
+		 * 根据patientId查找到phone
+		 */
+		Patient patient = Patient.dao.findById(patientId);
+		String phone = patient.getPhone();
+		try {
+			DoRegisterResponse res =  Service.doRegister(patientId, rBASId, transactionId, bdate, phone, userID, clientAddress, method);
+			if(res == null||res.getResultCode()!=0){
+				renderJson(RespFactory.isFail("调用注册接口失败！"));
+				return;
+			}
+			Regist regist=new Regist();
+			regist.setId(Integer.parseInt(rBASId));
+			regist.setHDate(bdate);
+			regist.setPatientId(patientId);
+			regist.setUserID(userID);
+			regist.save();
+		} catch (Exception e) {
+			log.error("注册接口出错",e);
+			renderJson(RespFactory.isFail("注册接口出错！"));
 		}
 	}
 }

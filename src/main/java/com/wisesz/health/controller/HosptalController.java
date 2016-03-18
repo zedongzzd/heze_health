@@ -1,5 +1,6 @@
 package com.wisesz.health.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,9 @@ import com.jfinal.core.Controller;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.log.Log;
 import com.wisesz.health.common.Result.RespFactory;
+import com.wisesz.health.handler.StringHandler;
 import com.wisesz.health.model.Dept;
+import com.wisesz.health.model.Doctor;
 import com.wisesz.health.model.Schedual;
 import com.wisesz.health.service.HospitalService;
 
@@ -64,5 +67,38 @@ public class HosptalController extends Controller {
 			log.error("获取科室排班信息出错！", e);
 			renderJson(RespFactory.isFail());
 		}
+	}
+	
+	/**
+	 * doctor 分页查询,name模糊查询
+	 */
+	@Before(POST.class)
+	public void selectDoctorByPage() {
+		String deptId = getPara("deptId");
+		String name = getPara("name");
+		Integer page = getParaToInt("page");
+		if (page == null) {
+			page = 1;
+		}
+		Integer pageSize = getParaToInt("pageSize");
+		if (pageSize == null) {
+			pageSize = 15;
+		}
+		StringBuilder sb = new StringBuilder("SELECT * FROM t_doctor where 1=1 ");
+		List<Object> params = new ArrayList<>();
+		if (!StringHandler.isEmpty(deptId)) {
+			sb.append(" and deptId = ?");
+			params.add(deptId);
+		}
+
+		if (!StringHandler.isEmpty(name)) {
+			sb.append(" and name like ?");
+			params.add(name);
+		}
+		sb.append(" limit ?,?");
+		params.add(pageSize * (page - 1));
+		params.add(pageSize);
+		List<Doctor> doctorList = Doctor.dao.find(sb.toString(), params.toArray());
+		renderJson(RespFactory.isOk("查询医生列表成功！", doctorList));
 	}
 }
