@@ -1,6 +1,7 @@
 package com.wisesz.health.common;
 
 public class Const {
+	//adminzhang
 	public final static String adminUser = "E661C0A237922D3E3354234A00548AB6";
 	public final static String adminPwd = "5C757986F24037FBADE7A22DAC851558";
 
