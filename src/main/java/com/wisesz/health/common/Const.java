@@ -17,5 +17,5 @@ public class Const {
 	public static final String Cache_Name_login = "loginInfoCache";
 	public static final String Cache_Name_click = "clickCache";
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+	public static final String Cache_Key_Departs = "cache_key_departs:";
 }

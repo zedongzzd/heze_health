@@ -15,7 +15,7 @@ public class GetArrangementRequest extends Dom {
 	private String doctorId;
 	private String deptId;
 	private String RBASDate;
-	private String RBASDay;
+	private Integer RBASDay;
 	private String transactionId;
 
 	public String getDoctorId() {
@@ -42,11 +42,11 @@ public class GetArrangementRequest extends Dom {
 		RBASDate = rBASDate;
 	}
 
-	public String getRBASDay() {
+	public Integer getRBASDay() {
 		return RBASDay;
 	}
 
-	public void setRBASDay(String rBASDay) {
+	public void setRBASDay(Integer rBASDay) {
 		RBASDay = rBASDay;
 	}
 

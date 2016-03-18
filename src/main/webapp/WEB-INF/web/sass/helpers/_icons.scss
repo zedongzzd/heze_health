@@ -1,0 +1,8 @@
+@mixin icon($name) {
+  $image-width:rem(image-width("icons/#{$name}.png"));
+  .icon-#{$name}{
+    width: $image-width;
+    background: url("../img/icons/#{$name}.png") 0 center no-repeat;
+    background-size:$image-width ;
+  }
+}

@@ -1,13 +1,12 @@
 package com.wisesz.health.controller;
 
-import java.util.List;
-
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.wisesz.health.common.Const;
 import com.wisesz.health.common.Result.RespFactory;
 import com.wisesz.health.handler.StringHandler;
 import com.wisesz.health.model.Patient;
@@ -52,7 +51,9 @@ public class UserController extends Controller {
 			String cardNo = getPara("cardNo");
 			String idCard = getPara("idCard");
 			String phone = getPara("phone");
-			HisCheckPatientInfoResponse response = Service.getHisCheckPatientInfo(null, cardNo, name, idCard, null);
+			Integer type = getParaToInt("type");
+			HisCheckPatientInfoResponse response = Service.getHisCheckPatientInfo(Const.TransactionId, cardNo, idCard,
+					name, type);
 			if (response.getResultCode() == 0) {
 				UserInfo info = response.getUserInfo();
 				String patientId = info.getPatientId();
@@ -69,7 +70,7 @@ public class UserController extends Controller {
 				renderJson(RespFactory.isFail(response.getErrorMsg()));
 			}
 		} catch (Exception e) {
-			log.error("添加病人信息失败！",e);
+			log.error("添加病人信息失败！", e);
 			renderJson(RespFactory.isFail("添加病人信息失败!"));
 		}
 	}
@@ -90,11 +91,11 @@ public class UserController extends Controller {
 				renderJson(RespFactory.isOk("获得挂号人列表成功！", Patient.dao.find(sb.toString(), uid)));
 			}
 		} catch (Exception e) {
-			log.error("读取挂号人信息失败!",e);
+			log.error("读取挂号人信息失败!", e);
 			renderJson(RespFactory.isFail("读取挂号人信息失败!"));
 		}
 	}
-	
+
 	/**
 	 * 删除挂号人信息
 	 */
@@ -103,17 +104,17 @@ public class UserController extends Controller {
 		try {
 			String patientId = getPara("patientId");
 			String uid = getPara("uid");
-			if (!StringHandler.isEmpty(patientId)&&!StringHandler.isEmpty(uid)){
-				Record record=new Record();
+			if (!StringHandler.isEmpty(patientId) && !StringHandler.isEmpty(uid)) {
+				Record record = new Record();
 				record.set("patientId", patientId);
 				record.set("uid", uid);
-				Db.delete("t_patient", "patientId ,uid",record );
+				Db.delete("t_patient", "patientId ,uid", record);
 				renderJson(RespFactory.isOk("删除挂号人信息成功！"));
 			} else {
 				renderJson(RespFactory.isFail("删除挂号人信息失败！"));
 			}
 		} catch (Exception e) {
-			log.error("删除挂号人信息失败！",e);
+			log.error("删除挂号人信息失败！", e);
 			renderJson(RespFactory.isFail("删除挂号人信息失败！"));
 		}
 	}
@@ -130,7 +131,7 @@ public class UserController extends Controller {
 			String cardNo = getPara("cardNo");
 			String idCard = getPara("idCard");
 			String phone = getPara("phone");
-			Patient patient=new Patient();
+			Patient patient = new Patient();
 			if (!StringHandler.isEmpty(patientId)) {
 				patient.set("patientId", patientId);
 				if (!StringHandler.isEmpty(name)) {
@@ -151,7 +152,7 @@ public class UserController extends Controller {
 				renderJson(RespFactory.isFail("修改挂号人信息失败！"));
 			}
 		} catch (Exception e) {
-			log.error("修改挂号人信息失败！",e);
+			log.error("修改挂号人信息失败！", e);
 			renderJson(RespFactory.isFail("修改挂号人信息失败！"));
 		}
 	}

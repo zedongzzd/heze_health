@@ -1,0 +1,24 @@
+@charset "UTF-8";
+// compass 工具库
+@import "compass/utilities";
+// 基础引用
+@import "./helpers/reset";
+@import "./helpers/varibles";
+@import "./helpers/functions";
+@import "./helpers/mixins";
+@import "./helpers/base";
+// 组件
+@import "../js/components/header/header";
+@import "../js/components/banner/banner";
+// 页面
+
+html{
+  background: $bgc;
+}
+
+html,body,#root,.app,.view{
+  width: 100%;
+  min-height: 100%;
+}
+
+@import "./iscroll";

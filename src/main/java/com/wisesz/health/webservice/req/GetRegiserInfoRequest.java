@@ -1,7 +1,9 @@
 package com.wisesz.health.webservice.req;
 
+import me.zzd.webapp.core.annotation.BindDom;
 import me.zzd.webapp.core.dom.Dom;
 
+@BindDom(value = "Request")
 public class GetRegiserInfoRequest extends Dom {
 
 	/**
