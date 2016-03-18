@@ -5,7 +5,6 @@ import com.jfinal.core.Controller;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Record;
 import com.wisesz.health.common.Const;
 import com.wisesz.health.common.Result.RespFactory;
 import com.wisesz.health.handler.StringHandler;
@@ -45,33 +44,41 @@ public class UserController extends Controller {
 	 * 添加病人信息
 	 */
 	@Before(POST.class)
-	public void setpatient() {
+	public void addPatient() {
 		try {
+			String uid = UserService.getUid(getRequest());
+			if (StringHandler.isEmpty(uid)) {
+				renderJson(RespFactory.isFail("尚未登录"));
+				return;
+			}
 			String name = getPara("name");
 			String cardNo = getPara("cardNo");
 			String idCard = getPara("idCard");
 			String phone = getPara("phone");
 			Integer type = getParaToInt("type");
+			if (!StringHandler.isEmpty(name) && !StringHandler.isEmpty(cardNo) && !StringHandler.isEmpty(idCard)
+					&& !StringHandler.isEmpty(phone) || type == null) {
+				renderJson(RespFactory.isFail("参数异常！"));
+				return;
+			}
 			HisCheckPatientInfoResponse response = Service.getHisCheckPatientInfo(Const.TransactionId, cardNo, idCard,
 					name, type);
-			if (response.getResultCode() == 0) {
+			if (response != null && response.getResultCode() == 0) {
 				UserInfo info = response.getUserInfo();
 				String patientId = info.getPatientId();
-				if (!StringHandler.isEmpty(patientId) && !StringHandler.isEmpty(name) && !StringHandler.isEmpty(cardNo)
-						&& !StringHandler.isEmpty(idCard) && !StringHandler.isEmpty(phone)) {
-					Patient patient = new Patient();
-					patient.set("patientId", patientId).set("name", name).set("idCard", idCard).set("phone", phone)
-							.set("cardNo", cardNo).save();
-					renderJson(RespFactory.isOk("添加挂号人信息成功！", patient));
+				Patient patient = new Patient();
+				patient.setPatientId(patientId).setName(name).setIdCard(idCard).setPhone(phone).setCardNo(cardNo);
+				if (patient.save()) {
+					renderJson(RespFactory.isOk("新增挂号人成功！", patient));
 				} else {
-					renderJson(RespFactory.isFail("填写信息不完整!"));
+					renderJson(RespFactory.isFail("新增挂号人出错！"));
 				}
 			} else {
 				renderJson(RespFactory.isFail(response.getErrorMsg()));
 			}
 		} catch (Exception e) {
 			log.error("添加病人信息失败！", e);
-			renderJson(RespFactory.isFail("添加病人信息失败!"));
+			renderJson(RespFactory.isFail("新增挂号人出错！"));
 		}
 	}
 
@@ -81,14 +88,16 @@ public class UserController extends Controller {
 	@Before(POST.class)
 	public void getpatient() {
 		try {
-			String uid = getPara("uid");
+			String uid = UserService.getUid(getRequest());
+			if (StringHandler.isEmpty(uid)) {
+				renderJson(RespFactory.isFail("尚未登录"));
+				return;
+			}
 			String patientId = getPara("patientId");
-			StringBuilder sb = new StringBuilder("select * from t_patient where uid=? ");
 			if (!StringHandler.isEmpty(patientId)) {
-				sb.append(" and patientId=?");
-				renderJson(RespFactory.isOk("获取挂号人信息成功!", Patient.dao.findFirst(sb.toString(), uid, patientId)));
+				renderJson(RespFactory.isOk("获取挂号人信息成功!", Db.findById("t_patient", "patientId,uid", patientId, uid)));
 			} else {
-				renderJson(RespFactory.isOk("获得挂号人列表成功！", Patient.dao.find(sb.toString(), uid)));
+				renderJson(RespFactory.isOk("获得挂号人列表成功！", Db.find("select * from t_patient where uid=?", uid)));
 			}
 		} catch (Exception e) {
 			log.error("读取挂号人信息失败!", e);
@@ -102,13 +111,17 @@ public class UserController extends Controller {
 	@Before(POST.class)
 	public void deletepatient() {
 		try {
+			String uid = UserService.getUid(getRequest());
+			if (StringHandler.isEmpty(uid)) {
+				renderJson(RespFactory.isFail("尚未登录"));
+				return;
+			}
 			String patientId = getPara("patientId");
-			String uid = getPara("uid");
-			if (!StringHandler.isEmpty(patientId) && !StringHandler.isEmpty(uid)) {
-				Record record = new Record();
-				record.set("patientId", patientId);
-				record.set("uid", uid);
-				Db.delete("t_patient", "patientId ,uid", record);
+			if (StringHandler.isEmpty(patientId)) {
+				renderJson(RespFactory.isFail("参数异常！"));
+				return;
+			}
+			if (Db.deleteById("t_patient", "patientId ,uid", patientId, uid)) {
 				renderJson(RespFactory.isOk("删除挂号人信息成功！"));
 			} else {
 				renderJson(RespFactory.isFail("删除挂号人信息失败！"));
