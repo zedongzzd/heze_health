@@ -56,8 +56,8 @@ public class UserController extends Controller {
 			String idCard = getPara("idCard");
 			String phone = getPara("phone");
 			Integer type = getParaToInt("type");
-			if (!StringHandler.isEmpty(name) && !StringHandler.isEmpty(cardNo) && !StringHandler.isEmpty(idCard)
-					&& !StringHandler.isEmpty(phone) || type == null) {
+			if (StringHandler.isEmpty(name) || StringHandler.isEmpty(cardNo) || StringHandler.isEmpty(idCard)
+					|| StringHandler.isEmpty(phone) || type == null) {
 				renderJson(RespFactory.isFail("参数异常！"));
 				return;
 			}
