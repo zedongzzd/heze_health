@@ -1,10 +1,13 @@
 package com.wisesz.health.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.wisesz.health.common.Const;
 import com.wisesz.health.handler.CacheHandler;
 import com.wisesz.health.handler.HttpHandler;
@@ -56,29 +59,77 @@ public class UserService {
 		return null;
 	}
 
+	/**
+	 * 添加病人
+	 * 
+	 * @param cardNo
+	 * @param idCard
+	 * @param phone
+	 * @param name
+	 * @param type
+	 * @return
+	 */
 	public static boolean addPatient(String cardNo, String idCard, String phone, String name, Integer type) {
-		HisCheckPatientInfoResponse response = Service.getHisCheckPatientInfo(Const.TransactionId, cardNo, idCard, name,
-				type);
-		if (response != null && response.getResultCode() == 0) {
-			UserInfo info = response.getUserInfo();
-			String patientId = info.getPatientId();
-			Patient patient = new Patient();
-			patient.setPatientId(patientId).setName(name).setIdCard(idCard).setPhone(phone).setCardNo(cardNo);
-			return patient.save();
-		} else {
-			return false;
+		try {
+			HisCheckPatientInfoResponse response = Service.getHisCheckPatientInfo(Const.TransactionId, cardNo, idCard,
+					name, type);
+			if (response != null && response.getResultCode() == 0) {
+				UserInfo info = response.getUserInfo();
+				String patientId = info.getPatientId();
+				Patient patient = new Patient();
+				patient.setPatientId(patientId).setName(name).setIdCard(idCard).setPhone(phone).setCardNo(cardNo);
+				return patient.save();
+			}
+		} catch (Exception e) {
+			log.error("添加病人出错！", e);
 		}
+		return false;
 	}
 
-	public static Object getPatients(String uid, String patientId) {
-		if (!StringHandler.isEmpty(patientId)) {
-			return Db.findById("t_patient", "patientId,uid", patientId, uid);
-		} else {
+	/**
+	 * 获取病人列表
+	 * 
+	 * @param uid
+	 * @return
+	 */
+	public static List<Record> getPatients(String uid) {
+		try {
 			return Db.find("select * from t_patient where uid=?", uid);
+		} catch (Exception e) {
+			log.error("获取病人列表出错！", e);
 		}
+		return null;
 	}
 
+	/**
+	 * 获取病人信息
+	 * 
+	 * @param uid
+	 * @param patientId
+	 * @return
+	 */
+	public static Record getPatient(String uid, String patientId) {
+		try {
+			return Db.findById("t_patient", "patientId,uid", patientId, uid);
+		} catch (Exception e) {
+			log.error("获取病人信息出错！", e);
+		}
+		return null;
+	}
+
+	/**
+	 * 删除病人
+	 * 
+	 * @param uid
+	 * @param patientId
+	 * @return
+	 */
 	public static boolean delPatient(String uid, String patientId) {
-		return Db.deleteById("t_patient", "patientId ,uid", patientId, uid);
+		try {
+			return Db.deleteById("t_patient", "patientId ,uid", patientId, uid);
+		} catch (Exception e) {
+			log.error("删除常用病人信息！", e);
+		}
+		return false;
 	}
 }

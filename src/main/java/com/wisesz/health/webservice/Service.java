@@ -134,6 +134,7 @@ public class Service {
 	 * @param rBAS
 	 * @return
 	 */
+	@Deprecated
 	public static GetAvailableRegResponse getAvailableReg(String transactionId, RBAS rBAS) {
 		GetAvailableRegResponse response = new GetAvailableRegResponse();
 		try {

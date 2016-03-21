@@ -13,6 +13,13 @@ import com.wisesz.health.webservice.bean.RBASRec;
 import com.wisesz.health.webservice.res.GetAvailableRegCountResponse;
 
 public class HospitalService {
+	/**
+	 * 获取科室列表
+	 * 
+	 * @param page
+	 * @param pageSize
+	 * @return
+	 */
 	public static List<Dept> getDeptlist(Integer page, Integer pageSize) {
 		String key = StringHandler.joint('-', Const.Cache_Key_Departs, page.toString(), pageSize.toString());
 		List<Dept> list = CacheHandler.cache(Const.Cache_Name_request, key);
@@ -24,11 +31,21 @@ public class HospitalService {
 		return list;
 	}
 
+	/**
+	 * 获取科室排班信息以及剩余挂号数
+	 * 
+	 * @param deptId
+	 * @return
+	 */
 	public static List<Schedual> getDeptScheduals(String deptId) {
 		List<Schedual> list = CacheHandler.cache(Const.Cache_Name_request, Const.Cache_Key_Depart + deptId);
 		if (list == null) {
 			list = Schedual.dao.find("select * from t_schedual where deptId=? ", deptId);
-			RBAS rBAS = new RBAS();
+			CacheHandler.cache(Const.Cache_Name_request, Const.Cache_Key_Depart + deptId, list);
+		}
+		RBAS rBAS = CacheHandler.cache(Const.Cache_Name_reg, Const.Cache_Key_Depart + deptId);
+		if (rBAS == null) {
+			rBAS = new RBAS();
 			RBASRec[] rBASRec = new RBASRec[list.size()];
 			for (int i = 0; i < list.size(); i++) {
 				Schedual sc = list.get(i);
@@ -40,14 +57,14 @@ public class HospitalService {
 			GetAvailableRegCountResponse res = Service.getAvailableRegCount(Const.TransactionId, rBAS);
 			if (res != null && res.getResultCode() == 0) {
 				rBAS = res.getRBAS();
-				rBASRec = rBAS.getRBASRec();
-				if (rBASRec != null) {
-					for (int i = 0; i < rBASRec.length; i++) {
-						list.get(i).setResNo(rBASRec[i].getRemain() + "");
-					}
-				}
+				CacheHandler.cache(Const.Cache_Name_reg, Const.Cache_Key_Depart + deptId, rBAS);
 			}
-			CacheHandler.cache(Const.Cache_Name_request, Const.Cache_Key_Depart + deptId, list);
+		}
+		RBASRec[] rBASRec = rBAS.getRBASRec();
+		if (rBASRec != null) {
+			for (int i = 0; i < rBASRec.length; i++) {
+				list.get(i).setResNo(rBASRec[i].getRemain() + "");
+			}
 		}
 		return list;
 	}
