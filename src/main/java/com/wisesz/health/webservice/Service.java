@@ -213,10 +213,14 @@ public class Service {
 
 	/**
 	 * 
-	 * @param transactionId 暂无实际业务含义
-	 * @param patientId  HIS系统产生
-	 * @param userID 星锐互动的唯一编号CCB
-	 * @param clientAddress 暂不使用
+	 * @param transactionId
+	 *            暂无实际业务含义
+	 * @param patientId
+	 *            HIS系统产生
+	 * @param userID
+	 *            星锐互动的唯一编号CCB
+	 * @param clientAddress
+	 *            暂不使用
 	 * @return
 	 */
 	public static GetRegiserInfoResponse getRegiserInfo(String transactionId, String patientId, String userID,
