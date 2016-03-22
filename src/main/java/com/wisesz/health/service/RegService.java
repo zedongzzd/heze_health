@@ -1,5 +1,7 @@
 package com.wisesz.health.service;
 
+import java.util.List;
+
 import com.jfinal.log.Log;
 import com.wisesz.health.common.Const;
 import com.wisesz.health.common.Result;
@@ -15,6 +17,14 @@ import com.wisesz.health.webservice.res.DoRegisterResponse;
 public class RegService {
 	private static Log log = Log.getLog(Regist.class);
 
+	/**
+	 * 挂号
+	 * 
+	 * @param uid
+	 * @param patientId
+	 * @param rBASId
+	 * @return
+	 */
 	public static Result<Regist> doRegister(String uid, String patientId, String rBASId) {
 		try {
 			Patient patient = Patient.dao.findById(patientId);
@@ -57,6 +67,13 @@ public class RegService {
 		}
 	}
 
+	/**
+	 * 取消挂号
+	 * 
+	 * @param uid
+	 * @param appId
+	 * @return
+	 */
 	public static Result<Regist> unRegister(String uid, String appId) {
 		String sql = "select * from t_regist where apptId=? and uid=? and state=0";
 		Regist model = Regist.dao.findFirst(sql, appId, uid);
@@ -65,6 +82,7 @@ public class RegService {
 			if (res.getResultCode() != null && res.getResultCode() == 0) {
 				model.sethDate(res.getHDate());
 				model.setState(-1);
+				model.setCreateDate(DateHandler.getDate());
 				model.update();
 				return RespFactory.isOk("退号成功！", model);
 			} else {
@@ -73,6 +91,19 @@ public class RegService {
 		} else {
 			return RespFactory.isFail("连接医院服务器异常！");
 		}
+	}
+
+	/**
+	 * 挂号单列表
+	 * 
+	 * @param uid
+	 * @param page
+	 * @param pageSize
+	 * @return
+	 */
+	public static List<Regist> getRegists(String uid, Integer page, Integer pageSize) {
+		String sql = "select * from t_regist where uid=? order by createDate desc limit ?,?";
+		return Regist.dao.find(sql, uid, (page - 1) * pageSize, pageSize);
 	}
 
 }
