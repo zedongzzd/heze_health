@@ -6,6 +6,8 @@ public class Const {
 	// jsszadmin
 	public final static String adminPwd = "5C757986F24037FBADE7A22DAC851558";
 
+	public final static String UserID = "wisesz";
+	
 	public static String TransactionId = "20009030500001";
 	public static String HospitalId = "20009030500001";
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
