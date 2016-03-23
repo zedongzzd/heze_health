@@ -34,6 +34,7 @@ public class ManageController extends Controller {
 
 	@Before(GET.class)
 	public void login() {
+		setAttr("a","1");
 		render("login.html");
 	}
 
