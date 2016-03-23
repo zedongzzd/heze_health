@@ -11,7 +11,6 @@ import java.lang.annotation.Target;
 @Documented
 public @interface BindTable {
 	public String tableName();
-
 	public String pkName() default "id";
 
 }
