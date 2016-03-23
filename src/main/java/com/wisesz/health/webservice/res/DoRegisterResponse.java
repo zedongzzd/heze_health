@@ -8,7 +8,7 @@ public class DoRegisterResponse extends Dom{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String ResultCode;
+	private Integer ResultCode;
 	private String ApptId;
 	private String SeqCode;
 	private String RegFee;
@@ -17,11 +17,11 @@ public class DoRegisterResponse extends Dom{
 	private String AdmitRange;
 	private String ErrorMsg;
 
-	public String getResultCode() {
+	public Integer getResultCode() {
 		return ResultCode;
 	}
 
-	public void setResultCode(String resultCode) {
+	public void setResultCode(Integer resultCode) {
 		ResultCode = resultCode;
 	}
 

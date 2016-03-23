@@ -1,6 +1,8 @@
 package com.wisesz.health.webservice;
 
+import com.wisesz.health.common.Const;
 import com.wisesz.health.webservice.bean.RBAS;
+import com.wisesz.health.webservice.req.DoCancelRegisterRequest;
 import com.wisesz.health.webservice.req.DoRegisterRequest;
 import com.wisesz.health.webservice.req.GetArrangementRequest;
 import com.wisesz.health.webservice.req.GetAvailableRegCountRequest;
@@ -10,6 +12,7 @@ import com.wisesz.health.webservice.req.GetDoctorRequest;
 import com.wisesz.health.webservice.req.GetRegiserInfoRequest;
 import com.wisesz.health.webservice.req.HisCheckPatientInfoRequest;
 import com.wisesz.health.webservice.req.Request;
+import com.wisesz.health.webservice.res.DoCancelRegisterResponse;
 import com.wisesz.health.webservice.res.DoRegisterResponse;
 import com.wisesz.health.webservice.res.GetArrangementResponse;
 import com.wisesz.health.webservice.res.GetAvailableRegCountResponse;
@@ -43,17 +46,19 @@ public class Service {
 	 * @return
 	 */
 	public static GetDeptResponse getDept(String transactionId, String hospitalId) {
-		GetDeptResponse res = new GetDeptResponse();
 		try {
+			GetDeptResponse res = new GetDeptResponse();
 			GetDeptRequest request = new GetDeptRequest();
 			request.setTransactionId(transactionId);
 			request.setHospitalId(hospitalId);
 			request.setType(2);
 			Request message = new Request("I_00100", request);
 			res.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
+			return res;
 		} catch (Exception e) {
+			return null;
 		}
-		return res;
+
 	}
 
 	/**
@@ -65,16 +70,18 @@ public class Service {
 	 * @return
 	 */
 	public static GetDoctorResponse getDoctor(String transactionId, String deptId) {
-		GetDoctorResponse doctor = new GetDoctorResponse();
 		try {
+			GetDoctorResponse doctor = new GetDoctorResponse();
 			GetDoctorRequest request = new GetDoctorRequest();
 			request.setTransactionId(transactionId);
 			request.setDeptId(deptId);
 			Request message = new Request("I_00101", request);
 			doctor.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
+			return doctor;
 		} catch (Exception e) {
+			return null;
 		}
-		return doctor;
+
 	}
 
 	/**
@@ -89,8 +96,8 @@ public class Service {
 	 */
 	public static GetArrangementResponse getArrangement(String transactionId, String rBASDate, Integer rBASDay,
 			String doctorId, String deptId) {
-		GetArrangementResponse arrangement = new GetArrangementResponse();
 		try {
+			GetArrangementResponse arrangement = new GetArrangementResponse();
 			GetArrangementRequest request = new GetArrangementRequest();
 			request.setTransactionId(transactionId);
 			request.setRBASDate(rBASDate);
@@ -99,11 +106,11 @@ public class Service {
 			request.setDeptId(deptId);
 			Request message = new Request("I_00102", request);
 			arrangement.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
+			return arrangement;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return null;
 		}
-		return arrangement;
+
 	}
 
 	/**
@@ -114,17 +121,18 @@ public class Service {
 	 * @return
 	 */
 	public static GetAvailableRegCountResponse getAvailableRegCount(String transactionId, RBAS rBAS) {
-		GetAvailableRegCountResponse countResponse = new GetAvailableRegCountResponse();
 		try {
+			GetAvailableRegCountResponse countResponse = new GetAvailableRegCountResponse();
 			GetAvailableRegCountRequest request = new GetAvailableRegCountRequest();
 			request.setTransactionId(transactionId);
 			request.setRBAS(rBAS);
 			Request message = new Request("I_00105", request);
 			countResponse.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
+			return countResponse;
 		} catch (Exception e) {
-			e.printStackTrace();
+			return null;
 		}
-		return countResponse;
+
 	}
 
 	/**
@@ -134,18 +142,19 @@ public class Service {
 	 * @param rBAS
 	 * @return
 	 */
+	@Deprecated
 	public static GetAvailableRegResponse getAvailableReg(String transactionId, RBAS rBAS) {
-		GetAvailableRegResponse response = new GetAvailableRegResponse();
 		try {
+			GetAvailableRegResponse response = new GetAvailableRegResponse();
 			GetAvailableRegRequest request = new GetAvailableRegRequest();
 			request.setTransactionId(transactionId);
 			request.setRBAS(rBAS);
 			Request message = new Request("I_00106", request);
 			response.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
+			return response;
 		} catch (Exception e) {
-			e.printStackTrace();
+			return null;
 		}
-		return response;
 	}
 
 	/**
@@ -160,8 +169,8 @@ public class Service {
 	 */
 	public static HisCheckPatientInfoResponse getHisCheckPatientInfo(String transactionId, String cardNO, String iDCard,
 			String name, Integer type) {
-		HisCheckPatientInfoResponse response = new HisCheckPatientInfoResponse();
 		try {
+			HisCheckPatientInfoResponse response = new HisCheckPatientInfoResponse();
 			HisCheckPatientInfoRequest request = new HisCheckPatientInfoRequest();
 			request.setCardNO(cardNO);
 			request.setIDCard(iDCard);
@@ -170,70 +179,97 @@ public class Service {
 			request.setType(type);
 			Request message = new Request("I_00107", request);
 			response.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
+			return response;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return null;
 		}
-		return response;
 	}
 
 	/**
+	 * 确认挂号
 	 * 
 	 * @param patientId
 	 * @param rBASId
 	 * @param transactionId
 	 * @param bdate
 	 * @param phoneNumber
-	 * @param userID
 	 * @param clientAddress
 	 * @param method
 	 * @return
 	 */
-	public static DoRegisterResponse getDoRegister(String patientId, String rBASId, String transactionId, String bdate,
-			String phoneNumber, String userID, String clientAddress, String method) {
-		DoRegisterResponse response = new DoRegisterResponse();
+	public static DoRegisterResponse doRegister(String patientId, String rBASId, String transactionId, String bdate,
+			String phoneNumber, String clientAddress, String method) {
 		try {
+			DoRegisterResponse response = new DoRegisterResponse();
 			DoRegisterRequest request = new DoRegisterRequest();
 			request.setPatientId(patientId);
 			request.setRBASId(rBASId);
 			request.setTransactionId(transactionId);
 			request.setBdate(bdate);
 			request.setPhoneNumber(phoneNumber);
-			request.setUserID(userID);
+			request.setUserID(Const.UserID);
 			request.setClientAddress(clientAddress);
 			request.setMethod(method);
 			Request message = new Request("I_00108", request);
 			response.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
+			return response;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return null;
 		}
-		return response;
+
 	}
 
 	/**
+	 * 查询挂号信息
 	 * 
-	 * @param transactionId 暂无实际业务含义
-	 * @param patientId  HIS系统产生
-	 * @param userID 星锐互动的唯一编号CCB
-	 * @param clientAddress 暂不使用
+	 * @param transactionId
+	 *            暂无实际业务含义
+	 * @param patientId
+	 *            HIS系统产生
+	 * @param userID
+	 *            星锐互动的唯一编号CCB
+	 * @param clientAddress
+	 *            暂不使用
 	 * @return
 	 */
-	public static GetRegiserInfoResponse getRegiserInfo(String transactionId, String patientId, String userID,
-			String clientAddress) {
-		GetRegiserInfoResponse response = new GetRegiserInfoResponse();
+	public static GetRegiserInfoResponse getRegiserInfo(String transactionId, String patientId, String clientAddress) {
 		try {
+			GetRegiserInfoResponse response = new GetRegiserInfoResponse();
 			GetRegiserInfoRequest request = new GetRegiserInfoRequest();
 			request.setTransactionId(transactionId);
 			request.setPatientId(patientId);
-			request.setUserID(userID);
+			request.setUserID(Const.UserID);
 			request.setClientAddress(clientAddress);
 			Request message = new Request("I_00109", request);
 			response.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
+			return response;
 		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
+			return null;
 		}
-		return response;
+
 	}
+
+	/**
+	 * 取消挂号
+	 * 
+	 * @param appId
+	 * @param userID
+	 * @param bDate
+	 * @return
+	 */
+	public static DoCancelRegisterResponse doCancelRegister(String appId, String bDate) {
+		try {
+			DoCancelRegisterResponse response = new DoCancelRegisterResponse();
+			DoCancelRegisterRequest cancelRegisterRequest = new DoCancelRegisterRequest();
+			cancelRegisterRequest.setApptId(appId);
+			cancelRegisterRequest.setUserID(Const.UserID);
+			cancelRegisterRequest.setBDate(bDate);
+			Request message = new Request("I_00110", cancelRegisterRequest);
+			response.parse(XmlUtils.xmldomutils(SoapClient.connect(new HezeMessage(message.toDocument()))));
+			return response;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 }

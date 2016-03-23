@@ -13,6 +13,7 @@ public class Patient extends Model<Patient> {
 	private static final long serialVersionUID = 1L;
 	public static Patient dao = new Patient();
 
+<<<<<<< HEAD
 	public String getPhone(){
 		return getStr("phone");
 	}
@@ -20,6 +21,8 @@ public class Patient extends Model<Patient> {
 		return set("phone", phone);
 	}
 	
+=======
+>>>>>>> b335b2b777a535494d74643b682f63efe7ef0057
 	
 	public String getPatientId() {
 		return getStr("patientId");

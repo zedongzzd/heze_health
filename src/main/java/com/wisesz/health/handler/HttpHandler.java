@@ -22,7 +22,9 @@ public class HttpHandler {
 	}
 
 	public static void addCookie(HttpServletResponse res, String name, String value) {
-		res.addCookie(new Cookie(name, value));
+		Cookie cookie = new Cookie(name, value);
+		cookie.setPath("/");
+		res.addCookie(cookie);
 	}
 
 	public static String getIpAddress(HttpServletRequest request) {

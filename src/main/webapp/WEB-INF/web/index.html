@@ -1,14 +1,37 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>医疗挂号</title>
-    <!-- <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.2/??flexible_css.js,flexible.js"></script> -->
-    <link rel="stylesheet" href="../stylesheets/main.css">
-  </head>
-  <body>
-    <div id="root">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>菏泽医疗</title>
+    <link rel="stylesheet" type="text/css" href="/web/stylesheets/main.css" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5" />
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.2/??flexible_css.js,flexible.js"></script>
+</head>
+<body>
+    <#include "./ftl/header.ftl"/>
+    <!--banner横幅广告-->
+    <div class="banner w h280 ovh mb15">
+        <div class="banner-item">
+            <img class="w" src="../../img/banner.png" alt="横幅广告" />
+        </div>
     </div>
-    <script src="/static/bundle.js"></script>
-    <!-- <script src="dist/bundle.js"></script> -->
-  </body>
+    <!--医院选择-->
+    <div class="bdt fz28 fc-ccc w hht88 bg-white txt-ellipsis icon-hospital-search">
+			<span class="ml90 ">
+				请选择需要就医的医院
+			</span>
+        <span class="fr pr20 dp-inlb h icon-enter"></span>
+    </div>
+    <!--选择科室-->
+    <div class="bdt fz28 fc-ccc w hht88 bg-white txt-ellipsis icon-keshi bdb">
+			<span class="ml90 ">
+				请选择需要就医的医院
+			</span>
+        <span class="fr pr20 dp-inlb h icon-enter"></span>
+    </div>
+    <!--医师查询-->
+    <h1><a href="科室挂号.html"><div class="mlr20 fc-white fz30 item-search hht88 mt60 bdr-5 bg-cyan tc">
+        查询
+    </div></a></h1>
+</body>
 </html>
