@@ -1,0 +1,21 @@
+@charset "UTF-8";
+// compass 工具库
+@import "compass/utilities";
+// 基础引用
+@import "helpers/functions";
+@import "helpers/mixins";
+@import "helpers/base";
+@import "helpers/icons";
+// 组件
+
+// 页面
+//
+//html{
+//  background: $bgc;
+//}
+
+html,body,#root,.app,.view{
+  width: 100%;
+  min-height: 100%;
+}
+

@@ -1,0 +1,33 @@
+@mixin icon($name) {
+  $image-width:rem(image-width("icons/#{$name}.png"));
+  .icon-#{$name}{
+    width: $image-width;
+    background: url("../img/icons/#{$name}.png") 0 center no-repeat;
+    background-size:$image-width ;
+  }
+}
+
+@include icon("back");
+@include icon("enter");
+@include icon("icontouxiang");
+@include icon("hospital-search");
+@include icon("keshi");
+@include icon("iconfont-jiahao");
+
+.icon-back{
+    width: rem(70px)!important;
+    background-position:rem(20px)!important;
+}
+.icon-icontouxiang{
+    width: rem(50px)!important;
+    background-size: rem(50px)!important;
+}
+
+.icon-hospital-search{
+    background-position:rem(20px)!important;
+}
+
+.icon-keshi{
+    background-position:rem(20px)!important;
+    background-size: rem(55px)!important;
+}
