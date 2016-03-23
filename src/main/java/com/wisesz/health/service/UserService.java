@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.wisesz.health.bean.User;
 import com.wisesz.health.common.Const;
 import com.wisesz.health.handler.CacheHandler;
 import com.wisesz.health.handler.HttpHandler;
@@ -24,14 +25,14 @@ public class UserService {
 	 * 登陆
 	 * 
 	 * @param req
-	 * @param uid
+	 * @param user
 	 * @return
 	 */
-	public static boolean doLogin(HttpServletRequest req, HttpServletResponse res, String uid) {
+	public static boolean doLogin(HttpServletRequest req, HttpServletResponse res, User user) {
 		try {
 			String flag = "pre_" + req.getSession().getId();
 			HttpHandler.addCookie(res, Const.Login_Fag, flag);
-			CacheHandler.cache(Const.Cache_Name_login, flag, uid);
+			CacheHandler.cache(Const.Cache_Name_login, flag, user);
 			return true;
 		} catch (Exception e) {
 			log.error("登陆失败！", e);
@@ -45,14 +46,10 @@ public class UserService {
 	 * @param req
 	 * @return
 	 */
-	public static String getUid(HttpServletRequest req) {
+	public static User getUid(HttpServletRequest req) {
 		try {
 			String flag = HttpHandler.getCookie(req, Const.Login_Fag);
-			if (StringHandler.isEmpty(flag)) {
-				return req.getParameter("uid");
-			} else {
-				return CacheHandler.cache(Const.Cache_Name_login, flag);
-			}
+			return CacheHandler.cache(Const.Cache_Name_login, flag);
 		} catch (Exception e) {
 			log.error("获取登陆uid失败！", e);
 		}
