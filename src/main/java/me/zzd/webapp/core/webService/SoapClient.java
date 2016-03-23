@@ -1,7 +1,9 @@
 package me.zzd.webapp.core.webService;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -34,12 +36,12 @@ public class SoapClient {
 			// 获得响应状态
 			int responseCode = conn.getResponseCode();
 			if (HttpURLConnection.HTTP_OK == responseCode) {
-				InputStream is = conn.getInputStream();
-				byte[] b = new byte[1024];
-				int len = 0;
 				StringBuilder result = new StringBuilder();
-				while ((len = is.read(b)) != -1) {
-					result.append(new String(b, 0, len, "utf-8"));
+				InputStream is = conn.getInputStream();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(is,"utf-8"));
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					result.append(line);
 				}
 				return result.toString();
 			}
