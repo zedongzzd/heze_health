@@ -24,11 +24,11 @@
         <!--选择科室-->
 
 
-        <div id="depart" class="bdt fz28 fc-ccc w hht88 bg-white txt-ellipsis icon-keshi bdb <#if departId??>fc-black</#if>">
-            <span class="ml90 ">${departName!"请选择科室"}</span>
+        <div id="depart" class="bdt fz28 fc-ccc w hht88 bg-white txt-ellipsis icon-keshi bdb <#if deptId??>fc-black</#if>">
+            <span class="ml90 ">${deptName!"请选择科室"}</span>
             <span class="fr pr20 dp-inlb h icon-enter"></span>
         </div>
-        <input id="departId" name="departId"  type="hidden" value="${departId!''}" >
+        <input id="deptId" name="deptId"  type="hidden" value="${deptId!''}" >
         <!--医师查询-->
         <h1>
             <div id="query" class="mlr20 fc-white fz30 item-search hht88 mt60 bdr-5 bg-cyan tc">查询</div>
@@ -45,14 +45,14 @@
         });
 
         $("#depart").click(function(){
-            location.href = "/reg/depart";
+            location.href = "/reg/depart?hospId=${hospId!''}&hospName="+encodeURIComponent("${hospName!''}");
         });
     })
 
     function chkform(){
-        var departId = $.trim($("#departId").val());
+        var deptId = $.trim($("#deptId").val());
 
-        if(departId ==""){
+        if(deptId ==""){
             alert("请选择科室");
             return false;
         }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>科室选择</title>
+  <#include "../ftl/style.ftl"/>
+</head>
+<body>
+  <#include "../ftl/titleBar.ftl"/>
+  <ul id="depts">
+    <#list depts as d>
+      <li deptId="${d.deptId}">${d.name!''}</li>
+    </#list>
+    <li class="none">没有科室</li>
+  </ul>
+</body>
+<#include "../ftl/js.ftl"/>
+<script>
+  $(function(){
+
+    $("#depts li").click(function(){
+      var $li      = $(this);
+      var deptId   = $li.attr("deptId");
+      var deptName = $li.html();
+      window.location = "/reg?hospId=${hospId!''}&hospName="+encodeURIComponent("${hospName!''}")+"&deptId="+deptId+"&deptName="+encodeURIComponent(deptName);
+    });
+  })
+</script>
+</html>
