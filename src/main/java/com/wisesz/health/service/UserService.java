@@ -10,9 +10,10 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.wisesz.health.bean.User;
 import com.wisesz.health.common.Const;
+import com.wisesz.health.common.Result;
+import com.wisesz.health.common.Result.RespFactory;
 import com.wisesz.health.handler.CacheHandler;
 import com.wisesz.health.handler.HttpHandler;
-import com.wisesz.health.handler.StringHandler;
 import com.wisesz.health.model.Patient;
 import com.wisesz.health.webservice.Service;
 import com.wisesz.health.webservice.bean.UserInfo;
@@ -81,6 +82,42 @@ public class UserService {
 			log.error("添加病人出错！", e);
 		}
 		return false;
+	}
+
+	public static Result<String> updatePatient(String patientId, String cardNo, String idCard, String phone,
+			String name, Integer type) {
+		try {
+			HisCheckPatientInfoResponse response = Service.getHisCheckPatientInfo(Const.TransactionId, cardNo, idCard,
+					name, type);
+			if (response != null) {
+				if (response.getResultCode() == 0) {
+					UserInfo info = response.getUserInfo();
+					String _patientId = info.getPatientId();
+					Patient patient = new Patient();
+					patient.setPatientId(_patientId).setName(name).setIdCard(idCard).setPhone(phone).setCardNo(cardNo);
+					boolean op = false;
+					if (_patientId.equals(patientId)) {
+						op = patient.update();
+					} else {
+						Patient.dao.deleteById(patient);
+						op = patient.save();
+					}
+					if (op) {
+						return RespFactory.isOk();
+					} else {
+						return RespFactory.isFail("服务器繁忙，请多事几次！");
+					}
+				} else {
+					return RespFactory.isFail(response.getErrorMsg());
+				}
+			} else {
+				return RespFactory.isFail("服务器繁忙，请多事几次！");
+			}
+		} catch (Exception e) {
+			log.error("修改常用联系人出错！", e);
+			return RespFactory.isFail("服务器繁忙，请多事几次！");
+		}
+
 	}
 
 	/**
