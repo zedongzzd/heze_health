@@ -38,15 +38,16 @@ public class HospitalService {
 		List<Record> list = CacheHandler.cache(Const.Cache_Name_request, key);
 		if (list == null) {
 			String sql = "SELECT de.deptId,de.name FROM t_schedual sc LEFT JOIN t_dept de ON sc.deptId = de.deptId AND sc.deptName = de.name WHERE sc.date>=? ";
-			String date=DateHandler.getDate();
-			if(typeId==null){
-				list=Db.find(sql,date);
-			}else if(typeId==-1) {
-				sql+=" and de.type is null ";
-				list=Db.find(sql,date);
-			}else  {
-				sql+=" and de.type =? ";
-				list=Db.find(sql,date,typeId);
+			String date = DateHandler.getDate();
+			if (typeId == null) {
+				sql += " limit ?,? ";
+				list = Db.find(sql, date, (page - 1) * pageSize, pageSize);
+			} else if (typeId == -1) {
+				sql += " and de.type is null  limit ?,? ";
+				list = Db.find(sql, date, (page - 1) * pageSize, pageSize);
+			} else {
+				sql += " and de.type =?  limit ?,? ";
+				list = Db.find(sql, date, typeId, (page - 1) * pageSize, pageSize);
 			}
 			CacheHandler.cache(Const.Cache_Name_request, key, list);
 		}
