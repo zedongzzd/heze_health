@@ -44,4 +44,12 @@ public class Dept extends Model<Dept> {
 	public Dept setHospitalId(String hospitalId) {
 		return set("hospitalId", hospitalId);
 	}
+
+	public Integer getType() {
+		return getInt("type");
+	}
+
+	public Dept setType(Integer type) {
+		return set("type", type);
+	}
 }
