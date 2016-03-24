@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>菏泽医疗</title>
+    <#include "../ftl/style.ftl"/>
+
+</head>
+<body>
+    <#include "../ftl/titleBar.ftl"/>
+    <!--banner横幅广告-->
+    <div class="banner w h280 ovh mb15">
+        <div class="banner-item">
+            <img class="w" src="/web/img/banner.png" alt="横幅广告" />
+        </div>
+    </div>
+    <form id="form" action="/reg/pools" method="get" onsubmit="return chkform();" >
+        <!--医院选择-->
+        <div class="bdt fz28 fc-ccc w hht88 bg-white txt-ellipsis icon-hospital-search">
+            <span class="ml90 ">山东菏泽医院</span>
+            <span class="fr pr20 dp-inlb h icon-enter"></span>
+        </div>
+        <input id="hospId" name="hospId" type="hidden" value="${hospId!''}" >
+        <!--选择科室-->
+
+
+        <div id="depart" class="bdt fz28 fc-ccc w hht88 bg-white txt-ellipsis icon-keshi bdb <#if departId??>fc-black</#if>">
+            <span class="ml90 ">${departName!"请选择科室"}</span>
+            <span class="fr pr20 dp-inlb h icon-enter"></span>
+        </div>
+        <input id="departId" name="departId"  type="hidden" value="${departId!''}" >
+        <!--医师查询-->
+        <h1>
+            <div id="query" class="mlr20 fc-white fz30 item-search hht88 mt60 bdr-5 bg-cyan tc">查询</div>
+        </h1>
+
+    </form>
+</body>
+<#include "../ftl/js.ftl"/>
+<script>
+
+    $(function(){
+        $("#query").click(function(){
+           $("#form").submit();
+        });
+
+        $("#depart").click(function(){
+            location.href = "/reg/depart";
+        });
+    })
+
+    function chkform(){
+        var departId = $.trim($("#departId").val());
+
+        if(departId ==""){
+            alert("请选择科室");
+            return false;
+        }
+
+        return true;
+    }
+
+</script>
+</html>

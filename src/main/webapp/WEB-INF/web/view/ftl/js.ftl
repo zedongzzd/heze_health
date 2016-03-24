@@ -1,0 +1,1 @@
+<script src="/web/js/jquery.min.js"></script>
