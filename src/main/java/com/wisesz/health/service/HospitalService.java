@@ -8,7 +8,6 @@ import com.wisesz.health.common.Const;
 import com.wisesz.health.handler.CacheHandler;
 import com.wisesz.health.handler.DateHandler;
 import com.wisesz.health.handler.StringHandler;
-import com.wisesz.health.model.Dept;
 import com.wisesz.health.model.Schedual;
 import com.wisesz.health.webservice.Service;
 import com.wisesz.health.webservice.bean.RBAS;
