@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.2/??flexible_css.js,flexible.js"></script>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../stylesheets/main.css" />
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			.bar {
+				height: 80px;
+				border: 1px solid #ccc;
+			}
+			
+			.bar-nav {}
+			
+			.icon {
+				display: inline-block;
+				width: 70px;
+				height: inherit;
+				position: absolute;
+				background: url(../img/icons/back.png)center center no-repeat;
+				background-size: 0.328125rem;
+			}
+			
+			.title {
+				font-family: ;
+				text-align: center;
+				height: inherit;
+				line-height: 80px;
+				color: #1bbc9c;
+				font-size: 30px;
+			}
+			
+			.dl {
+				margin-left: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="hht88 bdb-ccc bg-white">
+			<a class="dp-inlb pa h icon-back "></a>
+			<div class="fz30 tc fc-cyan">标题</div>
+			<a href="" class="dp-inlb pa icon-icontouxiang h r20 t0"></a>
+		</header>
+		<banner><img style="width: 100%;" src="../img/banner.png" /></banner>
+		<div class="" style="border: 1px solid #bbb;font-size: 0.46875rem;color: #888;">
+			<div class="dl" style="height: 0.78125rem;line-height: 0.78125rem;">
+				<label for="l1" style="">就诊时间:</label>
+				<p class="p1" style="display: inline-block;">123</p>
+			</div>
+			<div class="dl" style="height: 0.78125rem;line-height: 0.78125rem;">
+				<label for="l1" style="">就诊时间:</label>
+				<p class="p1" style="display: inline-block;">123</p>
+			</div>
+			<div class="dl" style="height: 0.78125rem;line-height: 0.78125rem;">
+				<label for="l1" style="">就诊时间:</label>
+				<p class="p1" style="display: inline-block;">123</p>
+			</div>
+			<div class="dl" style="height: 0.78125rem;line-height: 0.78125rem;">
+				<label for="l1" style="">就诊时间:</label>
+				<p class="p1" style="display: inline-block;">123</p>
+			</div>
+			<div class="dl" style="height: 0.78125rem;line-height: 0.78125rem;">
+				<label for="l1" style="">就诊时间:</label>
+				<p class="p1" style="display: inline-block;">123</p>
+			</div>
+			<div class="dl" style="height: 0.78125rem;line-height: 0.78125rem;">
+				<label for="l1" style="">就诊时间:</label>
+				<p class="p1" style="display: inline-block;">123</p>
+			</div>
+
+		</div>
+	</body>
+	<script>
+		$(function() {
+			$.post("http://221.224.162.179:2500/hospital/list", {}, function(resp) {
+				if (resp.resultCode == 0 && resp.obj && resp.obj.length) {
+					$.each(resp.obj, function(i, v) {
+						$("body").append(`<div>${v.hospName}</div>`);
+					});
+				}
+			});
+		})
+	</script>
+
+</html>
