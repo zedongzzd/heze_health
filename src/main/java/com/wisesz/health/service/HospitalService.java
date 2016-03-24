@@ -72,6 +72,7 @@ public class HospitalService {
 			RBASRec[] rBASRec = new RBASRec[list.size()];
 			for (int i = 0; i < list.size(); i++) {
 				Schedual sc = list.get(i);
+				sc.setResNo("0");
 				rBASRec[i] = new RBASRec();
 				rBASRec[i].setRBASId(sc.getId());
 				rBASRec[i].setRBASDate(sc.getDate());
@@ -85,8 +86,17 @@ public class HospitalService {
 		}
 		RBASRec[] rBASRec = rBAS.getRBASRec();
 		if (rBASRec != null) {
-			for (int i = 0; i < rBASRec.length; i++) {
-				list.get(i).setResNo(rBASRec[i].getRemain() + "");
+			for (RBASRec rec : rBASRec) {
+				for (Schedual sc : list) {
+					if (rec.getRBASDate().equals(sc.getDate())) {
+						Integer remain = rec.getRemain();
+						if (remain == null) {
+							remain = 0;
+						}
+						sc.setResNo(remain.toString());
+						break;
+					}
+				}
 			}
 		}
 		return list;
