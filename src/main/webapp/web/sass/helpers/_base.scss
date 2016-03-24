@@ -9,8 +9,9 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}
 q:before, q:after{content:' '}
 abbr,acronym{border:0;}
 a{text-decoration: none;}
-html{background: rgb(234,238,242)!important;}
+html{font-family:arial simhei!important;background: rgb(234,238,242)!important;}
 /*****文字排版******/
+.fc-black{color: #000;}
 .fc-white{color: #fff;}
 .fc-cyan{color: #1bbc9c;}
 .fc-grey{color: grey;}
@@ -57,13 +58,16 @@ html{background: rgb(234,238,242)!important;}
 .dp-inlb{display: inline-block;}
 .vm{vertical-align:center;}
 .vc-v{display: table-cell;vertical-align: middle;}
-.vc{position: absolute;top: 25%;left: 25%;}
+.vc{position: absolute;top: 50%;left: 50%;}
 .pa{position: absolute;}
 .r10{right: rem(10px);}
 .r20{right: rem(20px);}
 .r40{right: rem(40px);}
 .l20{left: rem(20px);}
 .t0{top: 0;}
+.t10{top: rem(10px);}
+.t15{top: rem(15px);}
+.t20{top: rem(20px);}
 .pr{position:relative;}
 .abs-right{position:absolute;right:0;}
 .zoom{zoom:1}
@@ -89,9 +93,9 @@ html{background: rgb(234,238,242)!important;}
 .w60{width:rem(60px);}
 .w65{width: rem(65px);}
 .w70{width:rem(70px);}
-.w80{width:80px;}
-.w90{width:90px;}
-.w100{width:100px;}
+.w80{width:rem(80px);}
+.w90{width:rem(90px);}
+.w100{width:rem(100px);}
 .w110{width:rem(110px);}
 .w140{width:rem(140px);}
 .w200{width:rem(200px);}
@@ -253,6 +257,9 @@ html{background: rgb(234,238,242)!important;}
 }
 .bg{
     background-color: #eaeef2;
+}
+.bg-f4{
+    background-color: #f4f4f4!important;
 }
 .dp-flex{
     display: flex;
