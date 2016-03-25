@@ -40,7 +40,6 @@ public class MineController extends Controller{
 
     }
 
-
   /**
    * 我的挂号页面
    */
