@@ -3,8 +3,10 @@ package com.wisesz.health.controller;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.ext.interceptor.GET;
+import com.jfinal.ext.interceptor.POST;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.render.NullRender;
 import com.wisesz.health.bean.TitleBar;
 import com.wisesz.health.bean.User;
 import com.wisesz.health.common.Const;
@@ -17,9 +19,7 @@ import me.zzd.webapp.core.annotation.BindController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -29,12 +29,26 @@ import java.util.Map;
 public class RegController extends Controller {
     private Log log = Log.getLog(getClass());
 
-    public void baseRender(String viewPath, HttpServletRequest request){
-        setAttr("hospId"  , StringHandler.defaultValue(getPara("hospId"),Const.HospitalId));
-        setAttr("hospName", StringHandler.defaultValue(getPara("hospName"),"山东菏泽医院"));
-        setAttr("deptId"  , StringHandler.defaultValue(getPara("deptId")));
-        setAttr("deptName", StringHandler.defaultValue(getPara("deptName")));
+    public void baseRender(String viewPath,TitleBar titleBar,boolean isAddParam){
+        String hospId   = StringHandler.defaultValue(getPara("hospId"),Const.HospitalId);
+        String hospName = StringHandler.defaultValue(getPara("hospName"),"菏泽市第一人民医院");
+        String deptId   = StringHandler.defaultValue(getPara("deptId"));
+        String deptName = StringHandler.defaultValue(getPara("deptName"));
+        setAttr("hospId"  , hospId);
+        setAttr("hospName", hospName);
+        setAttr("deptId"  , deptId);
+        setAttr("deptName", deptName);
 
+        Map<String,String> backParam = new HashMap<>();
+        backParam.put("hospId"  , hospId);
+        backParam.put("hospName", hospName);
+        backParam.put("deptId"  , deptId);
+        backParam.put("deptName", deptName);
+
+        if(isAddParam){
+            titleBar.setBackUrl(HttpHandler.formatUrl(titleBar.getBackUrl(),backParam));
+        }
+        setAttr("titleBar",titleBar);
         render(viewPath);
     }
 
@@ -51,9 +65,7 @@ public class RegController extends Controller {
             UserService.doLogin(getRequest(),getResponse(),user);
         }
 
-        setAttr("titleBar",new TitleBar("","智慧医疗","/mine"));
-
-        baseRender("reg/index.html",getRequest());
+        baseRender("reg/index.html",new TitleBar("","智慧医疗","/mine"),false);
     }
 
 
@@ -64,18 +76,35 @@ public class RegController extends Controller {
     @Before(GET.class)
     public void depart(){
         List<Record> types = HospitalService.getDeptTypes();
+        List<Record> depts =  HospitalService.getDeptlist(null, 1, 20);
+
+
+        setAttr("depts"    , depts);
+        setAttr("types"    , types);
+        baseRender("reg/depart.html",new TitleBar("/reg",StringHandler.defaultValue(getPara("hospName"),"科室选择"),""),true);
+    }
+
+    @Before(POST.class)
+    public void post_depart(){
+        Integer typeId   = getParaToInt("typeId");
+        Integer page     = getParaToInt("page");
+        Integer pageSize = getParaToInt("pageSize");
+
         List<Record> depts = null;
 
-        if(types !=null && types.size()>0){
-            Integer typeId = types.get(0).get("typeId");
-            if(typeId != null) {
-                HospitalService.getDeptlist(typeId, 1, 20);
-            }
+        if(page ==null){
+            page = 1;
         }
 
-        setAttr("titleBar" , new TitleBar("/reg",StringHandler.defaultValue(getPara("hospName"),"科室选择"),""));
-        setAttr("depts"    , depts);
-        baseRender("reg/depart.html",getRequest());
+        if(pageSize == null){
+            pageSize = 20;
+        }
+        if(typeId ==null || typeId.compareTo(0)>0){
+            depts = HospitalService.getDeptlist(typeId, page, pageSize);
+        }
+
+        setAttr("depts", depts);
+        render("ftl/reg/dept.ftl");
     }
 
     /**
@@ -96,9 +125,18 @@ public class RegController extends Controller {
         }
 
         List<Schedual> scheduals = HospitalService.getDeptScheduals(departId);
-        setAttr("scheduals", scheduals);
-        setAttr("titleBar" , new TitleBar("/reg",StringHandler.defaultValue(getPara("deptName"),"号源选择"),""));
+        List<String>   weeks      = new ArrayList<>();
+        String [] week = new String[]{"星期日","星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
+        if(scheduals!=null && scheduals.size()>0) {
+            for (Schedual schedual : scheduals) {
+                String date = schedual.getDate().replace("-","/");
+                weeks.add(week[new Date(date).getDay()]);
+            }
+        }
 
-        baseRender("reg/pools.html",getRequest());
+        setAttr("scheduals", scheduals);
+        setAttr("weeks", weeks);
+
+        baseRender("reg/pools.html",new TitleBar("/reg",StringHandler.defaultValue(getPara("deptName"),"号源选择"),""),true);
     }
 }
