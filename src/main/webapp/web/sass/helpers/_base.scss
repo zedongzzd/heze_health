@@ -49,7 +49,7 @@ body,*,*:before,*:after{
 .tj{text-align: justify;}
 .tr{text-align:right;}
 .bc{margin-left:auto;margin-right:auto;}
-.fl{float:left;display:inline;}
+.fl{float:left;}
 .fl-20{float: left;@extend .pl20;}
 .fr{float:right;}
 .fr-20{float: right;@extend .pr20;}
@@ -61,6 +61,7 @@ body,*,*:before,*:after{
 .dp-inlb{display: inline-block;}
 .vm{vertical-align:center;}
 .vc-v{display: table-cell;vertical-align: middle;}
+.tb-center{text-align:center;vertical-align: middle;}
 .vc{position: absolute;top: 50%;left: 50%;}
 .pa{position: absolute;}
 .r10{right: rem(10px);}
@@ -121,6 +122,7 @@ body,*,*:before,*:after{
 .h115{height: 115px;}
 .h185{height: 185px;}
 .h200{height:rem(200px);}
+.h240{height: rem(240px);}
 .h250{height: rem(250px);}
 .h260{height: rem(260px);}
 .h280{height: rem(280px);}
@@ -175,7 +177,9 @@ body,*,*:before,*:after{
 .mt30{margin-top:rem(30px);}
 .mt50{margin-top:rem(50px);}
 .mt60{margin-top: rem(60px);}
+.mt88{margin-top: rem(88px);}
 .mt100{margin-top:100px;}
+.mt103{margin-top: rem(103px);}
 .mb5{margin-bottom:5px;}
 .mb10{margin-bottom:10px;}
 .mb15{margin-bottom:15px;}
@@ -238,15 +242,18 @@ body,*,*:before,*:after{
 .pl10{padding-left:10px;}
 .pl15{padding-left:15px;}
 .pl20{padding-left:20px;}
-.pl30{padding-left:30px;}
-.pl50{padding-left:50px;}
+.pl30{padding-left:rem(30px);}
+.pl40{padding-left:rem(40px);}
+.pl50{padding-left:rem(50px);}
+.pl60{padding-left:rem(60px);}
+.pl70{padding-left:rem(70px);}
 .pl100{padding-left:100px;}
 .pr5{padding-right:5px;}
 .pr10{padding-right:10px;}
 .pr15{padding-right:15px;}
-.pr20{padding-right:20px;}
-.pr30{padding-right:30px;}
-.pr50{padding-right:50px;}
+.pr20{padding-right:rem(20px);}
+.pr30{padding-right:rem(30px);}
+.pr50{padding-right:rem(50px);}
 .pr100{padding-right:100px;}
 .plr20{padding-left: rem(20px);padding-right: rem(20px);}
 .bg-white{
@@ -276,6 +283,7 @@ body,*,*:before,*:after{
 //文本溢出显示省略号
 .txt-ellipsis{overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
 .ovh{overflow: hidden;}
+.ovsc{overflow-x: scroll;}
 .bdr-5{border-radius: rem(5px);}
 .bdr-10{border-radius: rem(10px);}
 

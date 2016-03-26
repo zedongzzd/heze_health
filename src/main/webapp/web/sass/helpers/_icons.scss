@@ -1,7 +1,7 @@
 @mixin icon($name) {
   $image-width:rem(image-width("icons/#{$name}.png"));
   .icon-#{$name}{
-    width: $image-width;
+//  width: $image-width;
     background: url("../img/icons/#{$name}.png") 0 center no-repeat;
     background-size:$image-width ;
   }
@@ -13,6 +13,7 @@
 @include icon("hospital-search");
 @include icon("keshi");
 @include icon("iconfont-jiahao");
+@include icon("iconfont-icongou");
 
 .icon-back{
     width: rem(70px)!important;
@@ -30,4 +31,10 @@
 .icon-keshi{
     background-position:rem(20px)!important;
     background-size: rem(55px)!important;
+}
+.icon-iconfont-icongou{
+    background-position:rem(20px)!important;
+}
+.pull-right{
+    background-position:97%!important;
 }
