@@ -105,8 +105,9 @@ public class RegService {
 	 */
 	public static List<Record> getRegists(String uid, Integer page, Integer pageSize) {
 		//todo 修改为多表联合查询,需要医院,科室,病人名称
-		String sql = "select * from t_regist where uid=? order by createDate desc limit ?,?";
-		return Db.find(sql, uid, (page - 1) * pageSize, pageSize);
+		String sql="select t_regist.*, t_patient.name as patientName,t_hospital.name as hospName, t_dept.name as deptName, t_doctor.address from  t_regist inner join   t_patient on  t_regist.uid=? and  t_regist.patientId=t_patient.patientId inner join   t_dept on t_regist.deptId=t_dept.deptId inner join    t_hospital  on t_regist.hospitalId=t_hospital.hospitalId  inner join t_doctor on t_regist.deptId=t_doctor.doctorId order by createDate desc limit ?,?";	
+	    //String sql = "select * from t_regist where uid=? order by createDate desc limit ?,?";
+		return Db.find(sql,uid,(page - 1) * pageSize, pageSize);
 	}
-
+	
 }

@@ -1,11 +1,12 @@
 package com.wisesz.health.controller;
 
+import java.util.List;
+
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.ext.interceptor.GET;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.plugin.activerecord.Record;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import com.wisesz.health.bean.TitleBar;
 import com.wisesz.health.bean.User;
 import com.wisesz.health.common.Result;
@@ -13,13 +14,10 @@ import com.wisesz.health.handler.HttpHandler;
 import com.wisesz.health.handler.StringHandler;
 import com.wisesz.health.interceptor.WebLoginInterceptor;
 import com.wisesz.health.model.Patient;
-import com.wisesz.health.model.Regist;
 import com.wisesz.health.service.RegService;
 import com.wisesz.health.service.UserService;
-import me.zzd.webapp.core.annotation.BindController;
 
-import java.io.IOException;
-import java.util.List;
+import me.zzd.webapp.core.annotation.BindController;
 
 /**
  * Created by wangguohao on 16/3/23.
@@ -43,18 +41,17 @@ public class MineController extends Controller{
   /**
    * 我的挂号页面
    */
-    @Before({GET.class, WebLoginInterceptor.class})
+    @Before({GET.class,WebLoginInterceptor.class})
     public void index(){
-        User user = UserService.getUid(getRequest());
-
-        List<Record> registList = RegService.getRegists(user.getUid(),1,10);
-
-
+        //User user = UserService.getUid(getRequest());
+    	String uid=getPara("uid");
+        List<Record> registList = RegService.getRegists(uid,1,10);
         setAttr("registers" , registList);
         setAttr("titleBar"     , new TitleBar("/reg", "我的挂号", "/mine/patients", "常用人"));
         render("mine/registers.html");
     }
-
+    
+    
   /**
    * 分页获取我的挂号单
    */

@@ -15,7 +15,6 @@
 </head>
 <body>
   <#include "../ftl/titleBar.ftl"/>
-
   <!--选择科室-->
   <ul id="type" class="mt15 bdt tf-y fl bg-white fz28 w-40 tc bdb">
     <li class="hht88 bdb bdr active">全部</li>
@@ -40,7 +39,7 @@
       page     : 1,
       pageSize : 20
     };
-
+    
     var $type = $("#type");
     var $dept = $("#dept");
     $([$type[0],$dept[0]]).height(document.documentElement.clientHeight-$("#dept").offset().top+"px");
@@ -80,7 +79,6 @@
           //todo 没有更多了
           return false;
         }
-
         isloading = true;
 
         $.post("/reg/post_depart", param, function(resp){
@@ -102,7 +100,6 @@
       var height       = dept.clientHeight;
       var scrollHeight = dept.scrollHeight;
       var scrollTop    = dept.scrollTop;
-
       if(scrollHeight - height - scrollTop < 10){
         if(!noMore && !isloading) {
           param.page += 1;
