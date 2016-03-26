@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<!--<link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.css">-->
+		<link rel="stylesheet" type="text/css" href="../stylesheets/main.css"/>
+	</head>
+
+	<body>
+		<div class="content">
+			<div class="content-block">
+				<p><a href="#" class="open-indicator">Open Indicator</a></p>
+			</div>
+		</div>
+		<div class="preloader-indicator-overlay"></div>
+		<div class="preloader-indicator-modal"><span class="preloader preloader-white"></span></div>
+		<script type="text/javascript">
+		</script>
+		<!--<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.js' charset='utf-8'></script>
+		<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.js' charset='utf-8'></script>-->
+		<script type="text/javascript">
+			$(document).on('click', '.open-indicator', function() {
+				$.showIndicator();
+				setTimeout(function() {
+					$.hideIndicator();
+				}, 2000);
+			});
+		</script>
+	</body>
+
+</html>

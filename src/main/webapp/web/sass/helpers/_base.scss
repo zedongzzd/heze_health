@@ -10,6 +10,9 @@ q:before, q:after{content:' '}
 abbr,acronym{border:0;}
 a{text-decoration: none;}
 html{font-family:arial simhei!important;background: rgb(234,238,242)!important;}
+body,*,*:before,*:after{
+    box-sizing: border-box;
+}
 /*****文字排版******/
 .fc-black{color: #000;}
 .fc-white{color: #fff;}
@@ -63,6 +66,7 @@ html{font-family:arial simhei!important;background: rgb(234,238,242)!important;}
 .r10{right: rem(10px);}
 .r20{right: rem(20px);}
 .r40{right: rem(40px);}
+.l0{left: 0;}
 .l20{left: rem(20px);}
 .t0{top: 0;}
 .t10{top: rem(10px);}
@@ -70,6 +74,7 @@ html{font-family:arial simhei!important;background: rgb(234,238,242)!important;}
 .t20{top: rem(20px);}
 .pr{position:relative;}
 .abs-right{position:absolute;right:0;}
+.b0{position:absolute;bottom:0;}
 .zoom{zoom:1}
 .hidden{visibility:hidden;}
 .none{display:none;}
@@ -151,6 +156,7 @@ html{font-family:arial simhei!important;background: rgb(234,238,242)!important;}
 .bdb{border-bottom: 1px solid #ccc;box-sizing: border-box;}
 .bdtb{border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;}
 .bd-cyan{border: 1px solid #1bbc9c;}
+.bd-grey{border: 1px solid grey;}
 .bdb{border-bottom: 1px solid #ccc;}
 .bdb-ccc{border-bottom: 1px solid #ccc;}
 /******边距*******/
@@ -273,4 +279,4 @@ html{font-family:arial simhei!important;background: rgb(234,238,242)!important;}
 .bdr-5{border-radius: rem(5px);}
 .bdr-10{border-radius: rem(10px);}
 
-.tf-y{overflow-y: scroll;}
+.tf-y{overflow-y: auto;}
