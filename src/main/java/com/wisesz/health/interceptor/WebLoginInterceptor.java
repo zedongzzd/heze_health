@@ -10,6 +10,8 @@ import com.wisesz.health.handler.CacheHandler;
 import com.wisesz.health.handler.HttpHandler;
 import com.wisesz.health.handler.StringHandler;
 
+import java.io.IOException;
+
 /**
  * Created by wangguohao on 16/3/24.
  */
@@ -34,7 +36,12 @@ public class WebLoginInterceptor implements Interceptor {
     if ("POST".equalsIgnoreCase(c.getRequest().getMethod().toUpperCase())) {
       c.renderJson(Result.RespFactory.newInstance(-500, "尚未登录！", null));
     } else {
-      c.render("/reg");
+      try {
+        c.getResponse().sendRedirect("/reg");
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
     }
   }
 }

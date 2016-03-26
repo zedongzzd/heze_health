@@ -3,6 +3,8 @@ package com.wisesz.health.service;
 import java.util.List;
 
 import com.jfinal.log.Log;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.wisesz.health.common.Const;
 import com.wisesz.health.common.Result;
 import com.wisesz.health.common.Result.RespFactory;
@@ -101,9 +103,10 @@ public class RegService {
 	 * @param pageSize
 	 * @return
 	 */
-	public static List<Regist> getRegists(String uid, Integer page, Integer pageSize) {
+	public static List<Record> getRegists(String uid, Integer page, Integer pageSize) {
+		//todo 修改为多表联合查询,需要医院,科室,病人名称
 		String sql = "select * from t_regist where uid=? order by createDate desc limit ?,?";
-		return Regist.dao.find(sql, uid, (page - 1) * pageSize, pageSize);
+		return Db.find(sql, uid, (page - 1) * pageSize, pageSize);
 	}
 
 }

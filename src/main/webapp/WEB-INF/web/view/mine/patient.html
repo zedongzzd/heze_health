@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>demo</title>
+  <!--公共样式-->
+  <#include "../ftl/style.ftl"/>
+</head>
+<body>
+<!--标题栏-->
+<#include "../ftl/titleBar.ftl"/>
+<div class="container mt88">
+  <div class=" fz28 bdb bg-white mt15 txt-ellipsis">
+    <div class="ml20 fz28 hht70 bdb txt-ellipsis">
+      <label class="fc-grey">姓&emsp;名：</label>
+      <input class="fz26 txt-ellipsis">${patient.name!""}</input>
+    </div>
+    <div class="ml20 fz28 hht70 bdb txt-ellipsis">
+      <label class="fc-grey">卡&emsp;号：</label>
+      <input class="fz26 ">${patient.cardNo!""}</input>
+    </div>
+    <div class="ml20 fz28 hht70 bdb txt-ellipsis">
+      <label class="fc-grey">身份证：</label>
+      <input class="fz26 txt-ellipsis">${patient.idCard!""}</input>
+    </div>
+    <div class="ml20 fz28 hht70 txt-ellipsis">
+      <label class="fc-grey">手&emsp;机：</label>
+      <input class="fz26 ">${patient.phone!""}</input>
+    </div>
+  </div>
+  <div class="hht88 bg-white mt15 fz30 fc-cyan tc bdtb" id="action">
+    <#if (patient.id??)>
+      编辑
+    <#else>
+      新增
+    </#if>
+  </div>
+</div>
+</body>
+<!--公共js-->
+<#include "../ftl/js.ftl"/>
+<script>
+  const patientId = "${patient.id}";
+  var   isAjax    = false;
+
+  $("#action").on("click",function(){
+    //todo 1.是否正在ajax,否继续
+    //todo 2.姓名（非空）,卡号（非空）,身份证（校验）,手机号（校验）验证成功继续,失败时alert信息
+    //todo 3.ajax新增/更新就诊人
+
+    var data = {};
+    $.ajax({
+      type       : "post",
+      url        : "/user/patient",
+      data       : data,
+      beforeSend : function(){
+        isAjax = true;
+      },success  : function(resp){
+          isAjax = false;
+          if(resp.resultCode){
+            alert(resp.resultMsg);
+          }else{
+            //todo 成功处理
+//            alert()
+          }
+      }
+    })
+  });
+</script>
+</html>

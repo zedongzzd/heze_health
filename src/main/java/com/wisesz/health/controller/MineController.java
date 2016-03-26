@@ -27,7 +27,7 @@ import java.util.List;
 @BindController(value = "/mine",viewPath = "/web/view")
 public class MineController extends Controller{
 
-    /**
+  /**
      * 获取登录信息
      */
     @Before(GET.class)
@@ -47,12 +47,12 @@ public class MineController extends Controller{
     public void index(){
         User user = UserService.getUid(getRequest());
 
-        List<Regist> registList = RegService.getRegists(user.getUid(),1,10);
+        List<Record> registList = RegService.getRegists(user.getUid(),1,10);
 
 
         setAttr("registers" , registList);
-        setAttr("titleBar"     , new TitleBar("/reg","我的挂号","/mine/patients"));
-        render("/mine/registers.html");
+        setAttr("titleBar"     , new TitleBar("/reg", "我的挂号", "/mine/patients", "常用人"));
+        render("mine/registers.html");
     }
 
   /**
@@ -73,14 +73,14 @@ public class MineController extends Controller{
             pageSize = 10;
         }
 
-        List<Regist> registList = RegService.getRegists(user.getUid(),1,10);
+        List<Record> registList = RegService.getRegists(user.getUid(),1,10);
         setAttr("registers" , registList);
-        render("/ftl/mine/register.ftl");
+        render("ftl/mine/register.ftl");
     }
 
 
   /**
-   * 常用人页面
+   * 就诊人列表
    */
   @Before({GET.class, WebLoginInterceptor.class})
     public void patients(){
@@ -90,8 +90,8 @@ public class MineController extends Controller{
 
 
         setAttr("patients" , patients);
-        setAttr("titleBar" , new TitleBar("/mine","我的常用人","/mine/patients"));
-        render("/mine/registers.html");
+        setAttr("titleBar" , new TitleBar("/mine","我的常用人",""));
+        render("mine/patients.html");
     }
 
 
@@ -102,26 +102,29 @@ public class MineController extends Controller{
     public void edit_patient(){
       User user = UserService.getUid(getRequest());
 
-      String patientId = getPara("patientId");
-      String type      = getPara("type");
+      String patientId = getPara("patientId"); //病人id
+      String type      = getPara("type","");      //为reg时,表示挂号时选择就诊人
       String title     = StringHandler.isEmpty(patientId) ? "新增挂号人" : "编辑挂号人";
 
       if(!StringHandler.isEmpty(patientId)){
           Record patient   = UserService.getPatient(user.getUid(),patientId);
           setAttr("patient" , patient);
+      }else{
+          setAttr("patient" , new Patient());
       }
 
 
-      if(type.equals("reg")){
+      if(type.equals("reg")){//科室选择
           setAttr("titleBar" , new TitleBar(HttpHandler.formatUrl("/reg/doRegister",null),title,""));
       }else{
           setAttr("titleBar" , new TitleBar("/patients",title,""));
       }
 
-      render("/mine/registers.html");
+      setAttr("type",type);
+      render("mine/patient.html");
     }
 
-  /**
+   /**
    * 就诊人新增or编辑
    */
     @Before({POST.class,WebLoginInterceptor.class})

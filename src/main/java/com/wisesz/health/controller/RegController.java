@@ -58,7 +58,7 @@ public class RegController extends Controller {
     @Before(GET.class)
     public void index(){
         String uid = getPara("uid");
-        uid = "1600129";
+        uid = "1";
 
         if(!StringHandler.isEmpty(uid)){
             User user = new User(uid,getPara("uname"),getPara("mobile"),getPara("deviceid"),getPara("platform"));
