@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>科室选择</title>
+  <#include "../ftl/style.ftl"/>
+  <style>
+
+    #type li.active{
+      border-left: 0.125rem solid #1bbc9c;
+      background-color: #f4f4f4 !important;
+      border-right:0;
+    }
+  </style>
+</head>
+<body>
+  <#include "../ftl/titleBar.ftl"/>
+
+  <!--选择科室-->
+  <ul id="type" class="mt15 bdt tf-y fl bg-white fz28 w-40 tc bdb">
+    <li class="hht88 bdb bdr active">全部</li>
+    <#if types??>
+      <#list types as t>
+      <li class="hht88 bdb bdr" typeId="${t.typeId}">${t.typeName}</li>
+      </#list>
+    </#if>
+  </ul>
+
+  <ul id="dept" class="mt15 bdt tf-y fl tc fz28 bdt w-60 bg-f4">
+    <#include "../ftl/reg/dept.ftl" />
+  </ul>
+</body>
+<#include "../ftl/js.ftl"/>
+<script>
+  $(function(){
+    var isloading = false;
+    var noMore    = false;
+    var param   ={
+      typeId   : null,
+      page     : 1,
+      pageSize : 20
+    };
+
+    var $type = $("#type");
+    var $dept = $("#dept");
+    $([$type[0],$dept[0]]).height(document.documentElement.clientHeight-$("#dept").offset().top+"px");
+
+    bindLiClick();
+    function bindLiClick(){
+      $dept.find("li").unbind("click").click(function(){
+        var $li      = $(this);
+        var deptId   = $li.attr("deptId");
+        var deptName = $li.html();
+        window.location = "/reg?hospId=${hospId!''}&hospName="+encodeURIComponent("${hospName!''}")+"&deptId="+deptId+"&deptName="+encodeURIComponent(deptName);
+      });
+    }
+
+
+    $type.find("li").click(function(){
+      var $li      = $(this);
+      var typeId   = $li.attr("typeId");
+      $type.find("li.active").removeClass("active");
+      $li.addClass("active");
+
+      if(typeId != param.typeId){
+        $dept.empty();
+      }
+      param.typeId = typeId;
+      param.page   = 1;
+      noMore       = false;
+      get_dept(param);
+    });
+
+
+    //获取科室信息
+    function get_dept(param){
+      if(!isloading) {
+
+        if(noMore){
+          //todo 没有更多了
+          return false;
+        }
+
+        isloading = true;
+
+        $.post("/reg/post_depart", param, function(resp){
+          isloading = false;
+          if(resp.split("</li>").length < 21){
+            noMore = true;
+          }
+          $dept.append(resp);
+          bindLiClick();
+        });
+      }else{
+        //todo 加载中
+      }
+    }
+
+    $dept.scroll(function(){
+      console.debug("scroll");
+      var dept         = $dept[0];
+      var height       = dept.clientHeight;
+      var scrollHeight = dept.scrollHeight;
+      var scrollTop    = dept.scrollTop;
+
+      if(scrollHeight - height - scrollTop < 10){
+        if(!noMore && !isloading) {
+          param.page += 1;
+          get_dept(param);
+        }
+      }
+
+    });
+  });
+</script>
+</html>

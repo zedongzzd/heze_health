@@ -1,8 +1,11 @@
 package com.wisesz.health.handler;
 
+import com.sun.javafx.collections.MappingChange;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 public class HttpHandler {
 	public static String getCookie(HttpServletRequest req, String name) {
@@ -54,5 +57,27 @@ public class HttpHandler {
 			ip = "未知";
 		}
 		return ip;
+	}
+
+	public static String formatUrl(String pathName, Map<String,String> data){
+		if(StringHandler.isEmpty(pathName)){
+			return "";
+		}
+
+		StringBuffer sb = new StringBuffer(pathName);
+
+		boolean isFirst = true;
+		for(Map.Entry<String,String> entry : data.entrySet()){
+			if(isFirst){
+				sb.append("?");
+				isFirst = false;
+			}else{
+				sb.append("&");
+			}
+
+			sb.append(entry.getKey()).append("=").append(entry.getValue());
+		}
+
+		return sb.toString();
 	}
 }

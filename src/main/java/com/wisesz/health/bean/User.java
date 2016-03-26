@@ -1,9 +1,11 @@
 package com.wisesz.health.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by wangguohao on 16/3/23.
  */
-public class User {
+public class User implements Serializable {
     /**
      * 用户UID,没有登录为0
      */
@@ -72,5 +74,11 @@ public class User {
 
     public User(){}
 
-    public User(String uid ,String uname,String mobile,String deviceid,String platform){}
+    public User(String uid ,String uname,String mobile,String deviceid,String platform){
+        this.uid   = uid;
+        this.uname = uname;
+        this.mobile = mobile;
+        this.deviceid = deviceid;
+        this.platform = platform;
+    }
 }

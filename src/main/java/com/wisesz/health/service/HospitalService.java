@@ -1,9 +1,11 @@
 package com.wisesz.health.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+
 import com.wisesz.health.common.Const;
 import com.wisesz.health.handler.CacheHandler;
 import com.wisesz.health.handler.DateHandler;
@@ -18,12 +20,13 @@ public class HospitalService {
 	public static List<Record> getDeptTypes() {
 		List<Record> list = CacheHandler.cache(Const.Cache_Name_request, Const.Cache_Key_DepartTypes);
 		if (list == null) {
-			String sql = "SELECT * FROM ( SELECT IFNULL(de.type, '-1') AS typeId,IFNULL(de_t.name, '其他') AS typeName FROM t_schedual sc LEFT JOIN t_dept de ON sc.deptId = de.deptId AND sc.deptName = de.name LEFT JOIN t_dept_type de_t ON de.type = de_t.id where sc.date>=? GROUP BY sc.deptId ) ss GROUP BY ss.typeId ORDER BY typeId =- 1,typeId ASC";
+			String sql = "SELECT * FROM ( SELECT IFNULL(de.type, '-1') AS typeId,IFNULL(de_t.name, '其他') AS typeName FROM t_schedual sc LEFT JOIN t_dept de ON sc.deptId = de.deptId AND sc.deptName = de.name LEFT JOIN t_dept_type de_t ON de.type = de_t.id where sc.date>=? GROUP BY sc.deptId,de.type,de_t.name ) ss GROUP BY ss.typeId,ss.typename ORDER BY typeId =- 1,typeId ASC";
 			list = Db.find(sql, DateHandler.getDate());
 			CacheHandler.cache(Const.Cache_Name_request, Const.Cache_Key_DepartTypes, list);
 		}
 		return list;
 	}
+
 
 	/**
 	 * 获取科室列表
@@ -67,6 +70,7 @@ public class HospitalService {
 			CacheHandler.cache(Const.Cache_Name_request, Const.Cache_Key_Depart + deptId, list);
 		}
 		RBAS rBAS = CacheHandler.cache(Const.Cache_Name_reg, Const.Cache_Key_Depart + deptId);
+		String [] week = new String [] { "星期日","星期一","星期二","星期三","星期四","星期五","星期六" };
 		if (rBAS == null) {
 			rBAS = new RBAS();
 			RBASRec[] rBASRec = new RBASRec[list.size()];

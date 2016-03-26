@@ -1,5 +1,7 @@
 package com.wisesz.health.handler;
 
+
+
 public class StringHandler {
 	public static boolean isEmpty(String value) {
 		if (value == null || value.length() == 0) {
@@ -25,5 +27,22 @@ public class StringHandler {
 
 		}
 		return sb.toString();
+	}
+
+	public static String defaultValue(Object value, String defaultValue) {
+		String str = "";
+		String s   = "";
+
+		try {
+			s = value.toString();
+		}catch (Exception e){
+			s = defaultValue;
+		}
+
+		return s;
+	}
+
+	public  static String defaultValue(Object value){
+		return defaultValue(value,"");
 	}
 }

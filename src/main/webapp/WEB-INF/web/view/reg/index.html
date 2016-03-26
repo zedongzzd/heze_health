@@ -8,6 +8,7 @@
 </head>
 <body>
     <#include "../ftl/titleBar.ftl"/>
+    <#include "../ftl/util.ftl"/>
     <!--banner横幅广告-->
     <div class="banner w h280 ovh mb15">
         <div class="banner-item">
@@ -16,19 +17,22 @@
     </div>
     <form id="form" action="/reg/pools" method="get" onsubmit="return chkform();" >
         <!--医院选择-->
-        <div class="bdt fz28 fc-ccc w hht88 bg-white txt-ellipsis icon-hospital-search">
-            <span class="ml90 ">山东菏泽医院</span>
+
+        <div class="bdt fz28  w hht88 bg-white txt-ellipsis icon-hospital-search <@EmptyColor value='${hospName}'/>">
+            <span class="ml90">${hospName!"请选择医院"}</span>
             <span class="fr pr20 dp-inlb h icon-enter"></span>
         </div>
         <input id="hospId" name="hospId" type="hidden" value="${hospId!''}" >
+        <input id="hospName" name="hospName" type="hidden" value="${hospName!''}" >
         <!--选择科室-->
 
 
-        <div id="depart" class="bdt fz28 fc-ccc w hht88 bg-white txt-ellipsis icon-keshi bdb <#if departId??>fc-black</#if>">
-            <span class="ml90 ">${departName!"请选择科室"}</span>
+        <div id="depart" class="bdt fz28 w hht88 bg-white txt-ellipsis icon-keshi bdb <@EmptyColor value='${deptName}'/>">
+            <span class="ml90 ">${deptName!"请选择科室"}</span>
             <span class="fr pr20 dp-inlb h icon-enter"></span>
         </div>
-        <input id="departId" name="departId"  type="hidden" value="${departId!''}" >
+        <input id="deptId" name="deptId"  type="hidden" value="${deptId!''}" >
+        <input id="deptName" name="deptName"  type="hidden" value="${deptName!''}" >
         <!--医师查询-->
         <h1>
             <div id="query" class="mlr20 fc-white fz30 item-search hht88 mt60 bdr-5 bg-cyan tc">查询</div>
@@ -45,14 +49,18 @@
         });
 
         $("#depart").click(function(){
-            location.href = "/reg/depart";
+
+            location.href = "/reg/depart?hospId="+ $.trim($("#hospId").val())
+                    +"&hospName="+encodeURIComponent($.trim($("#hospName").val()))
+                    +"&deptId="+ $.trim($("#deptId").val())
+                    +"&deptName="+encodeURIComponent($.trim($("#deptName").val()));
         });
     })
 
     function chkform(){
-        var departId = $.trim($("#departId").val());
+        var deptId = $.trim($("#deptId").val());
 
-        if(departId ==""){
+        if(deptId ==""){
             alert("请选择科室");
             return false;
         }

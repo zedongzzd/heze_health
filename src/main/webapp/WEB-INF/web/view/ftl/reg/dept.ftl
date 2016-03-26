@@ -1,0 +1,1 @@
+<#if depts??><#list depts as d><li class=" hht88 bdb ml20" deptId="${d.deptId}">${d.name}</li></#list><#else><li class=" hht88 bdb ml20">没有</li></#if>
