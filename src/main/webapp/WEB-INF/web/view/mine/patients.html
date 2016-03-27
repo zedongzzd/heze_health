@@ -30,7 +30,7 @@
         window.location.href="/mine/edit_patient?"+replaceQueryString({patientId : ""});
       })
 
-      $(".pat_item").on("click",function(){
+      $(".item-choice").on("click",function(){
         var patientId = $(this).attr("patientId");
         if(isReg){
           window.location.href="/reg/doReg?"+replaceQueryString({patientId : patientId});
@@ -55,9 +55,19 @@
 
       $(".del").click(function(){
         var $this = $(this);
-        if(confirm("是否删除挂号人:"+$this.parent(".item-choice").find(".name").html())){
+        var $par  = $this.parent(".item-choice");
+        if(confirm("是否删除挂号人:"+$par.find("[name='name']").html())){
           $.ajax({
-
+            type    : "post",
+            url     : "/mine/delete_patient",
+            data    : {patientId : $par.attr("patientId")},
+            success : function(resp){
+              if(resp.resultCode == 0){
+                $this.parent(".item-choice").remove();
+              }else{
+                alert(resp.resultMsg);
+              }
+            }
           })
         }
       });

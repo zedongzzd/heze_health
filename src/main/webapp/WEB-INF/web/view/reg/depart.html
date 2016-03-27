@@ -28,6 +28,7 @@
 
     <ul id="dept" class="mt15 bdt tf-y fl tc fz28 bdt w-60 bg-f4">
       <#include "../ftl/reg/dept.ftl" />
+
     </ul>
   </div>
 </body>
@@ -82,10 +83,7 @@
     function get_dept(param){
       if(!isloading) {
 
-        if(noMore){
-          //todo 没有更多了
-          return false;
-        }
+
         isloading = true;
         loadbox.show();
         $.post("/reg/post_depart", param, function(resp){
@@ -93,6 +91,7 @@
           loadbox.hide();
           if(resp.split("</li>").length < 21){
             noMore = true;
+            showNoMore("#dept")
           }
           $dept.append(resp);
           bindLiClick();
@@ -109,7 +108,11 @@
       var scrollHeight = dept.scrollHeight;
       var scrollTop    = dept.scrollTop;
       if(scrollHeight - height - scrollTop < 10){
-        if(!noMore && !isloading) {
+        if(noMore){
+          showNoMore("#dept");
+          return false;
+        }
+        if(!isloading) {
           param.page += 1;
           get_dept(param);
         }

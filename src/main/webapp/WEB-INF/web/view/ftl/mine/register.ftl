@@ -1,6 +1,6 @@
 <#if registers??>
     <#list registers as r>
-    <div class="w bg-white pr bdtb mt15 item-registers">
+    <div class="w bg-white pr bdtb mt15 item-registers" appId="${r.apptId!''}">
       <div class="hht70 fz16 	bdb-ccc pr">
         <label class="fz30 fz-b ml20">
           挂号单

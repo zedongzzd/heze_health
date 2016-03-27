@@ -4,8 +4,9 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.ext.interceptor.GET;
 import com.jfinal.ext.interceptor.POST;
+import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Record;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+
 import com.wisesz.health.bean.TitleBar;
 import com.wisesz.health.bean.User;
 import com.wisesz.health.common.Result;
@@ -13,10 +14,11 @@ import com.wisesz.health.handler.HttpHandler;
 import com.wisesz.health.handler.StringHandler;
 import com.wisesz.health.interceptor.WebLoginInterceptor;
 import com.wisesz.health.model.Patient;
-import com.wisesz.health.model.Regist;
+
 import com.wisesz.health.service.RegService;
 import com.wisesz.health.service.UserService;
 import me.zzd.webapp.core.annotation.BindController;
+
 
 import java.io.IOException;
 import java.util.List;
@@ -26,20 +28,49 @@ import java.util.List;
  */
 @BindController(value = "/mine",viewPath = "/web/view")
 public class MineController extends Controller{
-
+  private Log log = Log.getLog(getClass());
   /**
      * 获取登录信息
      */
     @Before(GET.class)
     public void getUser(){
+      try {
         User user = UserService.getUid(getRequest());
-        if(user !=null && !StringHandler.isEmpty(user.getUid())){
-          renderJson(Result.RespFactory.isOk("",null));
-        }else {
+        String uid = user.getUid();
+        if (user != null && !StringHandler.isEmpty(uid)) {
+          renderJson(Result.RespFactory.isOk("", null));
+        } else {
           renderJson(Result.RespFactory.isFail("未登录", null));
         }
+      }catch (Exception e){
+        log.error("验证用户登录出错",e);
+        renderJson(Result.RespFactory.isFail("验证用户登录出错"));
+      }
 
     }
+
+  /**
+   * 登录成功
+   */
+  @Before(GET.class)
+  public  void loginSuccess(){
+    String uid = getPara("uid");
+
+    if(!StringHandler.isEmpty(uid)){
+      User user = new User(uid,getPara("uname"),getPara("mobile"),getPara("deviceid"),getPara("platform"));
+      UserService.doLogin(getRequest(),getResponse(),user);
+    }
+
+    try {
+      getResponse().sendRedirect(StringHandler.defaultValue(getRequest().getHeader("referer"),"/reg"));
+    } catch (IOException e) {
+      try {
+        getResponse().sendRedirect("/reg");
+      } catch (IOException e1) {
+        e1.printStackTrace();
+      }
+    }
+  }
 
   /**
    * 我的挂号页面
@@ -73,7 +104,7 @@ public class MineController extends Controller{
             pageSize = 10;
         }
 
-        List<Record> registList = RegService.getRegists(user.getUid(),1,10);
+        List<Record> registList = RegService.getRegists(user.getUid(),page,pageSize);
         setAttr("registers" , registList);
         render("ftl/mine/register.ftl");
     }
@@ -99,6 +130,22 @@ public class MineController extends Controller{
         render("mine/patients.html");
     }
 
+  /**
+   * 就诊人删除
+   */
+  @Before({POST.class,WebLoginInterceptor.class})
+  public void delete_patient(){
+    User user = UserService.getUid(getRequest());
+
+    String patientId = getPara("patientId");
+
+    if(StringHandler.isEmpty(patientId)){
+      renderJson(Result.RespFactory.isFail("参数不全"));
+    }else {
+      renderJson(Result.RespFactory.isOk("",UserService.delPatient(user.getUid(),patientId)));
+    }
+  }
+
 
   /**
    * 就诊人编辑
@@ -118,10 +165,7 @@ public class MineController extends Controller{
           setAttr("patient" , new Patient());
       }
 
-
-
       setAttr("titleBar" , new TitleBar(HttpHandler.formatUrl("/mine/patients",getParaMap()),title,""));
-
 
       setAttr("type",type);
       render("mine/patient.html");

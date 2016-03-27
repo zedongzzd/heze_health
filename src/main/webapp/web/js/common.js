@@ -12,6 +12,17 @@ $(function(){
     $("body").height(document.documentElement.clientHeight);
 });
 
+function showNoMore(container){
+    var $noMore = $(".noMore");
+    if($noMore.length == 0){
+        $(container).append('<div class="noMore tc p20">没有更多了...</div>')
+        var timer = setTimeout(function(){
+            clearTimeout(timer);
+            $(".noMore").remove();
+        },2000);
+    }
+
+}
 
 /**
  * 登录
@@ -21,7 +32,7 @@ function requestLogin(){
     var data = {
         "action" : "login",
         "params" : {
-            url: "/loginSuccess"
+            url: "/mine/loginSuccess"
         }
     };
 

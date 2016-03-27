@@ -31,11 +31,8 @@
     </div>
     <div class="ml20 fz28 hht70 bdt txt-ellipsis">
       <label class="fc-grey">校验类型：</label>
-
-      <input id="type1" type="radio" name="type" value="1" <#if patient.type ?? && patient.type == 1> checked="true"</#if>/>
-      <label for="type1">就诊卡号</label>&nbsp;&nbsp;
-      <input id="type2" type="radio" name="type" value="2" <#if ( patient.type ?? && patient.type ==2)> checked="true"</#if>/>
-      <label for="type2">住院号</label>
+      <span name="type" type="1" class="dp-inlb hht50 tc w110 fc-white fz26 <#if patient.type ?? && patient.type == 1> bg-cyan  <#else>bg-ccc </#if>">就诊卡号</span>
+      <span name="type" type="1" class="dp-inlb hht50 tc w110 fc-white fz26 <#if patient.type ?? && patient.type == 2> bg-cyan  <#else>bg-ccc </#if>">住院号</span>
       <br/>
     </div>
   </div>
@@ -51,60 +48,70 @@
 <!--公共js-->
 <#include "../ftl/js.ftl"/>
 <script>
-  const patientId = "${patient.patientId!''}";
-  const type      = "${type!''}";
-  var   isAjax    = false;
 
-  $("#action").on("click",function(){
-    //todo 1.是否正在ajax,否继续
-    //todo 2.姓名（非空）,卡号（非空）,身份证（校验）,手机号（校验）验证成功继续,失败时alert信息
-    //todo 3.ajax新增/更新就诊人
-    if(!isAjax) {
-      var data = {};
-      data.name      = $.trim($("#name").val());
-      data.patientId = patientId;
-      data.phone     = $.trim($("#phone").val());
-      data.cardNo    = $.trim($("#cardNo").val());
-      data.idCard    = $.trim($("#idCard").val());
-      data.type      = $.trim($("[name=type]:checked").val()||"");
-      if (!validatePhone(data.phone)) {
-        alert("手机号码验证不通过");
-        return;
-      }
+  $(function(){
+    const patientId = "${patient.patientId!''}";
+    const type      = "${type!''}";
+    var   isAjax    = false;
 
-      if (!validateIdCard(data.idCard)) {
-        alert("身份证号码验证不通过");
-        return;
-      }
+    $("[name='type']").click(function(){
+      $(this).addClass("bg-cyan").removeClass("bg-ccc").siblings("[name='type']").addClass("bg-ccc").removeClass("bg-cyan");
+    });
 
-      if (!validateCN(data.name)) {
-        alert("姓名必须是中文");
-        return;
-      }
-
-      if(!data.type){
-        alert("请选择就诊类型")
-        return;
-      }
-
-      $.ajax({
-        type: "post",
-        url: "/mine/patient",
-        data: data,
-        beforeSend: function () {
-          isAjax = true;
-          loadbox.show();
-        }, success: function (resp) {
-          isAjax = false;
-          loadbox.hide();
-          if (resp.resultCode) {
-            alert(resp.resultMsg);
-          } else {
-            window.location.href = "/mine/patients"+location.search;
-          }
+    $("#action").on("click",function(){
+      //todo 1.是否正在ajax,否继续
+      //todo 2.姓名（非空）,卡号（非空）,身份证（校验）,手机号（校验）验证成功继续,失败时alert信息
+      //todo 3.ajax新增/更新就诊人
+      if(!isAjax) {
+        var data = {};
+        data.name      = $.trim($("#name").val());
+        data.patientId = patientId;
+        data.phone     = $.trim($("#phone").val());
+        data.cardNo    = $.trim($("#cardNo").val());
+        data.idCard    = $.trim($("#idCard").val());
+        data.type      = $.trim($(".bg-cyan[name=type]").attr("type")||"");
+        if (!validatePhone(data.phone)) {
+          alert("手机号码验证不通过");
+          return;
         }
-      })
-    }
-  });
+
+        if (!validateIdCard(data.idCard)) {
+          alert("身份证号码验证不通过");
+          return;
+        }
+
+        if (!validateCN(data.name)) {
+          alert("姓名必须是中文");
+          return;
+        }
+
+        if(!data.type){
+          alert("请选择就诊类型")
+          return;
+        }
+
+
+
+        $.ajax({
+          type: "post",
+          url: "/mine/patient",
+          data: data,
+          beforeSend: function () {
+            isAjax = true;
+            loadbox.show();
+          }, success: function (resp) {
+            isAjax = false;
+            loadbox.hide();
+            if (resp.resultCode) {
+              alert(resp.resultMsg);
+            } else {
+              window.location.href = "/mine/patients"+location.search;
+            }
+          }
+        })
+      }
+    });
+  })
+
 </script>
 </html>

@@ -43,6 +43,23 @@
 
     $(function(){
         $("#header-left").attr("href","http://api.wisesz.mobi/action.php?data=%7B%22action%22:%22close%22,%22params%22:%7B%7D%7D");
+
+        $("#header-right").click(function(){
+            var isJump = false;
+            $.ajax({
+                async   : false,
+                url     : "/mine/getUser",
+                type    : "get",
+                success : function(resp){
+                    if(resp.resultCode){
+                        window.location.href = $("#header-left").attr("href");
+                    }else{
+                        isJump = true;
+                    }
+                }
+            })
+            return isJump;
+        })
 //        console.debug($("#hospName").val(),$("#deptName").val())
         $("#query").click(function(){
 

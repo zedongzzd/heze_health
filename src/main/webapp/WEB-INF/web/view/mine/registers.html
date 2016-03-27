@@ -22,7 +22,7 @@
       var param   ={
         typeId   : null,
         page     : 1,
-        pageSize : 20
+        pageSize : 10
       };
       var $container = $(".container");
 
@@ -41,7 +41,9 @@
             loadbox.hide();
             alert(resp.resultMsg);
             if(resp.resultCode == 0){
-              $this.parent().attr("state","-1");
+              $this.text("已取消").parent().attr("state","-1");
+              $this.parents(".item-registers").addClass("fc-ccc").find(".fc-grey").removeClass("fc-grey").end()
+                      .find(".fc-orange").removeClass("fc-orange")
             }
           }
 
@@ -62,10 +64,7 @@
       function get_registers(param){
         if(!isloading) {
 
-          if(noMore){
-            //todo 没有更多了
-            return false;
-          }
+
           isloading = true;
           loadbox.show();
           $.post("/mine/post_registers", param, function(resp){
@@ -73,6 +72,7 @@
             loadbox.hide();
             if(resp.split("item-register").length < 21){
               noMore = true;
+              showNoMore(".container");
             }
             $container.append(resp);
             bindLiClick();
@@ -84,13 +84,18 @@
 
       //监听滚动条
       $container.scroll(function(){
-        console.debug("scroll");
+//        console.debug("scroll");
         var dept         = $container[0];
         var height       = dept.clientHeight;
         var scrollHeight = dept.scrollHeight;
         var scrollTop    = dept.scrollTop;
         if(scrollHeight - height - scrollTop < 10){
-          if(!noMore && !isloading) {
+          if(noMore){
+            showNoMore(".container");
+            return false;
+          }
+
+          if(!isloading) {
             param.page += 1;
             get_registers(param);
           }

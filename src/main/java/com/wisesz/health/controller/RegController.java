@@ -25,6 +25,7 @@ import me.zzd.webapp.core.annotation.BindController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.rmi.server.UID;
 import java.text.ParseException;
@@ -48,12 +49,12 @@ public class RegController extends Controller {
         uid = "1";
 
         if(!StringHandler.isEmpty(uid)){
-            User user = new User(uid,getPara("uname"),getPara("mobile"),getPara("deviceid"),getPara("platform"));
+            User user = new User(uid,getPara("uname",""),getPara("mobile",""),getPara("deviceid",""),getPara("platform",""));
             UserService.doLogin(getRequest(),getResponse(),user);
         }
 
-        setAttr("hosp"    , HospitalService.getHospital(getPara("hospId")));
-        setAttr("dept"    , HospitalService.getDepart(getPara("deptId")));
+        setAttr("hosp"    , HospitalService.getHospital(getPara("hospId","")));
+        setAttr("dept"    , HospitalService.getDepart(getPara("deptId","")));
         setAttr("titleBar", new TitleBar("","智慧医疗","/mine"));
         render("reg/index.html");
     }
@@ -208,13 +209,21 @@ public class RegController extends Controller {
     }
 
     private  String decodeParam(String str){
-        return URLDecoder.decode((URLDecoder.decode(URLDecoder.decode(str))));
+        try {
+            return URLDecoder.decode(URLDecoder.decode(str,"UTF-8"),"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            log.error("decode出错:"+str);
+            return "";
+        }
     }
   /**
    * 挂号成功
    */
   @Before(GET.class)
     public void reg_succ(){
+      log.error(getPara("hospName"));
+      log.error(decodeParam(getPara("hospName")));
+      log.error(decodeParam(decodeParam(getPara("hospName"))));
         setAttr("hospName"   , decodeParam(getPara("hospName")) );
         setAttr("deptName"   , decodeParam(getPara("deptName")));
         setAttr("patientName", decodeParam(getPara("patientName")));
