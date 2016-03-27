@@ -67,7 +67,7 @@ public class UserService {
 	 * @param type
 	 * @return
 	 */
-	public static boolean addPatient(String cardNo, String idCard, String phone, String name, Integer type) {
+	public static Result<String> addPatient(String cardNo, String idCard, String phone, String name, Integer type) {
 		try {
 			HisCheckPatientInfoResponse response = Service.getHisCheckPatientInfo(Const.TransactionId, cardNo, idCard,
 					name, type);
@@ -76,12 +76,20 @@ public class UserService {
 				String patientId = info.getPatientId();
 				Patient patient = new Patient();
 				patient.setPatientId(patientId).setName(name).setIdCard(idCard).setPhone(phone).setCardNo(cardNo);
-				return patient.save();
+				if(patient.save()){
+					return RespFactory.isOk();
+				}else{
+					return RespFactory.isFail();
+				}
+
+			}else{
+				return RespFactory.isFail(response.getErrorMsg());
 			}
 		} catch (Exception e) {
 			log.error("添加病人出错！", e);
+			return RespFactory.isFail("添加病人出错");
 		}
-		return false;
+
 	}
 
 	public static Result<String> updatePatient(String patientId, String cardNo, String idCard, String phone,

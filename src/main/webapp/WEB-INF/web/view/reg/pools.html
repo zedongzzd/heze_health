@@ -10,7 +10,7 @@
 <#include "../ftl/util.ftl"/>
 <!--标题栏-->
 <#include "../ftl/titleBar.ftl"/>
-<div class="mt15 bg-white bd bdr-10 mlr10">
+<div class="mt15 bg-white bd bdr-10 mlr10 mt103">
   <div class="hht60 fz28 ml20">
     可预约班次
   </div>
@@ -21,4 +21,15 @@
 </body>
 <!--公共js-->
 <#include "../ftl/js.ftl"/>
+<script>
+  $(function(){
+
+    $("[rBASId]").on("click",function(){
+      var $this  = $(this);
+      var rBASId = $this.attr("rBASId");
+      var date   = $this.parent(".schedule").find("#time").html();
+      window.location.href = "/reg/doReg"+location.search+"&rBASId="+rBASId+"&date="+date;
+    });
+  });
+</script>
 </html>

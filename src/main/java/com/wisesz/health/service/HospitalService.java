@@ -4,7 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.DbKit;
 import com.jfinal.plugin.activerecord.Record;
+
 
 import com.wisesz.health.common.Const;
 import com.wisesz.health.handler.CacheHandler;
@@ -27,6 +29,34 @@ public class HospitalService {
 		return list;
 	}
 
+	/**
+	 * 获取医院（暂时只有一个医院）
+	 * @param hospId
+	 * @return
+   */
+	public static Record getHospital(String hospId){
+		Record record = new Record();
+		record.set("hospName","菏泽市第一人民医院");
+		record.set("hospId",Const.HospitalId);
+		return record;
+	}
+
+	/**
+	 * 获取科室
+	 * @param deptId
+	 * @return
+   */
+	public static Record getDepart(String deptId){
+		if(deptId == null){
+			return new Record();
+		}
+		Record record = CacheHandler.cache(Const.Cache_Name_request,Const.Cache_Key_DepartINFO+deptId);
+		if(record == null){
+			record = Db.findById("t_dept","deptId",deptId);
+			CacheHandler.cache(Const.Cache_Name_request,Const.Cache_Key_DepartINFO+deptId,record);
+		}
+		return record;
+	}
 
 	/**
 	 * 获取科室列表
@@ -40,7 +70,7 @@ public class HospitalService {
 				page.toString(), pageSize.toString());
 		List<Record> list = CacheHandler.cache(Const.Cache_Name_request, key);
 		if (list == null) {
-			String sql = "SELECT de.deptId,de.name FROM t_schedual sc LEFT JOIN t_dept de ON sc.deptId = de.deptId AND sc.deptName = de.name WHERE sc.date>=? ";
+			String sql = "SELECT de.deptId,de.name,de.address FROM t_schedual sc LEFT JOIN t_dept de ON sc.deptId = de.deptId AND sc.deptName = de.name WHERE sc.date>=? ";
 			String date = DateHandler.getDate();
 			if (typeId == null) {
 				sql += " limit ?,? ";
@@ -63,10 +93,10 @@ public class HospitalService {
 	 * @param deptId
 	 * @return
 	 */
-	public static List<Schedual> getDeptScheduals(String deptId) {
-		List<Schedual> list = CacheHandler.cache(Const.Cache_Name_request, Const.Cache_Key_Depart + deptId);
+	public static List<Record> getDeptScheduals(String deptId) {
+		List<Record> list = CacheHandler.cache(Const.Cache_Name_request, Const.Cache_Key_Depart + deptId);
 		if (list == null) {
-			list = Schedual.dao.find("select * from t_schedual where deptId=? ", deptId);
+			list = Db.find("select * from t_schedual where deptId=? and date > ? ", deptId,DateHandler.getDate(new Date()));
 			CacheHandler.cache(Const.Cache_Name_request, Const.Cache_Key_Depart + deptId, list);
 		}
 		RBAS rBAS = CacheHandler.cache(Const.Cache_Name_reg, Const.Cache_Key_Depart + deptId);
@@ -75,11 +105,11 @@ public class HospitalService {
 			rBAS = new RBAS();
 			RBASRec[] rBASRec = new RBASRec[list.size()];
 			for (int i = 0; i < list.size(); i++) {
-				Schedual sc = list.get(i);
-				sc.setResNo("0");
+				Record sc = list.get(i);
+				sc.set("resNo","0");
 				rBASRec[i] = new RBASRec();
-				rBASRec[i].setRBASId(sc.getId());
-				rBASRec[i].setRBASDate(sc.getDate());
+				rBASRec[i].setRBASId(sc.get("id"));
+				rBASRec[i].setRBASDate(sc.get("date").toString());
 			}
 			rBAS.setRBASRec(rBASRec);
 			GetAvailableRegCountResponse res = Service.getAvailableRegCount(Const.TransactionId, rBAS);
@@ -91,13 +121,14 @@ public class HospitalService {
 		RBASRec[] rBASRec = rBAS.getRBASRec();
 		if (rBASRec != null) {
 			for (RBASRec rec : rBASRec) {
-				for (Schedual sc : list) {
-					if (rec.getRBASDate().equals(sc.getDate())) {
+				for (Record sc : list) {
+					if (rec.getRBASDate().equals(sc.get("date").toString())) {
 						Integer remain = rec.getRemain();
 						if (remain == null) {
 							remain = 0;
 						}
-						sc.setResNo(remain.toString());
+						sc.set("resNo"  , remain.toString());
+						sc.set("rBASId" , rec.getRBASId());
 						break;
 					}
 				}

@@ -9,15 +9,94 @@
 <body>
   <!--标题栏-->
   <#include "../ftl/titleBar.ftl"/>
-  <#include "../ftl/mine/register.ftl"/>
+  <div class="container mt88" style="overflow: auto;">
+    <#include "../ftl/mine/register.ftl"/>
+  </div>
 </body>
   <!--公共js-->
   <#include "../ftl/js.ftl"/>
   <script>
     $(function(){
+      var isloading = false;
+      var noMore    = false;
+      var param   ={
+        typeId   : null,
+        page     : 1,
+        pageSize : 20
+      };
+      var $container = $(".container");
 
-      //todo 无限加载（参照科室选择,滚动至底部获取下一页内容）
-      
+      $container.height(document.documentElement.clientHeight-$container.offset().top+"px");
+
+      bindLiClick();
+
+      //取消挂号事件绑定
+      function bindLiClick(){
+        // 取消挂号
+        $(".reg-state[state='0'][end='false']").find(".state-btn").unbind("click").bind("click",function(){
+          var $this = $(this);
+          var appId = $this.attr("appId");
+
+          var func  = function(resp){
+            loadbox.hide();
+            alert(resp.resultMsg);
+            if(resp.resultCode == 0){
+              $this.parent().attr("state","-1");
+            }
+          }
+
+          if(confirm("是否取消挂号")){
+              loadbox.show();
+              $.ajax({
+                data    : { appId :appId},
+                type    : "post",
+                url     : "/reg/un_reg",
+                success : func
+              })
+            }
+          });
+
+      }
+
+      //获取科室信息
+      function get_registers(param){
+        if(!isloading) {
+
+          if(noMore){
+            //todo 没有更多了
+            return false;
+          }
+          isloading = true;
+          loadbox.show();
+          $.post("/mine/post_registers", param, function(resp){
+            isloading = false;
+            loadbox.hide();
+            if(resp.split("item-register").length < 21){
+              noMore = true;
+            }
+            $container.append(resp);
+            bindLiClick();
+          });
+        }else{
+          //todo 加载中
+        }
+      }
+
+      //监听滚动条
+      $container.scroll(function(){
+        console.debug("scroll");
+        var dept         = $container[0];
+        var height       = dept.clientHeight;
+        var scrollHeight = dept.scrollHeight;
+        var scrollTop    = dept.scrollTop;
+        if(scrollHeight - height - scrollTop < 10){
+          if(!noMore && !isloading) {
+            param.page += 1;
+            get_registers(param);
+          }
+        }
+      });
+
     })
   </script>
 </html>

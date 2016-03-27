@@ -1,10 +1,10 @@
 package com.wisesz.health.handler;
 
-import com.sun.javafx.collections.MappingChange;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Map;
 
 public class HttpHandler {
@@ -59,7 +59,7 @@ public class HttpHandler {
 		return ip;
 	}
 
-	public static String formatUrl(String pathName, Map<String,String> data){
+	public static String formatUrl(String pathName, Map<String, String[]> data){
 		if(StringHandler.isEmpty(pathName)){
 			return "";
 		}
@@ -67,7 +67,7 @@ public class HttpHandler {
 		StringBuffer sb = new StringBuffer(pathName);
 
 		boolean isFirst = true;
-		for(Map.Entry<String,String> entry : data.entrySet()){
+		for(Map.Entry<String,String[]> entry : data.entrySet()){
 			if(isFirst){
 				sb.append("?");
 				isFirst = false;
@@ -75,7 +75,7 @@ public class HttpHandler {
 				sb.append("&");
 			}
 
-			sb.append(entry.getKey()).append("=").append(entry.getValue());
+			sb.append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue()[0]));
 		}
 
 		return sb.toString();

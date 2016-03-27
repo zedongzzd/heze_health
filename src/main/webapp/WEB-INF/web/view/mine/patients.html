@@ -10,38 +10,46 @@
   <!--标题栏-->
   <#include "../ftl/titleBar.ftl"/>
   <div class="container mt88">
-
-    <#include "../ftl/mine/patient.ftl"/>
-    <a href="/mine/edit_patient">
-      <div class="mlr20 fc-white fz30 item-search hht88 mt60 bdr-5 bg-cyan tc">
-        添加就诊人
-      </div>
-    </a>
+    <ul class="list-ul mb60 mb100">
+      <#include "../ftl/mine/patient.ftl"/>
+    </ul>
+    <div class="fixed-bottom btn" id="addPatient">
+      添加挂号人
+    </div>
   </div>
 </body>
   <!--公共js-->
   <#include "../ftl/js.ftl"/>
   <script>
     $(function(){
-      var $pats = $(".pat_item");
+      //判断是否为挂号页面选择就诊人
+      const type  = "${type!''}";
+      const isReg = type == "reg";
 
-      $pats.on("click",function(){
-        window.location.href="/mine/edit_patient?patientId="+$(this).attr("patientId");
-      });
+      $("#addPatient").on("click",function(){
+        window.location.href="/mine/edit_patient?"+replaceQueryString({patientId : ""});
+      })
 
-      //左滑删除
-      //
-      $pats.on("touchstart",function(){
-        //todo 1.记录滑动项的初始坐标x
-        //todo 2.使用$.animate 重置其他项的滑动位置
-      });
-
-      $pats.on("touchmove",function(){
-        //todo 计算滑动过程中的坐标x 差值,给被滑动项增加left
-      });
-
-      $pats.on("touchend",function(){
-        //todo 滑动结束时,根据滑动距离（为删除按钮的1/3时,使用$.animate将其滑开,否则还原状态）
+      $(".pat_item").on("click",function(){
+        var patientId = $(this).attr("patientId");
+        if(isReg){
+          window.location.href="/reg/doReg?"+replaceQueryString({patientId : patientId});
+        }else{
+          window.location.href="/mine/edit_patient?"+replaceQueryString({patientId : patientId});
+        }
+      }).on("touchstart",function(){
+        if(!isReg) {
+          //todo 1.记录滑动项的初始坐标x
+          //todo 2.使用$.animate 重置其他项的滑动位置
+        }
+      }).on("touchmove",function(){
+        if(!isReg) {
+          //todo 计算滑动过程中的坐标x 差值,给被滑动项增加left
+        }
+      }).on("touchend",function(){
+        if(!isReg) {
+          //todo 滑动结束时,根据滑动距离（为删除按钮的1/3时,使用$.animate将其滑开,否则还原状态）
+        }
       })
 
     })

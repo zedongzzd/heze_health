@@ -5,6 +5,7 @@ import java.util.List;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.mysql.fabric.xmlrpc.base.Data;
 import com.wisesz.health.common.Const;
 import com.wisesz.health.common.Result;
 import com.wisesz.health.common.Result.RespFactory;
@@ -47,7 +48,8 @@ public class RegService {
 			reg.setAdmitRange(res.getAdmitRange());
 			reg.setCreateDate(DateHandler.getDate());
 			reg.setDeptId(sc.getDeptId());
-			reg.sethDate(res.getHDate());
+			String date = res.getHDate();
+			reg.sethDate(date.substring(0,3)+"-"+date.substring(4,5)+"-"+date.substring(6,7));
 			reg.setHospitalId(Const.HospitalId);
 			reg.setPatientId(patientId);
 			reg.setRegFee(res.getRegFee());
@@ -104,10 +106,23 @@ public class RegService {
 	 * @return
 	 */
 	public static List<Record> getRegists(String uid, Integer page, Integer pageSize) {
-		//todo 修改为多表联合查询,需要医院,科室,病人名称
-		String sql="select t_regist.*, t_patient.name as patientName,t_hospital.name as hospName, t_dept.name as deptName, t_doctor.address from  t_regist inner join   t_patient on  t_regist.uid=? and  t_regist.patientId=t_patient.patientId inner join   t_dept on t_regist.deptId=t_dept.deptId inner join    t_hospital  on t_regist.hospitalId=t_hospital.hospitalId  inner join t_doctor on t_regist.deptId=t_doctor.doctorId order by createDate desc limit ?,?";	
+
+		String sql="select t_regist.*, t_patient.name as patientName,t_hospital.name as hospName, t_dept.name as deptName, t_dept.address from  t_regist inner join   t_patient on  t_regist.uid=? and  t_regist.patientId=t_patient.patientId inner join   t_dept on t_regist.deptId=t_dept.deptId inner join    t_hospital  on t_regist.hospitalId=t_hospital.hospitalId  left join t_doctor on t_regist.deptId=t_doctor.doctorId order by createDate desc limit ?,?";
 	    //String sql = "select * from t_regist where uid=? order by createDate desc limit ?,?";
 		return Db.find(sql,uid,(page - 1) * pageSize, pageSize);
 	}
-	
+
+
+	/**
+	 * 查询指定挂号单
+	 * @param uid
+	 * @param registerId
+	 * @return
+   */
+	public static Record getRegist(String uid ,String registerId){
+		String sql="select t_regist.*, t_patient.name as patientName,t_hospital.name as hospName, t_dept.name as deptName, t_dept.address from  t_regist inner join   t_patient on  t_regist.uid=? and  t_regist.patientId=t_patient.patientId inner join   t_dept on t_regist.deptId=t_dept.deptId inner join    t_hospital  on t_regist.hospitalId=t_hospital.hospitalId  left join t_doctor on t_regist.deptId=t_doctor.doctorId where t_regist.id = ? order by createDate desc ";
+		//String sql = "select * from t_regist where uid=? order by createDate desc limit ?,?";
+		return Db.findFirst(sql,uid,registerId);
+	}
+
 }
