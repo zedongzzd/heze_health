@@ -59,6 +59,7 @@ body,*,*:before,*:after{
 .clearfix:after{content:'.';display:block;height:0;clear:both;visibility:hidden}
 .clearfix{display:inline-block;}
 .dp-inlb{display: inline-block;}
+.fixed{position: fixed;z-index: 9999;}
 .vm{vertical-align:center;}
 .vc-v{display: table-cell;vertical-align: middle;}
 .tb-center{text-align:center;vertical-align: middle;}
