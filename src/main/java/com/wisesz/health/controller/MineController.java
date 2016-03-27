@@ -86,7 +86,7 @@ public class MineController extends Controller{
     public void patients(){
         User user = UserService.getUid(getRequest());
         List<Record> patients = UserService.getPatients(user.getUid());
-        String type = getPara("type");
+        String type = getPara("type","");
         setAttr("type"     , type);
         setAttr("patients" , patients);
 

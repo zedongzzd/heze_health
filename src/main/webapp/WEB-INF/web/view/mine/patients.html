@@ -37,21 +37,74 @@
         }else{
           window.location.href="/mine/edit_patient?"+replaceQueryString({patientId : patientId});
         }
-      }).on("touchstart",function(){
-        if(!isReg) {
-          //todo 1.记录滑动项的初始坐标x
-          //todo 2.使用$.animate 重置其他项的滑动位置
-        }
-      }).on("touchmove",function(){
-        if(!isReg) {
-          //todo 计算滑动过程中的坐标x 差值,给被滑动项增加left
-        }
-      }).on("touchend",function(){
-        if(!isReg) {
-          //todo 滑动结束时,根据滑动距离（为删除按钮的1/3时,使用$.animate将其滑开,否则还原状态）
-        }
-      })
+      });
 
+      $.each(document.getElementsByClassName("pat_item"),function(i,v){
+        v.addEventListener('touchstart', function(event) {
+          touch(event);
+        });
+
+        v.addEventListener('touchmove', function(event) {
+          touch(event);
+        });
+
+        v.addEventListener('touchend', function(event) {
+          touch(event);
+        });
+      });
+
+      $(".del").click(function(){
+        var $this = $(this);
+        if(confirm("是否删除挂号人:"+$this.parent(".item-choice").find(".name").html())){
+          $.ajax({
+
+          })
+        }
+      });
+
+
+      function touch(e){
+        var $target  = $(e.currentTarget);
+        var $del     = $target.siblings(".del"),
+                delWidth = $del.width();
+        var nPageX, //当前距左侧距离
+                bPageX, //start时距左侧距离
+                diff,move;
+
+        if(e.type != "touchend"){
+          nPageX = e.targetTouches[0].pageX;
+          bPageX = $target.attr("pageX");
+          diff=nPageX-bPageX;
+          if(e.type == "touchstart"){
+            // 设置初始位置
+            $target.attr("pageX",nPageX-$target.offset().left);
+            // 重置其他
+            let sibNodes = $target.parents(".item-choice").siblings(".item-choice");
+            $.each(sibNodes,function(i ,treatment ){
+              $(treatment).find(".pat_item").animate({left:0});
+            });
+
+          }
+        }
+
+        if(e.type == "touchmove"){
+
+          move=Math.max(-1*delWidth,diff);
+          move=Math.min(0,move);
+
+          $target.offset({left : move});
+        }else if(e.type == "touchend"){
+          let left    = $target.offset().left;
+
+          if(left < (-1*delWidth*0.5)){
+            move = -1 * delWidth;
+          }else{
+            move = 0;
+          }
+
+          $target.animate({left : move+"px"},200);
+        }
+      }
     })
   </script>
 </html>
