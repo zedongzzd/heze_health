@@ -11,26 +11,37 @@
 <#include "../ftl/titleBar.ftl"/>
 <div class="container mt88">
   <div class=" fz28 bdb bg-white mt15 txt-ellipsis">
+      <input type="hidden" value="${patient.id!''}"/>
     <div class="ml20 fz28 hht70 bdb txt-ellipsis">
-      <label class="fc-grey">姓&emsp;名：</label>
-      <input class="fz26 txt-ellipsis">${patient.name!""}</input>
+      <label class="fc-grey">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+      <input type="text" class="bd-non" id="name" value="${patient.name!''}" placeholder="请输入姓名" />
     </div>
+
     <div class="ml20 fz28 hht70 bdb txt-ellipsis">
-      <label class="fc-grey">卡&emsp;号：</label>
-      <input class="fz26 ">${patient.cardNo!""}</input>
-    </div>
-    <div class="ml20 fz28 hht70 bdb txt-ellipsis">
-      <label class="fc-grey">身份证：</label>
-      <input class="fz26 txt-ellipsis">${patient.idCard!""}</input>
+      <label class="fc-grey">身&nbsp;份&nbsp;证：</label>
+      <input type="text"  class="bd-non" id="idCard" value="${patient.idCard!''}" placeholder="请输入身份证号" />
     </div>
     <div class="ml20 fz28 hht70 txt-ellipsis">
-      <label class="fc-grey">手&emsp;机：</label>
-      <input class="fz26 ">${patient.phone!""}</input>
+      <label class="fc-grey">手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机：</label>
+      <input type="text" class="bd-non" id="phone" value="${patient.phone!''}" placeholder="请输入手机号" />
+    </div>
+    <div class="ml20 fz28 hht70 bdt txt-ellipsis">
+      <label class="fc-grey">卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</label>
+      <input type="text" class="bd-non" id="cardNo" value="${patient.cardNo!''}" placeholder="请输入卡号" />
+    </div>
+    <div class="ml20 fz28 hht70 bdt txt-ellipsis">
+      <label class="fc-grey">校验类型：</label>
+
+      <input id="type1" type="radio" name="type" value="1" <#if patient.type ?? && patient.type == 1> checked="true"</#if>/>
+      <label for="type1">就诊卡号</label>&nbsp;&nbsp;
+      <input id="type2" type="radio" name="type" value="2" <#if ( patient.type ?? && patient.type ==2)> checked="true"</#if>/>
+      <label for="type2">住院号</label>
+      <br/>
     </div>
   </div>
   <div class="hht88 bg-white mt15 fz30 fc-cyan tc bdtb" id="action">
-    <#if (patient.id??)>
-      编辑
+    <#if (patient.patientId??)>
+      保存
     <#else>
       新增
     </#if>
@@ -40,31 +51,60 @@
 <!--公共js-->
 <#include "../ftl/js.ftl"/>
 <script>
-  const patientId = "${patient.id}";
+  const patientId = "${patient.patientId!''}";
+  const type      = "${type!''}";
   var   isAjax    = false;
 
   $("#action").on("click",function(){
     //todo 1.是否正在ajax,否继续
     //todo 2.姓名（非空）,卡号（非空）,身份证（校验）,手机号（校验）验证成功继续,失败时alert信息
     //todo 3.ajax新增/更新就诊人
-
-    var data = {};
-    $.ajax({
-      type       : "post",
-      url        : "/user/patient",
-      data       : data,
-      beforeSend : function(){
-        isAjax = true;
-      },success  : function(resp){
-          isAjax = false;
-          if(resp.resultCode){
-            alert(resp.resultMsg);
-          }else{
-            //todo 成功处理
-//            alert()
-          }
+    if(!isAjax) {
+      var data = {};
+      data.name      = $.trim($("#name").val());
+      data.patientId = patientId;
+      data.phone     = $.trim($("#phone").val());
+      data.cardNo    = $.trim($("#cardNo").val());
+      data.idCard    = $.trim($("#idCard").val());
+      data.type      = $.trim($("[name=type]:checked").val()||"");
+      if (!validatePhone(data.phone)) {
+        alert("手机号码验证不通过");
+        return;
       }
-    })
+
+      if (!validateIdCard(data.idCard)) {
+        alert("身份证号码验证不通过");
+        return;
+      }
+
+      if (!validateCN(data.name)) {
+        alert("姓名必须是中文");
+        return;
+      }
+
+      if(!data.type){
+        alert("请选择就诊类型")
+        return;
+      }
+
+      $.ajax({
+        type: "post",
+        url: "/mine/patient",
+        data: data,
+        beforeSend: function () {
+          isAjax = true;
+          loadbox.show();
+        }, success: function (resp) {
+          isAjax = false;
+          loadbox.hide();
+          if (resp.resultCode) {
+            alert(resp.resultMsg);
+          } else {
+            window.location.href = "/mine/patients"+location.search;
+          }
+        }
+      })
+    }
   });
 </script>
 </html>

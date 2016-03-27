@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>demo</title>
+  <!--公共样式-->
+  <#include "../ftl/style.ftl"/>
+</head>
+<body>
+  <!--标题栏-->
+  <#include "../ftl/titleBar.ftl"/>
+  <div class="container mt88">
+    <div class=" bg-white pr bdtb mt15">
+      <div class="txt-ellipsis ml20 fz28 hht50">
+        <label class="fc-grey">医&emsp;&emsp;院：</label>
+        <span class="fz26 txt-ellipsis">${hosp.hospName!""}</span>
+      </div>
+      <div class="txt-ellipsis ml20 fz28 hht50">
+        <label class="fc-grey">科&emsp;&emsp;室：</label>
+        <span class="fz26 txt-ellipsis">${dept.name!""}</span>
+      </div>
+      <div class="txt-ellipsis ml20 fz28 hht50">
+        <label class="fc-grey">预约时间：</label>
+        <span class="fz26 txt-ellipsis">${date!""}</span>
+      </div>
+      <div class="txt-ellipsis ml20 fz28 hht50">
+        <label class="fc-grey">就诊位置：</label>
+        <span class="fz26 txt-ellipsis">${dept.address!""}</span>
+      </div>
+    </div>
+    <div class=" fz28 bdb bg-white mt15 txt-ellipsis" id="patient">
+      <div class=" bdb hht60 pr ">
+        <label class="ml20">添加挂号人</label>
+        <a class="dp-inlb icon-iconfont-jiahao h fr pr50"></a>
+      </div>
+      <div class="ml20 fz28 hht70 bdb txt-ellipsis">
+        <label class="fc-grey">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+        <input type="text" class="bd-non" value="${patient.name!''}" disabled placeholder="请输入姓名" />
+      </div>
+
+      <div class="ml20 fz28 hht70 bdb txt-ellipsis">
+        <label class="fc-grey">身&nbsp;份&nbsp;证：</label>
+        <input type="text" class="bd-non" value="${patient.name!''}" disabled placeholder="请输入身份证号" />
+      </div>
+      <div class="ml20 fz28 hht70 txt-ellipsis">
+        <label class="fc-grey">手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机：</label>
+        <input type="text"  class="bd-non" value="${patient.phone!''}" disabled placeholder="请输入手机号" />
+      </div>
+      <div class="ml20 fz28 hht70 bdt txt-ellipsis">
+        <label class="fc-grey">卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</label>
+        <input type="text"  class="bd-non" value="${patient.cardNo!''}" disabled placeholder="请输入卡号" />
+      </div>
+      <div class="ptb20 ml20 fz28 bdt txt-ellipsis">
+        <label class="fc-grey">就诊类型：</label>
+        <input id="type1" type="radio" name="type" disabled value="1" <#if patient.type ?? && patient.type == 1> checked="true"</#if>/>
+        <label for="type1">就诊卡号</label>&nbsp;&nbsp;
+        <input id="type2" type="radio" name="type" disabled value="2" <#if ( patient.type ?? && patient.type ==2)> checked="true"</#if>/>
+        <label for="type2">住院号</label>
+      </div>
+    </div>
+    <h1>
+      <div class="hht88 bg-white mt15 fz30 fc-cyan tc bdtb" id="register">提交</div>
+    </h1>
+    <input id="patientId" type="hidden" value="${patient.patientId!''}">
+    <input id="rBASId" type="hidden" value="${rBASId!''}">
+  </div>
+</body>
+  <!--公共js-->
+  <#include "../ftl/js.ftl"/>
+  <script>
+    $(function(){
+
+      //选择就诊人
+      $("#patient").on("click",function(){
+        $.get("/mine/getUser",function(resp){
+          if(resp.resultCode == 0){
+            window.location.href = "/mine/patients?"+serialize($.extend({},parseQueryString(location.href),{type : "reg"}));
+          }else{
+            requestLogin();
+          }
+        })
+      });
+
+      //挂号
+      $("#register").on("click",function(){
+        $.get("/mine/getUser",function(resp){
+          if(resp.resultCode == 0){
+//            confirm("",function(status){
+              if(true){
+                var data = {};
+                data.patientId = $.trim($("#patientId").val());
+                data.rBASId    = $.trim($("#rBASId").val());
+
+                if(data.patientId == null || data.patientId == undefined || data.patientId == ""  ){
+                  alert("请选择就诊人");
+                  return;
+                }
+
+                if(data.rBASId == null || data.rBASId == undefined || data.rBASId == ""  ){
+                  alert("未选择号源")
+                  return;
+                }
+
+                $.ajax({
+                  url     : "/reg/doReg2",
+                  type    : "post",
+                  data    : data,
+                  success : function(resp){
+
+                    if(resp.resultCode){//挂号失败
+                      alert(resp.resultMsg);
+                    }else{//挂号成功
+                      resp.obj||(resp.obj={});
+                      var param = {
+                        hospName    : encodeURIComponent(encodeURIComponent("${hosp.hospName!''}")),
+                        deptName    : encodeURIComponent(encodeURIComponent("${dept.name!''}")),
+                        address     : encodeURIComponent(encodeURIComponent("${dept.address!''}")),
+                        date        : "${date!''}",
+                        patientName : encodeURIComponent(encodeURIComponent("${patient.name!''}")),
+                        admitRange  : resp.obj.admitRange,
+                        regFee      : resp.obj.regFee,
+                        serviceFee  : resp.obj.serviceFee,
+                        hDate       : resp.obj.hDate
+                      };
+                      window.location.href = "/reg/reg_succ?"+serialize(param);
+                    }
+                  }
+                });
+              }
+//            })
+
+          }else{
+            requestLogin();
+          }
+        })
+      });
+    })
+  </script>
+</html>

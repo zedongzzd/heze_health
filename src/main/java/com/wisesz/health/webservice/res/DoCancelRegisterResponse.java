@@ -1,7 +1,9 @@
 package com.wisesz.health.webservice.res;
 
+import me.zzd.webapp.core.annotation.BindDom;
 import me.zzd.webapp.core.dom.Dom;
 
+@BindDom("Response")
 public class DoCancelRegisterResponse extends Dom {
 	/**
 	 * 

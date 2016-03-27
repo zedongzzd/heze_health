@@ -9,51 +9,50 @@
 <body>
     <#include "../ftl/titleBar.ftl"/>
     <#include "../ftl/util.ftl"/>
-    <!--banner横幅广告-->
-    <div class="banner w h280 ovh mb15">
-        <div class="banner-item">
-            <img class="w" src="/web/img/banner.png" alt="横幅广告" />
+    <div class="mt88">
+        <!--banner横幅广告-->
+        <div class="banner w h280 ovh mb15">
+            <div class="banner-item">
+                <img class="w" src="/web/img/banner.png" alt="横幅广告" />
+            </div>
         </div>
+        <form id="form" action="/reg/pools" method="get" onsubmit="return chkform();" >
+            <!--医院选择-->
+
+            <div class="bdt fz28  w hht88 bg-white txt-ellipsis icon-hospital-search <@EmptyColor value='${hosp.hospName}'/>">
+                <span class="ml90">${hosp.hospName!"请选择医院"}</span>
+                <span class="fr pr20 dp-inlb h icon-enter"></span>
+            </div>
+            <input id="hospId" name="hospId" type="hidden" value="${hosp.hospId!''}" >
+            <!--选择科室-->
+            <div id="depart" class="bdt fz28 w hht88 bg-white txt-ellipsis icon-keshi bdb <@EmptyColor value='${dept.name!\'\'}'/>">
+                <span class="ml90 "><@DefaultVal value="${dept.name!''}" defaultVal="请选择科室"/></span>
+                <span class="fr pr20 dp-inlb h icon-enter"></span>
+            </div>
+            <input id="deptId"   name="deptId"    type="hidden" value="${dept.deptId!''}" >
+            <!--医师查询-->
+            <h1>
+                <div id="query" class="mlr20 fc-white fz30 item-search hht88 mt60 bdr-5 bg-cyan tc">查询</div>
+            </h1>
+
+        </form>
     </div>
-    <form id="form" action="/reg/pools" method="get" onsubmit="return chkform();" >
-        <!--医院选择-->
-
-        <div class="bdt fz28  w hht88 bg-white txt-ellipsis icon-hospital-search <@EmptyColor value='${hospName}'/>">
-            <span class="ml90">${hospName!"请选择医院"}</span>
-            <span class="fr pr20 dp-inlb h icon-enter"></span>
-        </div>
-        <input id="hospId" name="hospId" type="hidden" value="${hospId!''}" >
-        <input id="hospName" name="hospName" type="hidden" value="${hospName!''}" >
-        <!--选择科室-->
-
-
-        <div id="depart" class="bdt fz28 w hht88 bg-white txt-ellipsis icon-keshi bdb <@EmptyColor value='${deptName}'/>">
-            <span class="ml90 ">${deptName!"请选择科室"}</span>
-            <span class="fr pr20 dp-inlb h icon-enter"></span>
-        </div>
-        <input id="deptId" name="deptId"  type="hidden" value="${deptId!''}" >
-        <input id="deptName" name="deptName"  type="hidden" value="${deptName!''}" >
-        <!--医师查询-->
-        <h1>
-            <div id="query" class="mlr20 fc-white fz30 item-search hht88 mt60 bdr-5 bg-cyan tc">查询</div>
-        </h1>
-
-    </form>
 </body>
 <#include "../ftl/js.ftl"/>
 <script>
 
     $(function(){
+        $("#header-left").attr("href","http://api.wisesz.mobi/action.php?data=%7B%22action%22:%22close%22,%22params%22:%7B%7D%7D");
+//        console.debug($("#hospName").val(),$("#deptName").val())
         $("#query").click(function(){
-           $("#form").submit();
+
+            $("#form").submit();
         });
 
         $("#depart").click(function(){
-
             location.href = "/reg/depart?hospId="+ $.trim($("#hospId").val())
-                    +"&hospName="+encodeURIComponent($.trim($("#hospName").val()))
                     +"&deptId="+ $.trim($("#deptId").val())
-                    +"&deptName="+encodeURIComponent($.trim($("#deptName").val()));
+
         });
     })
 

@@ -12,15 +12,15 @@ fc-black
 
 <#--空值颜色修改-->
 <#macro EmptyColor value>
-    <#if value??>fc-black <#else> fc-ccc </#if>
+    <#if (value?? && value != "")>fc-black <#else> fc-ccc </#if>
 </#macro>
 
 <#--默认值-->
-<#macro dftVal val dfl>
-    <#if !(val??) && val != "">
-    ${val}
+<#macro DefaultVal value defaultVal>
+    <#if (value?? && value != "")>
+    ${value}
     <#else>
-    ${dfl}
+    ${defaultVal}
     </#if>
 </#macro>
 

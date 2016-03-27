@@ -15,19 +15,21 @@
 </head>
 <body>
   <#include "../ftl/titleBar.ftl"/>
-  <!--选择科室-->
-  <ul id="type" class="mt15 bdt tf-y fl bg-white fz28 w-40 tc bdb">
-    <li class="hht88 bdb bdr active">全部</li>
-    <#if types??>
-      <#list types as t>
-      <li class="hht88 bdb bdr" typeId="${t.typeId}">${t.typeName}</li>
-      </#list>
-    </#if>
-  </ul>
+  <div class="mt88">
+    <!--选择科室-->
+    <ul id="type" class="mt15 bdt tf-y fl bg-white fz28 w-40 tc bdb">
+      <li class="hht88 bdb bdr active">全部</li>
+      <#if types??>
+        <#list types as t>
+        <li class="hht88 bdb bdr" typeId="${t.typeId}">${t.typeName}</li>
+        </#list>
+      </#if>
+    </ul>
 
-  <ul id="dept" class="mt15 bdt tf-y fl tc fz28 bdt w-60 bg-f4">
-    <#include "../ftl/reg/dept.ftl" />
-  </ul>
+    <ul id="dept" class="mt15 bdt tf-y fl tc fz28 bdt w-60 bg-f4">
+      <#include "../ftl/reg/dept.ftl" />
+    </ul>
+  </div>
 </body>
 <#include "../ftl/js.ftl"/>
 <script>
@@ -50,7 +52,12 @@
         var $li      = $(this);
         var deptId   = $li.attr("deptId");
         var deptName = $li.html();
-        window.location = "/reg?hospId=${hospId!''}&hospName="+encodeURIComponent("${hospName!''}")+"&deptId="+deptId+"&deptName="+encodeURIComponent(deptName);
+        var address  = $li.attr("address");
+        var search   = location.search.slice(1);
+
+        window.location = "/reg?hospId="+getQuery(search,"hospId")
+                                        +"&deptId="+deptId
+
       });
     }
 
@@ -80,9 +87,10 @@
           return false;
         }
         isloading = true;
-
+        loadbox.show();
         $.post("/reg/post_depart", param, function(resp){
           isloading = false;
+          loadbox.hide();
           if(resp.split("</li>").length < 21){
             noMore = true;
           }

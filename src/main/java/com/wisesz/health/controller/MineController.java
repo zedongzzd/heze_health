@@ -1,12 +1,11 @@
 package com.wisesz.health.controller;
 
-import java.util.List;
-
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.ext.interceptor.GET;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.plugin.activerecord.Record;
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import com.wisesz.health.bean.TitleBar;
 import com.wisesz.health.bean.User;
 import com.wisesz.health.common.Result;
@@ -14,10 +13,13 @@ import com.wisesz.health.handler.HttpHandler;
 import com.wisesz.health.handler.StringHandler;
 import com.wisesz.health.interceptor.WebLoginInterceptor;
 import com.wisesz.health.model.Patient;
+import com.wisesz.health.model.Regist;
 import com.wisesz.health.service.RegService;
 import com.wisesz.health.service.UserService;
-
 import me.zzd.webapp.core.annotation.BindController;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by wangguohao on 16/3/23.
@@ -32,26 +34,27 @@ public class MineController extends Controller{
     public void getUser(){
         User user = UserService.getUid(getRequest());
         if(user !=null && !StringHandler.isEmpty(user.getUid())){
-            renderJson(Result.RespFactory.isOk("",null));
+          renderJson(Result.RespFactory.isOk("",null));
+        }else {
+          renderJson(Result.RespFactory.isFail("未登录", null));
         }
-        renderJson(Result.RespFactory.isFail("未登录",null));
 
     }
 
   /**
    * 我的挂号页面
    */
-    @Before({GET.class,WebLoginInterceptor.class})
+    @Before({GET.class, WebLoginInterceptor.class})
     public void index(){
-        //User user = UserService.getUid(getRequest());
-    	String uid=getPara("uid");
-        List<Record> registList = RegService.getRegists(uid,1,10);
+        User user = UserService.getUid(getRequest());
+
+        List<Record> registList = RegService.getRegists(user.getUid(),1,10);
+
         setAttr("registers" , registList);
         setAttr("titleBar"     , new TitleBar("/reg", "我的挂号", "/mine/patients", "常用人"));
         render("mine/registers.html");
     }
-    
-    
+
   /**
    * 分页获取我的挂号单
    */
@@ -82,12 +85,17 @@ public class MineController extends Controller{
   @Before({GET.class, WebLoginInterceptor.class})
     public void patients(){
         User user = UserService.getUid(getRequest());
-
         List<Record> patients = UserService.getPatients(user.getUid());
-
-
+        String type = getPara("type");
+        setAttr("type"     , type);
         setAttr("patients" , patients);
-        setAttr("titleBar" , new TitleBar("/mine","我的常用人",""));
+
+        if(type.equals("reg")){
+          setAttr("titleBar" , new TitleBar(HttpHandler.formatUrl("/reg/doReg",getParaMap()),"选择挂号人",""));
+        }else{
+          setAttr("titleBar" , new TitleBar("/mine","我的挂号人",""));
+        }
+
         render("mine/patients.html");
     }
 
@@ -111,11 +119,9 @@ public class MineController extends Controller{
       }
 
 
-      if(type.equals("reg")){//科室选择
-          setAttr("titleBar" , new TitleBar(HttpHandler.formatUrl("/reg/doRegister",null),title,""));
-      }else{
-          setAttr("titleBar" , new TitleBar("/patients",title,""));
-      }
+
+      setAttr("titleBar" , new TitleBar(HttpHandler.formatUrl("/mine/patients",getParaMap()),title,""));
+
 
       setAttr("type",type);
       render("mine/patient.html");
@@ -137,10 +143,10 @@ public class MineController extends Controller{
             renderJson(Result.RespFactory.isFail("参数异常"));
         }
 
-        if(StringHandler.isEmpty(patientId)){
-            renderJson(Result.RespFactory.isOk("",UserService.addPatient(cardNo,idCard,phone,name,type)));
-        }else{
-            //todo 新增
+        if(StringHandler.isEmpty(patientId)){//新增
+            renderJson(UserService.addPatient(cardNo,idCard,phone,name,type));
+        }else{//修改
+            renderJson(UserService.updatePatient(patientId,cardNo,idCard,phone,name,type));
         }
 
     }
