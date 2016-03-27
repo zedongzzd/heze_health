@@ -28,7 +28,7 @@ import java.util.*;
 @BindController(value = "/reg",viewPath = "/web/view")
 public class RegController extends Controller {
     private Log log = Log.getLog(getClass());
-
+    
     public void baseRender(String viewPath,TitleBar titleBar,boolean isAddParam){
         String hospId   = StringHandler.defaultValue(getPara("hospId"),Const.HospitalId);
         String hospName = StringHandler.defaultValue(getPara("hospName"),"菏泽市第一人民医院");
@@ -38,7 +38,6 @@ public class RegController extends Controller {
         setAttr("hospName", hospName);
         setAttr("deptId"  , deptId);
         setAttr("deptName", deptName);
-
         Map<String,String> backParam = new HashMap<>();
         backParam.put("hospId"  , hospId);
         backParam.put("hospName", hospName);
@@ -64,7 +63,6 @@ public class RegController extends Controller {
             User user = new User(uid,getPara("uname"),getPara("mobile"),getPara("deviceid"),getPara("platform"));
             UserService.doLogin(getRequest(),getResponse(),user);
         }
-
         baseRender("reg/index.html",new TitleBar("","智慧医疗","/mine"),false);
     }
 
@@ -77,13 +75,11 @@ public class RegController extends Controller {
     public void depart(){
         List<Record> types = HospitalService.getDeptTypes();
         List<Record> depts =  HospitalService.getDeptlist(null, 1, 20);
-
-
         setAttr("depts"    , depts);
         setAttr("types"    , types);
         baseRender("reg/depart.html",new TitleBar("/reg",StringHandler.defaultValue(getPara("hospName"),"科室选择"),""),true);
     }
-
+    
     @Before(POST.class)
     public void post_depart(){
         Integer typeId   = getParaToInt("typeId");

@@ -9,23 +9,23 @@
       </div>
       <div class="txt-ellipsis ml20 fz28 hht50">
         <label class="fc-grey">医&emsp;&emsp;院：</label>
-        <span class="fz26"></span>
+        <span class="fz26">${r.hospName!""}</span>
       </div>
       <div class="txt-ellipsis ml20 fz28 hht50">
         <label class="fc-grey">挂&ensp;号&ensp;人：</label>
-        <span class="fz26">曹卫东</span>
+        <span class="fz26">${r.patientName!""}</span>
       </div>
       <div class="txt-ellipsis ml20 fz28 hht50">
         <label class="fc-grey">科&emsp;&emsp;室：</label>
-        <span class="fz26"></span>
+        <span class="fz26">${r.deptName!""}</span>
       </div>
       <div class="txt-ellipsis ml20 fz28 hht50">
         <label class="fc-grey">预约时间：</label>
-        <span class="fz26"></span>
+        <span class="fz26">${r.createDate!""}</span>
       </div>
       <div class="txt-ellipsis ml20 fz28 hht50">
         <label class="fc-grey">就诊位置：</label>
-        <span class="fz26 "></span>
+        <span class="fz26 ">${r.address!""}</span>
       </div>
     </div>
     </#list>
