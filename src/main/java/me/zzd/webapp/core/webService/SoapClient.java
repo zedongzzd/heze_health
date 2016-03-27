@@ -28,6 +28,7 @@ public class SoapClient {
 			conn.setDoOutput(true);
 			conn.setRequestProperty("Content-Length", Integer.toString(param.length()));
 			conn.setRequestProperty("Content-Type", "text/xml;charset=utf-8");
+			conn.addRequestProperty("SOAPAction", "http://tempurl.org/f_interface");
 			conn.setRequestProperty("Accept-Charset", "utf-8");
 			conn.setRequestMethod("POST");
 			OutputStream os = conn.getOutputStream();
