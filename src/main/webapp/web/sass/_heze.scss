@@ -19,13 +19,30 @@ header {
         @extend .dp-inlb, .pa, .h, .r20, .t0, .fz26,.fc-cyan;
     }
 }
-
+/* === 容器 === */
+.container{
+    overflow: auto;
+}
 /* === btn === */
 .btn{
-    @extend  .hht88, .bg-white, .mt15, .fz30, .fc-cyan, .tc, .bdtb;
+    @extend .dp-inlb,.w, .hht88, .mt15, .bg-white, .fz30, .fc-cyan, .tc, .bdtb;
 }
 .btn-cyan{
     @extend .dp-inlb,.mlr20,.w-9375, .fc-white, .fz30,.hht88, .mt60, .bdr-5, .bg-cyan, .tc;
+}
+
+/* === 挂号单 === */
+.reg-form{
+    @extend .bg-white, .pr, .bdtb, .mt15;
+    .type{
+        @extend .dp-inlb, .hht70, .mr20, .w110, .fr, .fz26,.tc;
+    }
+    .title{
+        @extend .txt-ellipsis, .ml20, .fz28, .hht50,.fc-grey; 
+    }
+    .content{
+        @extend .fc-black,.fz26;
+    }
 }
 /* === Preloader === */
 .preloader-indicator-modal {
