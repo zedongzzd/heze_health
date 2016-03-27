@@ -22,7 +22,7 @@ header {
 
 /* === btn === */
 .btn{
-    
+    @extend  .hht88, .bg-white, .mt15, .fz30, .fc-cyan, .tc, .bdtb;
 }
 .btn-cyan{
     @extend .dp-inlb,.mlr20,.w-9375, .fc-white, .fz30,.hht88, .mt60, .bdr-5, .bg-cyan, .tc;

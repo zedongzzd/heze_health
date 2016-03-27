@@ -60,6 +60,7 @@ body,*,*:before,*:after{
 .clearfix{display:inline-block;}
 .dp-inlb{display: inline-block;}
 .fixed{position: fixed;z-index: 9999;}
+.fixed-top{position: fixed;top: 0; z-index: 9999;}
 .fixed-bottom{position: fixed; bottom: 0; z-index: 9999;}
 .vm{vertical-align:center;}
 .vc-v{display: table-cell;vertical-align: middle;}
