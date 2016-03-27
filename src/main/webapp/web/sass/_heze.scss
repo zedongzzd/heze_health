@@ -1,3 +1,32 @@
+/* === body === */
+body{
+    @extend .ovh;
+}
+
+/* === header === */
+header {
+    @extend .pr,.hht88,.bdb-ccc,.bg-white,.w,.fc-cyan,.fz30;
+    .back {
+        @extend .pa, .h, .icon-back;
+    }
+    .title{
+        @extend .tc;
+    }
+    .touxiang{
+        @extend .dp-inlb, .pa, .icon-icontouxiang, .h, .r20, .t0;
+    }
+    .font{
+        @extend .dp-inlb, .pa, .h, .r20, .t0, .fz26,.fc-cyan;
+    }
+}
+
+/* === btn === */
+.btn{
+    
+}
+.btn-cyan{
+    @extend .dp-inlb,.mlr20,.w-9375, .fc-white, .fz30,.hht88, .mt60, .bdr-5, .bg-cyan, .tc;
+}
 /* === Preloader === */
 .preloader-indicator-modal {
     position: absolute;
