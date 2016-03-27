@@ -52,7 +52,7 @@
                 type    : "get",
                 success : function(resp){
                     if(resp.resultCode){
-                        window.location.href = $("#header-left").attr("href");
+                        requestLogin();
                     }else{
                         isJump = true;
                     }
