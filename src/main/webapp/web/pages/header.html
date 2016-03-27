@@ -46,9 +46,9 @@
 	</body>
 	<script>
 		$(function() {
-			$.post("http://221.224.162.179:2500/hospital/list", {}, function(resp) {
-				if (resp.resultCode == 0 && resp.obj && resp.obj.length) {
-					$.each(resp.obj, function(i, v) {
+			$.post("http://221.224.162.179:2500/hospital/list", {}, function(res) {
+				if (res.resultCode == 0 && res.obj && res.obj.length) {
+					$.each(res.obj, function(i, v) {
 						$("body").append(`<div>${v.hospName}</div>`);
 					});
 				}
