@@ -14,7 +14,8 @@ import me.zzd.webapp.core.dom.XmlElement;
 
 public class SoapClient {
 	public static String connect(Message message) throws IOException {
-		return HttpClient.post("http://173.22.155.86:8080/service", message.toString());
+//		return HttpClient.post("http://173.22.155.86:8080/service", message.toString());
+		return connect("http://192.168.160.167:8001/bank_webservice/n_bank_webservice.asmx", message);
 	}
 
 	public static String connect(String endPoint, Message message) throws IOException {
