@@ -102,53 +102,51 @@
 				添加就诊人
 		</a>
 		<script type="text/javascript">
-//			$(function() {
-//				$(".list-li").on("swipeleft", function() {
-//					$(this).find("#con1").animate({
-//						left: "-2.03125rem"
-//					}, 500)
-//				}).on("swiperight", function() {
-//					$(this).find("#con1").animate({
-//						left: "0"
-//					}, 500)
-//				})
-//			},function(){
-//				$.mobile.loading('hide');
-//			})
-
-						$(function() {
-							var startX, endX;
-							document.getElementById("con1").addEventListener("touchstart", touchStart, false);
-							document.getElementById("con1").addEventListener("touchmove", touchMove, false);
-							document.getElementById("con1").addEventListener("touchend", touchEnd, false);
-							//				document.getElementById("con1").addEventListener("touchcancel",touchCancel,false);
-							function touchStart(event) {
-								var touch = event.touches[0];
-								startX = touch.pageX;
-							}
-			
-							function touchMove(event) {
-								var touch = event.touches[0];
-								endX = touch.pageX;
-								var X = startX - endX;
-								console.log("startX:" + startX);
-								console.log("endX:" + endX);
-								console.log("X:" + X);
-								if (X > 40) {
-									//向左
-									$(this).animate({
-										left: "-2.03125rem",
-									}, 300);
-								} else {
-									$(this).animate({
-										left: "0",
-									}, 300);
-								}
-							}
-			//
-			//				function touchEnd(event) {
-			//				}
+			//			$(function() {
+			//				$(".list-li").on("swipeleft", function() {
+			//					$(this).find("#con1").animate({
+			//						left: "-2.03125rem"
+			//					}, 500)
+			//				}).on("swiperight", function() {
+			//					$(this).find("#con1").animate({
+			//						left: "0"
+			//					}, 500)
+			//				})
+			//			},function(){
+			//				$.mobile.loading('hide');
 			//			})
+			$(function() {
+				var startX, endX;
+				document.getElementById("con1").addEventListener("touchstart", touchStart, false);
+				document.getElementById("con1").addEventListener("touchmove", touchMove, false);
+				document.getElementById("con1").addEventListener("touchend", touchEnd, false);
+				//				document.getElementById("con1").addEventListener("touchcancel",touchCancel,false);
+				function touchStart(event) {
+					var touch = event.touches[0];
+					startX = touch.pageX;
+				}
+
+				function touchMove(event) {
+					var touch = event.touches[0];
+					endX = touch.pageX;
+					var X = startX - endX;
+					console.log("startX:" + startX);
+					console.log("endX:" + endX);
+					console.log("X:" + X);
+					if (X > 40) {
+						//向左
+						$(this).animate({
+							left: "-2.03125rem",
+						}, 300);
+					} else {
+						$(this).animate({
+							left: "0",
+						}, 300);
+					}
+				}
+
+			function touchEnd(event) {}
+			})
 		</script>
 	</body>
 
