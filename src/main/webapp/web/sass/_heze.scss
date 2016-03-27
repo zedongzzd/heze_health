@@ -30,7 +30,19 @@ header {
 .btn-cyan{
     @extend .dp-inlb,.mlr20,.w-9375, .fc-white, .fz30,.hht88, .mt60, .bdr-5, .bg-cyan, .tc;
 }
-
+.del {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 2.03125rem;
+                height: inherit;
+                line-height: inherit;
+                text-align: center;
+                font-size: .59375rem;
+                color: white;
+                background: red;
+                z-index: -1;
+            }
 /* === 挂号单 === */
 .reg-form{
     @extend .bg-white, .pr, .bdtb, .mt15;
