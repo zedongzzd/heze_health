@@ -14,7 +14,8 @@ import me.zzd.webapp.core.dom.XmlElement;
 
 public class SoapClient {
 	public static String connect(Message message) throws IOException {
-		return HttpClient.post("http://173.22.155.86:8080/service", message.toString());
+//		return HttpClient.post("http://173.22.155.86:8080/service", message.toString());
+		return connect("http://192.168.160.167:8001/bank_webservice/n_bank_webservice.asmx", message);
 	}
 
 	public static String connect(String endPoint, Message message) throws IOException {
@@ -27,6 +28,7 @@ public class SoapClient {
 			conn.setDoOutput(true);
 			conn.setRequestProperty("Content-Length", Integer.toString(param.length()));
 			conn.setRequestProperty("Content-Type", "text/xml;charset=utf-8");
+			conn.addRequestProperty("SOAPAction", "http://tempurl.org/f_interface");
 			conn.setRequestProperty("Accept-Charset", "utf-8");
 			conn.setRequestMethod("POST");
 			OutputStream os = conn.getOutputStream();
