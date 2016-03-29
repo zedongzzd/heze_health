@@ -28,7 +28,24 @@
       var $this  = $(this);
       var rBASId = $this.attr("rBASId");
       var date   = $this.parent(".schedule").find("#time").html();
-      window.location.href = "/reg/doReg"+location.search+"&rBASId="+rBASId+"&date="+date;
+
+      if(confirm("检测到您还未登录,是否登录")){
+        $.ajax({
+          url     : "/mine/getUser",
+          type    : "get",
+          success : function(resp){
+            if(resp.resultCode){
+              requestLogin(function(){
+                window.location.href = "/reg/doReg"+location.search+"&rBASId="+rBASId+"&date="+date;
+              });
+            }else{
+              window.location.href = "/reg/doReg"+location.search+"&rBASId="+rBASId+"&date="+date;
+            }
+          }
+        });
+      }
+
+
     });
   });
 </script>

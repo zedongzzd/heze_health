@@ -47,7 +47,7 @@ public class HospitalService {
 	 * @return
    */
 	public static Record getDepart(String deptId){
-		if(deptId == null){
+		if(StringHandler.isEmpty(deptId)){
 			return new Record();
 		}
 		Record record = CacheHandler.cache(Const.Cache_Name_request,Const.Cache_Key_DepartINFO+deptId);

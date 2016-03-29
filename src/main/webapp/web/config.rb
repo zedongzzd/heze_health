@@ -9,10 +9,10 @@ images_dir = "img"
 javascripts_dir = "js"
 cache = false
 # 启用sourcemap
-sourcemap=true
+#sourcemap=true
 # You can select your preferred output style here (can be overridden via the command line):
 # 启用压缩
-# output_style = :compressed
+output_style = :compressed
 # :expanded or :nested or :compact or
 
 # To enable relative paths to assets via compass helper functions. Uncomment:

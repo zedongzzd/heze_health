@@ -1,4 +1,4 @@
-var query,loadbox ;
+var query,loadbox, loginSuccFun ;
 $(function(){
     query   = parseQueryString(location.href);
     loadbox = {
@@ -24,21 +24,51 @@ function showNoMore(container){
 
 }
 
+window.web2ciciClient = {
+    getAppUinfo : function(){
+        return "{}";
+    },login2js  : function(funcName){
+        return window[funcName]("{uid:1}");
+    }
+}
+
 /**
  * 登录
+ * @param func
  */
-function requestLogin(){
-    //const backUrl = "http://api.wisesz.mobi/action.php?data=%7B%22action%22:%22close%22,%22params%22:%7B%7D%7D";
-    var data = {
-        "action" : "login",
-        "params" : {
-            url: "/mine/loginSuccess"
+function requestLogin(func){
+    //z f4fna96cdnf27i8W9Jgdg4s8asd56a6sdV6T152fgh56df9z5ZcL15hy0W6ob88v0Q6Vf126
+    window.loginSuccFun = func;
+    eval("user="+window.web2ciciClient.getAppUinfo());
+
+    //用户信息存在直接登录
+    if(user.uid != null && user.uid != undefined && user.uid != 0){
+        doLogin(user);
+    }else{//不存在则打开登录窗口
+        window.web2ciciClient.login2js("doLogin");
+    }
+
+}
+
+/**
+ * 登录
+ * @param data
+ */
+function doLogin(data){
+    var _data = eval("("+data+")")
+    $.ajax({
+        url     : "/mine/loginSuccess",
+        data    : _data,
+        type    : "post",
+        success : function (obj) {
+            if(obj.resultCode == 0) {
+                if (typeof loginSuccFun == "function") {
+                    loginSuccFun(user);
+                    loginSuccFun = null;
+                }
+            }
         }
-    };
-
-    location.href="http://api.wisesz.mobi/action.php?data="+encodeURI(JSON.stringify(data));
-
-    console.log("未登录");
+    })
 }
 
 /**

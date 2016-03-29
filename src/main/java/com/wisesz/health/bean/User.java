@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Created by wangguohao on 16/3/23.
  */
 public class User implements Serializable {
+
     /**
      * 用户UID,没有登录为0
      */
@@ -14,22 +15,19 @@ public class User implements Serializable {
     /**
      * 用户昵称,没有登录为空
      */
-    private String uname;
+    private String nickname;
 
     /**
      * 用户手机号，没有登录为空
      */
-    private String mobile;
+    private String phone;
 
-    /**
-     *  设备唯一标识
-     */
-    private String deviceid;
+    public User (String uid,String nickname,String phone){
+        this.uid      = uid;
+        this.nickname = nickname;
+        this.phone    = phone;
+    }
 
-    /**
-     * 平台 1 ios；2 android
-     */
-    private String platform;
 
 
     public String getUid() {
@@ -40,45 +38,19 @@ public class User implements Serializable {
         this.uid = uid;
     }
 
-    public String getUname() {
-        return uname;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setUname(String uname) {
-        this.uname = uname;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getDeviceid() {
-        return deviceid;
-    }
-
-    public void setDeviceid(String deviceid) {
-        this.deviceid = deviceid;
-    }
-
-    public String getPlatform() {
-        return platform;
-    }
-
-    public void setPlatform(String platform) {
-        this.platform = platform;
-    }
-
-    public User(){}
-
-    public User(String uid ,String uname,String mobile,String deviceid,String platform){
-        this.uid   = uid;
-        this.uname = uname;
-        this.mobile = mobile;
-        this.deviceid = deviceid;
-        this.platform = platform;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

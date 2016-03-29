@@ -6,7 +6,7 @@ public class BootStrap {
 	
 	public static void main(String[] args) {
 		//启动项目
-		JFinal.start("src/main/webapp", 8085, "/", 1);
+		JFinal.start("src/main/webapp", 8080, "/", 1);
 		
 	}
 }

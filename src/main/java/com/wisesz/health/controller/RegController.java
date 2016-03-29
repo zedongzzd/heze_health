@@ -10,24 +10,21 @@ import com.jfinal.render.NullRender;
 
 import com.wisesz.health.bean.TitleBar;
 import com.wisesz.health.bean.User;
-import com.wisesz.health.common.Const;
 import com.wisesz.health.common.Result;
 import com.wisesz.health.handler.DateHandler;
 import com.wisesz.health.handler.HttpHandler;
 import com.wisesz.health.handler.StringHandler;
 import com.wisesz.health.interceptor.WebLoginInterceptor;
 import com.wisesz.health.model.Patient;
-import com.wisesz.health.model.Schedual;
 import com.wisesz.health.service.HospitalService;
 import com.wisesz.health.service.RegService;
 import com.wisesz.health.service.UserService;
 import me.zzd.webapp.core.annotation.BindController;
 
-import javax.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.rmi.server.UID;
 import java.text.ParseException;
 import java.util.*;
 
@@ -48,10 +45,10 @@ public class RegController extends Controller {
         String uid = getPara("uid");
         uid = "1";
 
-        if(!StringHandler.isEmpty(uid)){
-            User user = new User(uid,getPara("uname",""),getPara("mobile",""),getPara("deviceid",""),getPara("platform",""));
-            UserService.doLogin(getRequest(),getResponse(),user);
-        }
+//        if(!StringHandler.isEmpty(uid)){
+//            User user = new User(uid,getPara("uname",""),getPara("mobile",""),getPara("deviceid",""),getPara("platform",""));
+//            UserService.doLogin(getRequest(),getResponse(),user);
+//        }
 
         setAttr("hosp"    , HospitalService.getHospital(getPara("hospId","")));
         setAttr("dept"    , HospitalService.getDepart(getPara("deptId","")));

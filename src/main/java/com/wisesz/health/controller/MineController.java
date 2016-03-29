@@ -36,8 +36,8 @@ public class MineController extends Controller{
     public void getUser(){
       try {
         User user = UserService.getUid(getRequest());
-        String uid = user.getUid();
-        if (user != null && !StringHandler.isEmpty(uid)) {
+
+        if (user != null && !StringHandler.isEmpty(user.getUid())) {
           renderJson(Result.RespFactory.isOk("", null));
         } else {
           renderJson(Result.RespFactory.isFail("未登录", null));
@@ -52,23 +52,16 @@ public class MineController extends Controller{
   /**
    * 登录成功
    */
-  @Before(GET.class)
+  @Before(POST.class)
   public  void loginSuccess(){
     String uid = getPara("uid");
 
     if(!StringHandler.isEmpty(uid)){
-      User user = new User(uid,getPara("uname"),getPara("mobile"),getPara("deviceid"),getPara("platform"));
+      User user = new User(uid,getPara("nickname"),getPara("phone"));
       UserService.doLogin(getRequest(),getResponse(),user);
-    }
-
-    try {
-      getResponse().sendRedirect(StringHandler.defaultValue(getRequest().getHeader("referer"),"/reg"));
-    } catch (IOException e) {
-      try {
-        getResponse().sendRedirect("/reg");
-      } catch (IOException e1) {
-        e1.printStackTrace();
-      }
+      renderJson(Result.RespFactory.isOk("",user));
+    }else{
+      renderJson(Result.RespFactory.isFail(""));
     }
   }
 
