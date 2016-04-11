@@ -19,15 +19,15 @@
         <form id="form" action="/reg/pools" method="get" onsubmit="return chkform();" >
             <!--医院选择-->
 
-            <div class="bdt fz28  w hht88 bg-white txt-ellipsis icon-hospital-search <@EmptyColor value='${hosp.hospName}'/>">
+            <div class="bdt fz28  w hht88 bg-white txt-ellipsis icon-hospital-search <@EmptyColor value='${hosp.name}'/>">
                 <span class="ml90">${hosp.hospName!"请选择医院"}</span>
-                <span class="fr pr20 dp-inlb h icon-enter"></span>
+                <span class="fr mr20 dp-inlb h icon-enter"></span>
             </div>
-            <input id="hospId" name="hospId" type="hidden" value="${hosp.hospId!''}" >
+            <input id="hospId" name="hospId" type="hidden" value="${hosp.hospitalId!''}" >
             <!--选择科室-->
             <div id="depart" class="bdt fz28 w hht88 bg-white txt-ellipsis icon-keshi bdb <@EmptyColor value='${dept.name!\'\'}'/>">
                 <span class="ml90 "><@DefaultVal value="${dept.name!''}" defaultVal="请选择科室"/></span>
-                <span class="fr pr20 dp-inlb h icon-enter"></span>
+                <span class="fr mr20 dp-inlb h icon-enter"></span>
             </div>
             <input id="deptId"   name="deptId"    type="hidden" value="${dept.deptId!''}" >
             <!--医师查询-->
@@ -42,32 +42,37 @@
 <script>
 
     $(function(){
+//                alert(window.web2ciciClient.toString());
+        const uid = "${uid!''}";
         $("#header-left").click(function(){
-            window.web2ciciClient.webClose();
+//            alert(window.web2ciciClient.toString());
+            try{
+                window.web2ciciClient.webClose();
+            }catch (e){}
+
             return false;
-        })
+        });
 
         $("#header-right").click(function(){
-            var isJump = false;
-            var self   = this;
-            $.ajax({
-                async   : false,
-                url     : "/mine/getUser",
-                type    : "get",
-                success : function(resp){
+//            var isJump = false;
+            var self = this;
+            try{
+                checkLogin(function(resp){
+//                    alert(JSON.stringify(resp));
                     if(resp.resultCode){
-                        if(confirm("检测到您还未登录,是否登录")){
-                            requestLogin(function(){
-                                window.location.href = $(self).attr("href");
-                            });
-                        }
+                        requestLogin(function(){
+                            window.location.href = $(self).attr("href");
+                        });
                     }else{
-                        isJump = true;
+                        window.location.href = $(self).attr("href");
                     }
-                }
-            });
-            return isJump;
-        })
+                });
+            }catch (e){
+
+            }
+
+            return false;
+        });
 
         $("#query").click(function(){
             $("#form").submit();
@@ -75,16 +80,38 @@
 
         $("#depart").click(function(){
             location.href = "/reg/depart?hospId="+ $.trim($("#hospId").val())
-                    +"&deptId="+ $.trim($("#deptId").val())
+                    +"&deptId="+ $.trim($("#deptId").val());
 
         });
-    })
+
+
+        if(window.web2ciciClient && window.web2ciciClient.getAppUinfo){
+            var json = window.web2ciciClient.getAppUinfo() || "{uid:''}";
+//            alert("验证登录"+json);
+            eval("user="+json);
+//            alert("getAppUinfo|"+JSON.stringify(user));
+            if(user.uid != undefined && user.uid != null && user.uid !="" && !isNaN(user.uid*1) && user.uid*1 > 0){//登录
+//                alert("开始登录");
+                if(uid != user.uid) {
+                    doLogin(json);
+                }
+            }else{//取消登录
+//                alert("注销");
+                doLogin("{uid:''}");
+            }
+        }else{
+//            doLogin("{uid:'3'}");
+//            alert("无法调用window.web2ciciClient.getAppUinfo");
+//            alert(window.web2ciciClient.getAppUinfo());
+        }
+
+    });
 
     function chkform(){
         var deptId = $.trim($("#deptId").val());
 
         if(deptId ==""){
-            alert("请选择科室");
+            _alert("请选择科室");
             return false;
         }
 

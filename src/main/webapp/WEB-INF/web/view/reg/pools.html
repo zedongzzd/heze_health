@@ -27,24 +27,22 @@
     $("[rBASId]").on("click",function(){
       var $this  = $(this);
       var rBASId = $this.attr("rBASId");
-      var date   = $this.parent(".schedule").find("#time").html();
-
-      if(confirm("检测到您还未登录,是否登录")){
-        $.ajax({
-          url     : "/mine/getUser",
-          type    : "get",
-          success : function(resp){
-            if(resp.resultCode){
-              requestLogin(function(){
-                window.location.href = "/reg/doReg"+location.search+"&rBASId="+rBASId+"&date="+date;
-              });
-            }else{
-              window.location.href = "/reg/doReg"+location.search+"&rBASId="+rBASId+"&date="+date;
-            }
+      var $schedu = $this.parent(".schedule");
+      var date   = $schedu.find("#time").html();
+      var resNo  = $schedu.find(".left-num").html();
+      if(resNo*1 >0) {
+        checkLogin(function (resp) {
+          if (resp.resultCode) {
+            requestLogin(function () {
+              window.location.href = "/reg/doReg" + location.search + "&rBASId=" + rBASId + "&date=" + date;
+            });
+          } else {
+            window.location.href = "/reg/doReg" + location.search + "&rBASId=" + rBASId + "&date=" + date;
           }
         });
+      }else{
+        _alert("对不起,没有号了");
       }
-
 
     });
   });

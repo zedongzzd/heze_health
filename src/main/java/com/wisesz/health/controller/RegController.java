@@ -6,7 +6,6 @@ import com.jfinal.ext.interceptor.GET;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Record;
-import com.jfinal.render.NullRender;
 
 import com.wisesz.health.bean.TitleBar;
 import com.wisesz.health.bean.User;
@@ -42,17 +41,21 @@ public class RegController extends Controller {
      */
     @Before(GET.class)
     public void index(){
-        String uid = getPara("uid");
-        uid = "1";
 
 //        if(!StringHandler.isEmpty(uid)){
 //            User user = new User(uid,getPara("uname",""),getPara("mobile",""),getPara("deviceid",""),getPara("platform",""));
 //            UserService.doLogin(getRequest(),getResponse(),user);
 //        }
-
+        User user = UserService.getUid(getRequest());
+        String uid = "";
+        if(user!=null && !StringHandler.isEmpty(user.getUid())){
+          uid = user.getUid();
+        }
         setAttr("hosp"    , HospitalService.getHospital(getPara("hospId","")));
         setAttr("dept"    , HospitalService.getDepart(getPara("deptId","")));
         setAttr("titleBar", new TitleBar("","智慧医疗","/mine"));
+
+        setAttr("uid"     , uid );
         render("reg/index.html");
     }
 

@@ -13,5 +13,9 @@
 </#if>
 
 </header>
-<div class="preloader-indicator-modal none"><span class="preloader preloader-white"></span></div>
 
+<div id="preloader" class="preloader-indicator-overlay none" style="z-index: 99999999999;">
+  <div class="preloader-indicator-modal">
+    <span class="preloader preloader-white"></span>
+  </div>
+</div>

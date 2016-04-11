@@ -10,6 +10,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.wisesz.health.bean.TitleBar;
 import com.wisesz.health.bean.User;
 import com.wisesz.health.common.Result;
+import com.wisesz.health.handler.DateHandler;
 import com.wisesz.health.handler.HttpHandler;
 import com.wisesz.health.handler.StringHandler;
 import com.wisesz.health.interceptor.WebLoginInterceptor;
@@ -21,6 +22,7 @@ import me.zzd.webapp.core.annotation.BindController;
 
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,9 +40,9 @@ public class MineController extends Controller{
         User user = UserService.getUid(getRequest());
 
         if (user != null && !StringHandler.isEmpty(user.getUid())) {
-          renderJson(Result.RespFactory.isOk("", null));
+          renderJson(Result.RespFactory.isOk("", user));
         } else {
-          renderJson(Result.RespFactory.isFail("未登录", null));
+          renderJson(Result.RespFactory.isFail("未登录", user));
         }
       }catch (Exception e){
         log.error("验证用户登录出错",e);
@@ -61,6 +63,7 @@ public class MineController extends Controller{
       UserService.doLogin(getRequest(),getResponse(),user);
       renderJson(Result.RespFactory.isOk("",user));
     }else{
+      UserService.doLogin(getRequest(),getResponse(),new User(null,null,null));
       renderJson(Result.RespFactory.isFail(""));
     }
   }
@@ -74,7 +77,7 @@ public class MineController extends Controller{
 
         List<Record> registList = RegService.getRegists(user.getUid(),1,10);
 
-        setAttr("registers" , registList);
+        setAttr("registers" , addTime(registList));
         setAttr("titleBar"     , new TitleBar("/reg", "我的挂号", "/mine/patients", "常用人"));
         render("mine/registers.html");
     }
@@ -98,10 +101,26 @@ public class MineController extends Controller{
         }
 
         List<Record> registList = RegService.getRegists(user.getUid(),page,pageSize);
-        setAttr("registers" , registList);
+        setAttr("registers" , addTime(registList));
         render("ftl/mine/register.ftl");
     }
 
+  public List<Record> addTime(List<Record> registerList){
+
+    if(registerList != null && registerList.size() > 0) {
+      for (Record record : registerList) {
+        boolean isOvertime = false;
+        String hDate      = record.get("hDate");
+        String admitRange = record.get("admitRange").toString();
+
+        try {
+          record.set("isOverTime", new Date().getTime() > DateHandler.dateTimeFormat.parse(hDate+" "+admitRange.split("-")[1]).getTime());
+        }catch (Exception e){record.set("isOverTime", false);}
+      }
+    }
+
+    return registerList;
+  }
 
   /**
    * 就诊人列表

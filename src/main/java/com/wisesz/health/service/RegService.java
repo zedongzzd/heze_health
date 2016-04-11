@@ -46,10 +46,10 @@ public class RegService {
 			Regist reg = new Regist();
 			reg.setApptId(res.getApptId());
 			reg.setAdmitRange(res.getAdmitRange());
-			reg.setCreateDate(DateHandler.getDate());
+			reg.setCreateDate(DateHandler.getDateTime());
 			reg.setDeptId(sc.getDeptId());
 			String date = res.getHDate();
-			reg.sethDate(date.substring(0,3)+"-"+date.substring(4,5)+"-"+date.substring(6,7));
+			reg.sethDate(sc.getDate());
 			reg.setHospitalId(Const.HospitalId);
 			reg.setPatientId(patientId);
 			reg.setRegFee(res.getRegFee());
@@ -58,7 +58,7 @@ public class RegService {
 			reg.setState(res.getResultCode());
 			reg.setUid(uid);
 			reg.setErrorMsg(res.getErrorMsg());
-			reg.setCreateDate(DateHandler.getDate());
+//			reg.setCreateDate(DateHandler.getDate());
 			reg.save();
 			if (res.getResultCode() != null && res.getResultCode() == 0) {
 				return RespFactory.isOk("挂号成功", reg);
@@ -108,7 +108,8 @@ public class RegService {
 	public static List<Record> getRegists(String uid, Integer page, Integer pageSize) {
 
 		String sql="select t_regist.*, t_patient.name as patientName,t_hospital.name as hospName, t_dept.name as deptName, t_dept.address from  t_regist inner join   t_patient on  t_regist.uid=? and  t_regist.patientId=t_patient.patientId inner join   t_dept on t_regist.deptId=t_dept.deptId inner join    t_hospital  on t_regist.hospitalId=t_hospital.hospitalId  left join t_doctor on t_regist.deptId=t_doctor.doctorId order by createDate desc limit ?,?";
-	    //String sql = "select * from t_regist where uid=? order by createDate desc limit ?,?";
+
+
 		return Db.find(sql,uid,(page - 1) * pageSize, pageSize);
 	}
 

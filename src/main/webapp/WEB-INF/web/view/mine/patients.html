@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>常用人</title>
+  <title>挂号人</title>
   <!--公共样式-->
   <#include "../ftl/style.ftl"/>
 </head>
@@ -21,14 +21,16 @@
   <!--公共js-->
   <#include "../ftl/js.ftl"/>
   <script>
+    "use strict"
     $(function(){
       //判断是否为挂号页面选择就诊人
-      const type  = "${type!''}";
-      const isReg = type == "reg";
+      var type  = "${type!''}";
+      var isReg = type == "reg";
+
 
       $("#addPatient").on("click",function(){
         window.location.href="/mine/edit_patient?"+replaceQueryString({patientId : ""});
-      })
+      });
 
       $(".item-choice").on("click",function(){
         var patientId = $(this).attr("patientId");
@@ -39,82 +41,40 @@
         }
       });
 
-      $.each(document.getElementsByClassName("pat_item"),function(i,v){
-        v.addEventListener('touchstart', function(event) {
-          touch(event);
-        });
-
-        v.addEventListener('touchmove', function(event) {
-          touch(event);
-        });
-
-        v.addEventListener('touchend', function(event) {
-          touch(event);
-        });
-      });
-
-      $(".del").click(function(){
+      $(".del").click(function(event){
         var $this = $(this);
         var $par  = $this.parent(".item-choice");
-        if(confirm("是否删除挂号人:"+$par.find("[name='name']").html())){
-          $.ajax({
-            type    : "post",
-            url     : "/mine/delete_patient",
-            data    : {patientId : $par.attr("patientId")},
-            success : function(resp){
-              if(resp.resultCode == 0){
-                $this.parent(".item-choice").remove();
-              }else{
-                alert(resp.resultMsg);
+        _confirm({
+          content   :   "是否删除挂号人:"+$par.find("[name='name']").html(),
+          onSure    :   function(){
+            doAjax({
+              type    : "post",
+              url     : "/mine/delete_patient",
+              data    : {patientId : $par.attr("patientId")},
+              success : function(resp){
+                if(resp.resultCode == 0){
+                  $this.parent(".item-choice").remove();
+                }else{
+                  alert(resp.resultMsg);
+                }
               }
-            }
-          })
-        }
+            });
+          }
+        });
+        event.stopPropagation();
+        return false;
       });
 
 
-      function touch(e){
-        var $target  = $(e.currentTarget);
-        var $del     = $target.siblings(".del"),
-                delWidth = $del.width();
-        var nPageX, //当前距左侧距离
-                bPageX, //start时距左侧距离
-                diff,move;
 
-        if(e.type != "touchend"){
-          nPageX = e.targetTouches[0].pageX;
-          bPageX = $target.attr("pageX");
-          diff=nPageX-bPageX;
-          if(e.type == "touchstart"){
-            // 设置初始位置
-            $target.attr("pageX",nPageX-$target.offset().left);
-            // 重置其他
-            let sibNodes = $target.parents(".item-choice").siblings(".item-choice");
-            $.each(sibNodes,function(i ,treatment ){
-              $(treatment).find(".pat_item").animate({left:0});
-            });
 
-          }
-        }
-
-        if(e.type == "touchmove"){
-
-          move=Math.max(-1*delWidth,diff);
-          move=Math.min(0,move);
-
-          $target.offset({left : move});
-        }else if(e.type == "touchend"){
-          let left    = $target.offset().left;
-
-          if(left < (-1*delWidth*0.5)){
-            move = -1 * delWidth;
-          }else{
-            move = 0;
-          }
-
-          $target.animate({left : move+"px"},200);
-        }
-      }
-    })
+      $(".pat_item").rhuiSwipe("swipeLeft",function(event){
+        var $target = $(event.currentTarget);
+        $target.animate({left : "-"+$target.siblings(".del").outerWidth()+"px"},200);
+      }).rhuiSwipe("swipeRight",function(){
+        $(event.currentTarget).animate({left : "0px"},200);
+      });
+    });
   </script>
+
 </html>

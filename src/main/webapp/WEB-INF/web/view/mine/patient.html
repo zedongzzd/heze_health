@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>demo</title>
+  <title><#if (patient.patientId??)>
+      编辑挂号人
+    <#else>
+      新增挂号人
+  </#if></title>
   <!--公共样式-->
   <#include "../ftl/style.ftl"/>
 </head>
@@ -13,26 +17,26 @@
   <div class=" fz28 bdb bg-white mt15 txt-ellipsis">
       <input type="hidden" value="${patient.id!''}"/>
     <div class="ml20 fz28 hht70 bdb txt-ellipsis">
-      <label class="fc-grey">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+      <label class="fc-grey">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
       <input type="text" class="bd-non" id="name" value="${patient.name!''}" placeholder="请输入姓名" />
     </div>
 
     <div class="ml20 fz28 hht70 bdb txt-ellipsis">
-      <label class="fc-grey">身&nbsp;份&nbsp;证：</label>
+      <label class="fc-grey">身&nbsp;&nbsp;份&nbsp;&nbsp;证：</label>
       <input type="text"  class="bd-non" id="idCard" value="${patient.idCard!''}" placeholder="请输入身份证号" />
     </div>
     <div class="ml20 fz28 hht70 txt-ellipsis">
-      <label class="fc-grey">手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机：</label>
+      <label class="fc-grey">手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机：</label>
       <input type="text" class="bd-non" id="phone" value="${patient.phone!''}" placeholder="请输入手机号" />
     </div>
     <div class="ml20 fz28 hht70 bdt txt-ellipsis">
-      <label class="fc-grey">卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</label>
+      <label class="fc-grey">卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</label>
       <input type="text" class="bd-non" id="cardNo" value="${patient.cardNo!''}" placeholder="请输入卡号" />
     </div>
     <div class="ml20 fz28 hht70 bdt txt-ellipsis">
       <label class="fc-grey">校验类型：</label>
-      <span name="type" type="1" class="dp-inlb hht50 tc w110 fc-white fz26 <#if patient.type ?? && patient.type == 1> bg-cyan  <#else>bg-ccc </#if>">就诊卡号</span>
-      <span name="type" type="1" class="dp-inlb hht50 tc w110 fc-white fz26 <#if patient.type ?? && patient.type == 2> bg-cyan  <#else>bg-ccc </#if>">住院号</span>
+      <span name="type" type="1" class="w2rem dp-inlb hht50 tc fc-white fz26 <#if patient.type ?? && patient.type == 1> bg-cyan  <#else>bg-ccc </#if>">就诊卡号</span>
+      <span name="type" type="1" class="w2rem dp-inlb hht50 tc fc-white fz26 <#if patient.type ?? && patient.type == 2> bg-cyan  <#else>bg-ccc </#if>">住院号</span>
       <br/>
     </div>
   </div>
@@ -71,39 +75,34 @@
         data.idCard    = $.trim($("#idCard").val());
         data.type      = $.trim($(".bg-cyan[name=type]").attr("type")||"");
         if (!validatePhone(data.phone)) {
-          alert("手机号码验证不通过");
+          _alert("手机号码验证不通过");
           return;
         }
 
         if (!validateIdCard(data.idCard)) {
-          alert("身份证号码验证不通过");
+          _alert("身份证号码验证不通过");
           return;
         }
 
         if (!validateCN(data.name)) {
-          alert("姓名必须是中文");
+          _alert("姓名必须是中文");
           return;
         }
 
         if(!data.type){
-          alert("请选择就诊类型")
+          _alert("请选择就诊类型")
           return;
         }
 
 
 
-        $.ajax({
+        doAjax({
           type: "post",
           url: "/mine/patient",
           data: data,
-          beforeSend: function () {
-            isAjax = true;
-            loadbox.show();
-          }, success: function (resp) {
-            isAjax = false;
-            loadbox.hide();
+          success: function (resp) {
             if (resp.resultCode) {
-              alert(resp.resultMsg);
+              _alert(resp.resultMsg);
             } else {
               window.location.href = "/mine/patients"+location.search;
             }

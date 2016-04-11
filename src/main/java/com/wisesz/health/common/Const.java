@@ -26,4 +26,5 @@ public class Const {
 	public static final String Cache_Key_Depart = "cache_key_depart:";
 
 	public static final String Cache_Key_DepartINFO = "cache_key_departInfo:";
+	public static final String Cache_Key_Hospital = "cache_key_hospital";
 }

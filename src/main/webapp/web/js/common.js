@@ -2,7 +2,7 @@ var query,loadbox, loginSuccFun ;
 $(function(){
     query   = parseQueryString(location.href);
     loadbox = {
-        el   : $(".preloader-indicator-modal"),
+        el   : $("#preloader"),
         show : function(){
             this.el.removeClass("none");
         },hide:function(){
@@ -10,6 +10,15 @@ $(function(){
         }
     };
     $("body").height(document.documentElement.clientHeight);
+
+    //$(window).bind('beforeunload',function(){
+    //    loadbox.show();
+    //});
+
+    //try{
+    //    _alert(window.web2ciciClient.getAppUinfo());
+    //}catch(e){console.error(e);}
+
 });
 
 function showNoMore(container){
@@ -24,12 +33,59 @@ function showNoMore(container){
 
 }
 
-window.web2ciciClient = {
-    getAppUinfo : function(){
-        return "{}";
-    },login2js  : function(funcName){
-        return window[funcName]("{uid:1}");
+//window.web2ciciClient = {
+//    getAppUinfo : function(){
+//        return "{}";
+//    },login2js  : function(funcName){
+//        return window[funcName]("{uid:1}");
+//    }
+//}
+
+var loading = {
+    self   : null,
+    status : false,
+    keys   : {},
+    show   : function(key){
+        this.keys[key] = true;
+        loadbox.show();
+    },hide : function(key){
+        delete this.keys[key];
+
+        if(Object.keys(this.keys).length == 0){
+            loadbox.hide();
+        }
     }
+}
+
+/**
+ * @param data
+ */
+function doAjax(data){
+    var loadingKey = data.url + JSON.stringify(data.data||"");
+    $.ajax($.extend({},data,{
+        beforeSend : function(){
+            //alert(loadingKey+"|"+loading.show.toString());
+          loading.show(loadingKey);
+      },complete : function () {
+          loading.hide(loadingKey);
+      }
+    }));
+}
+
+/**
+ * 检查登录
+ * @param func
+ */
+function checkLogin(func){
+    doAjax({
+        url     : "/mine/getUser",
+        type    : "get",
+        async   : false,
+        success : function(resp){
+            //alert(JSON.stringify(resp));
+            func && typeof func == "function" && func(resp);
+        }
+    });
 }
 
 /**
@@ -37,17 +93,15 @@ window.web2ciciClient = {
  * @param func
  */
 function requestLogin(func){
-    //z f4fna96cdnf27i8W9Jgdg4s8asd56a6sdV6T152fgh56df9z5ZcL15hy0W6ob88v0Q6Vf126
+
     window.loginSuccFun = func;
-    eval("user="+window.web2ciciClient.getAppUinfo());
 
-    //用户信息存在直接登录
-    if(user.uid != null && user.uid != undefined && user.uid != 0){
-        doLogin(user);
-    }else{//不存在则打开登录窗口
-        window.web2ciciClient.login2js("doLogin");
-    }
-
+    _confirm({
+        content : "系统检测到您尚未登录,是否登录?",
+        onSure  : function(){
+            window.web2ciciClient.login2js("doLogin");
+        }
+    });
 }
 
 /**
@@ -56,19 +110,22 @@ function requestLogin(func){
  */
 function doLogin(data){
     var _data = eval("("+data+")")
-    $.ajax({
+
+    doAjax({
         url     : "/mine/loginSuccess",
         data    : _data,
+        async   : false,
         type    : "post",
         success : function (obj) {
+
             if(obj.resultCode == 0) {
                 if (typeof loginSuccFun == "function") {
-                    loginSuccFun(user);
+                    loginSuccFun(obj.obj || {});
                     loginSuccFun = null;
                 }
             }
         }
-    })
+    });
 }
 
 /**
@@ -77,6 +134,8 @@ function doLogin(data){
  * @returns {string}
  */
 function replaceQueryString(obj){
+    //alert(query);
+    //alert(serialize($.extend({},query,obj)));
     return serialize($.extend({},query,obj));
 }
 
@@ -191,3 +250,330 @@ function validateCN(name){
 function encodeURIComponent2(v){
     return encodeURIComponent(encodeURIComponent(v));
 }
+
+/**
+ * alert 弹框
+ * @param alert
+ * @private
+ */
+function _alert(alert){
+    if(typeof  alert == "string"){
+        alert = { content : alert};
+    }
+    alert = $.extend({
+        title   : "提示",
+        content : "",
+        onSureText : "确定"
+    },alert);
+
+    var $dialog = $(".weui_dialog_alert");
+
+    if(!$dialog.length){
+        var html = '<div class="weui_dialog_alert">\
+                    <div class="weui_mask"></div>\
+                    <div class="weui_dialog">\
+                        <div class="weui_dialog_hd">\
+                            <strong class="weui_dialog_title">{0}</strong>\
+                        </div>\
+                        <div class="weui_dialog_bd">{1}</div>\
+                        <div class="weui_dialog_ft">\
+                            <a href="javascript:;" class="weui_btn_dialog primary">{2}</a>\
+                        </div>\
+                    </div>\
+                </div>';
+        $dialog = $(html);
+    }
+
+    $dialog.find(".weui_dialog_title").html(alert.title).end()
+           .find(".weui_dialog_bd").html(alert.content).end()
+           .find(".weui_btn_dialog.primary").html(alert.onSureText).click(function(){
+                if(alert.onSure && typeof alert.onSure == "function"){
+                    try{
+                        alert.onSure();
+                    }catch (e){console.error(e);}
+
+                }
+                $dialog.remove();
+            });
+
+    $("body").append($dialog);
+}
+
+function _confirm(confirm){
+    confirm = $.extend({
+        title        : "提示",
+        content      : "",
+        onSureText   : "确定",
+        onCancelText : "取消"
+    },confirm);
+
+    var $confirm = $('.weui_dialog_confirm');
+
+    if(!$confirm.length){
+        var html = '<div class="weui_dialog_confirm">\
+                        <div class="weui_mask"></div>\
+                        <div class="weui_dialog">\
+                        <div class="weui_dialog_hd">\
+                            <strong class="weui_dialog_title"></strong>\
+                        </div>\
+                        <div class="weui_dialog_bd">自定义弹窗内容<br>...</div>\
+                            <div class="weui_dialog_ft">\
+                                <a href="javascript:;" class="weui_btn_dialog default">取消</a>\
+                                <a href="javascript:;" class="weui_btn_dialog primary">确定</a>\
+                            </div>\
+                        </div>\
+                    </div>';
+
+        $confirm = $(html);
+    }
+
+    $confirm.find(".weui_dialog_title").html(confirm.title).end()
+            .find(".weui_dialog_bd").html(confirm.content).end()
+            .find(".weui_btn_dialog.default").html(confirm.onCancelText).click(function(){
+                if(confirm.onCancel && typeof confirm.onCancel == "function"){
+                    try {
+                        confirm.onCancel();
+                    }catch(e){console.error(e);}
+                }
+                $confirm.remove();
+            }).end().find(".weui_btn_dialog.primary").html(confirm.onSureText).click(function(){
+                if(confirm.onSure && typeof confirm.onSure == "function"){
+                    try {
+                        confirm.onSure();
+                    }catch(e){
+                        console.error(e);
+                    }
+                }
+                $confirm.remove();
+            });
+
+    $("body").append($confirm);
+}
+
+/**
+ * @author accountwcx@qq.com
+ * http://git.oschina.net/accountwcx/rhui
+ *
+ * swipe事件，包括swipeLeft、swipeRight、swipeUp、swipeDown。
+ * 调用方法
+ * Rhui.mobile.swipeLeft(el, callback, options)
+ * Rhui.mobile.swipeRight(el, callback, options)
+ * Rhui.mobile.swipeUp(el, callback, options)
+ * Rhui.mobile.swipeDown(el, callback, options)
+ * 如果使用jQuery，调用方法
+ * $(el).rhuiSwipe('swipeLeft', callback, options);
+ * $(el).rhuiSwipe('swipeRight', callback, options);
+ * $(el).rhuiSwipe('swipeUp', callback, options);
+ * $(el).rhuiSwipe('swipeDown', callback, options);
+ */
+(function(window, $){
+    var Rhui = window.Rhui || {};
+    window.Rhui = Rhui;
+    Rhui.mobile = (function(){
+        var touch = {
+            distance: 30,  //滑动距离，超过该距离触发swipe事件，单位像素。
+            duration: 1000 //滑动时长，超过该时间不触发swipe，单位毫秒。
+        };
+
+        /**
+         * 绑定事件
+         * @param  el        触发事件的元素
+         * @param  swipe     事件名称，可选值为swipeLeft,swipeRight,swipeUp,swipeDown
+         * @param  callback  事件回调函数
+         * @param  isStopPropagation   是否停止冒泡，true为停止冒泡
+         * @param  isPreventDefault    是否阻止默认事件，true为阻止默认事件
+         * @param  triggerOnMove       swipe事件有两种触发方式，一种是在touchmove过程中，只要满足滑动距离条件即触发。
+         *                             一种是在touchend中，进入滑动距离判断，如果满足滑动距离触发。
+         *                             默认是在touchend中触发。
+         */
+        function bindSwipe(el, swipe, callback, triggerOnMove, isStopPropagation, isPreventDefault){
+            var startPoint, endPoint, timer;
+
+            /**
+             * 计算滑动方向
+             * 首先根据x方向和y方向滑动的长度决定触发x方向还是y方向的事件。
+             * 然后再判断具体的滑动方向。
+             * 如果滑动距离不够长，不判断方向。
+             */
+            function swipeDirection(x1, y1, x2, y2){
+                var diffX = x1 - x2,
+                    diffY = y1 - y2,
+                    absX = Math.abs(diffX),
+                    absY = Math.abs(diffY),
+                    swipe;
+
+                if(absX >= absY){
+                    if(absX >= touch.distance){
+                        swipe = diffX > 0 ? 'swipeLeft' : 'swipeRight';
+                    }
+                }else{
+                    if(absY >= touch.distance){
+                        swipe = diffY > 0 ? 'swipeUp' : 'swipeDown';
+                    }
+                }
+
+                return swipe;
+            }
+
+            // 清除本次滑动数据
+            function clearSwipe(){
+                startPoint = undefined;
+                endPoint = undefined;
+
+                if(timer !== undefined){
+                    clearTimeout(timer);
+                    timer = undefined;
+                }
+            }
+
+            /**
+             * 判断是否符合条件，如果符合条件就执行swipe事件
+             * @param  el     {HTMLElement}  元素
+             * @param  event  {Event}        Touch原始事件
+             * @param  return 如果执行了事件，就返回true。
+             */
+            function execSwipe(el, event){
+                if(startPoint && endPoint && swipeDirection(startPoint.x, startPoint.y, endPoint.x, endPoint.y) === swipe){
+                    callback.call(el, event);
+                    return true;
+                }
+            }
+
+            el.addEventListener('touchstart', function(event){
+                var self = this, touchPoint = event.touches[0];
+
+                if(isStopPropagation){
+                    event.stopPropagation();
+                }
+
+                if(isPreventDefault){
+                    event.preventDefault();
+                }
+
+                startPoint = {
+                    x: Math.floor(touchPoint.clientX),
+                    y: Math.floor(touchPoint.clientY)
+                };
+
+                timer = setTimeout(function(){
+                    //如果超时，清空本次touch数据
+                    clearSwipe();
+                }, touch.duration);
+            });
+
+            el.addEventListener('touchmove', function(event){
+                var self = this, touchPoint = event.touches[0];
+
+                if(isStopPropagation){
+                    event.stopPropagation();
+                }
+
+                if(isPreventDefault){
+                    event.preventDefault();
+                }
+
+                if(startPoint){
+                    endPoint = {
+                        x: Math.floor(touchPoint.clientX),
+                        y: Math.floor(touchPoint.clientY)
+                    };
+
+                    //执行swipe事件判断，是否符合触发事件
+                    if(triggerOnMove){
+                        if(execSwipe(self, event)){
+                            clearSwipe();
+                        }
+                    }
+                }
+            });
+
+            el.addEventListener('touchend', function(event){
+                if(isStopPropagation){
+                    event.stopPropagation();
+                }
+
+                if(isPreventDefault){
+                    event.preventDefault();
+                }
+
+                execSwipe(self, event);
+                //清除本次touch数据
+                clearSwipe();
+            });
+        }
+
+        /**
+         * @param  el        {HTMLElement}  HTML元素
+         * @param  callback  {Function}     事件回调函数
+         * @param  options   {Object}       可选参数
+         *                   isStopPropagation  {Boolean}  是否停止冒泡，true为停止冒泡
+         *                   isPreventDefault   {Boolean}  是否阻止默认事件，true为阻止默认事件
+         *                   triggerOnMove      {Boolean}
+         *                                       swipe事件有两种触发方式，一种是在touchmove过程中，只要满足滑动距离条件即触发。
+         *                                       一种是在touchend中，进入滑动距离判断，如果满足滑动距离触发。
+         *                                       默认值为false，在touchend中触发。
+         */
+        touch.swipeLeft = function(el, callback, options){
+            if(options){
+                bindSwipe(el, 'swipeLeft', callback, options.triggerOnMove, options.isStopPropagation, options.isPreventDefault);
+            }else{
+                bindSwipe(el, 'swipeLeft', callback);
+            }
+
+        };
+
+        touch.swipeRight = function(el, callback, options){
+            if(options){
+                bindSwipe(el, 'swipeRight', callback, options.triggerOnMove, options.isStopPropagation, options.isPreventDefault);
+            }else{
+                bindSwipe(el, 'swipeRight', callback);
+            }
+        };
+
+        touch.swipeUp = function(el, callback, options){
+            if(options){
+                bindSwipe(el, 'swipeUp', callback, options.triggerOnMove, options.isStopPropagation, options.isPreventDefault);
+            }else{
+                bindSwipe(el, 'swipeUp', callback);
+            }
+        };
+
+        touch.swipeDown = function(el, callback, options){
+            if(options){
+                bindSwipe(el, 'swipeDown', callback, options.triggerOnMove, options.isStopPropagation, options.isPreventDefault);
+            }else{
+                bindSwipe(el, 'swipeDown', callback);
+            }
+        };
+
+        return touch;
+    })();
+
+    // 注册jquery方法
+    if($ && $.fn){
+        $.fn.extend({
+            /**
+             * 模拟touch swipe事件，支持链式调用。
+             * @param   name      {String}    swipe事件名称，值有swipLeft、swipeRight、swipeUp、swipeDown。
+             * @param   callback  {Function}  swipe事件回调函数
+             * @param   opts      {Object}    可选参数
+             *                                isStopPropagation  {Boolean}  是否停止冒泡，true为停止冒泡
+             *                                isPreventDefault   {Boolean}  是否阻止默认事件，true为阻止默认事件
+             *                                triggerOnMove      {Boolean}  swipe事件有两种触发方式，一种是在touchmove过程中，只要满足滑动距离条件即触发。
+             *                                                              一种是在touchend中，进入滑动距离判断，如果满足滑动距离触发。
+             *                                                              默认值为false，在touchend中触发。
+             */
+            rhuiSwipe: function(name, callback, opts){
+                var fnSwipe = Rhui.mobile[name];
+
+                if(this.length > 0 && fnSwipe){
+                    this.each(function(){
+                        fnSwipe(this, callback, opts);
+                    });
+                }
+
+                return this;
+            }
+        });
+    }
+})(window, $);

@@ -13,6 +13,7 @@ import com.jfinal.config.Routes;
 import com.jfinal.kit.PathKit;
 import com.jfinal.log.Log4jLogFactory;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
+import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.ViewType;
 
 import me.zzd.webapp.core.plugin.AutoRouteBindPlugin;
@@ -45,7 +46,7 @@ public class CoreConfig extends JFinalConfig {
 		me.setBaseViewPath(systemConfig.getProperty("baseViewPath", "//"));
 		// view type
 		me.setViewType(ViewType.valueOf(systemConfig.getProperty("viewType", "FREE_MARKER")));
-
+		FreeMarkerRender.getConfiguration().setTemplateUpdateDelay(0);
 		me.setLogFactory(new Log4jLogFactory());
 
 	}

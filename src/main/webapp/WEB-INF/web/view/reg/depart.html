@@ -81,20 +81,23 @@
 
     //获取科室信息
     function get_dept(param){
-      if(!isloading) {
-
-
+      if(Object.keys(loading.keys).length == 0) {
         isloading = true;
-        loadbox.show();
-        $.post("/reg/post_depart", param, function(resp){
-          isloading = false;
-          loadbox.hide();
-          if(resp.split("</li>").length < 21){
-            noMore = true;
-            showNoMore("#dept")
+        doAjax({
+          type : "post",
+          url  :  "/reg/post_depart",
+          data :  param,
+          success : function(resp){
+            isloading = false;
+//            loadbox.hide();
+            $dept.append(resp);
+            if(resp.split("</li>").length < 21){
+              noMore = true;
+              showNoMore("#dept")
+            }
+
+            bindLiClick();
           }
-          $dept.append(resp);
-          bindLiClick();
         });
       }else{
         //todo 加载中
@@ -102,7 +105,7 @@
     }
 
     $dept.scroll(function(){
-      console.debug("scroll");
+//      console.debug("scroll");
       var dept         = $dept[0];
       var height       = dept.clientHeight;
       var scrollHeight = dept.scrollHeight;
@@ -112,7 +115,7 @@
           showNoMore("#dept");
           return false;
         }
-        if(!isloading) {
+        if(Object.keys(loading.keys).length == 0) {
           param.page += 1;
           get_dept(param);
         }

@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.DbKit;
 import com.jfinal.plugin.activerecord.Record;
 
 
@@ -12,7 +11,6 @@ import com.wisesz.health.common.Const;
 import com.wisesz.health.handler.CacheHandler;
 import com.wisesz.health.handler.DateHandler;
 import com.wisesz.health.handler.StringHandler;
-import com.wisesz.health.model.Schedual;
 import com.wisesz.health.webservice.Service;
 import com.wisesz.health.webservice.bean.RBAS;
 import com.wisesz.health.webservice.bean.RBASRec;
@@ -35,9 +33,12 @@ public class HospitalService {
 	 * @return
    */
 	public static Record getHospital(String hospId){
-		Record record = new Record();
-		record.set("hospName","菏泽市第一人民医院");
-		record.set("hospId",Const.HospitalId);
+		hospId = Const.HospitalId;
+		Record record = CacheHandler.cache(Const.Cache_Name_request, Const.Cache_Key_Hospital+hospId);
+		if(record == null){
+//			record = Db.findById("t_hospital","hospitalId",hospId);
+			CacheHandler.cache(Const.Cache_Name_request, Const.Cache_Key_Hospital+hospId, record);
+		}
 		return record;
 	}
 

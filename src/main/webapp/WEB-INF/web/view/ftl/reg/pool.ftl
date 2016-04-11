@@ -10,7 +10,7 @@
     <label class="dp-inlb w130 txt-ellipsis fz26">剩余
       <label class="left-num <@NumColor num='${s.resNo}'/>">${s.resNo}</label>
     </label>
-    <span  rBASId="${s.rBASId!""}" class=" t15 w110 pa bdr-5 tc fz26 <#if (s.resNo?number > 0)>bd-cyan fc-cyan<#else>fc-grey</#if> r20 hht50">预约</span>
+    <span  rBASId="${s.rBASId!""}" class=" t15 w110 pa bdr-5 tc fz26 <#if (s.resNo?number > 0)>bd-cyan fc-cyan<#else>fc-grey bd-grey</#if> r20 hht50">预约</span>
   </div>
   </#list>
 </#if>
