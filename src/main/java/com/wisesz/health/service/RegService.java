@@ -1,5 +1,7 @@
 package com.wisesz.health.service;
 
+import java.awt.geom.Arc2D;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import com.jfinal.log.Log;
@@ -10,6 +12,7 @@ import com.wisesz.health.common.Const;
 import com.wisesz.health.common.Result;
 import com.wisesz.health.common.Result.RespFactory;
 import com.wisesz.health.handler.DateHandler;
+import com.wisesz.health.handler.StringHandler;
 import com.wisesz.health.model.Patient;
 import com.wisesz.health.model.Regist;
 import com.wisesz.health.model.Schedual;
@@ -52,9 +55,12 @@ public class RegService {
 			reg.sethDate(sc.getDate());
 			reg.setHospitalId(Const.HospitalId);
 			reg.setPatientId(patientId);
-			reg.setRegFee(res.getRegFee());
+			DecimalFormat g=new DecimalFormat("0.00");
+			Double regFee = Double.parseDouble(StringHandler.defaultValue(res.getRegFee(),"0"));
+			Double serviceFee = Double.parseDouble(StringHandler.defaultValue(res.getServiceFee(),"0"));
+			reg.setRegFee(g.format(regFee));
+			reg.setServiceFee(g.format(serviceFee));
 			reg.setSeqCode(res.getSeqCode());
-			reg.setServiceFee(res.getServiceFee());
 			reg.setState(res.getResultCode());
 			reg.setUid(uid);
 			reg.setErrorMsg(res.getErrorMsg());

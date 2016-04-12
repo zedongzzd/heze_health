@@ -20,14 +20,14 @@
             <!--医院选择-->
 
             <div class="bdt fz28  w hht88 bg-white txt-ellipsis icon-hospital-search <@EmptyColor value='${hosp.name}'/>">
-                <span class="ml90">${hosp.hospName!"请选择医院"}</span>
-                <span class="fr mr20 dp-inlb h icon-enter"></span>
+                <span class="ml90">${hosp.name!"请选择医院"}</span>
+                <span class="fr mr20 dp-inlb h icon-enter" ></span>
             </div>
             <input id="hospId" name="hospId" type="hidden" value="${hosp.hospitalId!''}" >
             <!--选择科室-->
             <div id="depart" class="bdt fz28 w hht88 bg-white txt-ellipsis icon-keshi bdb <@EmptyColor value='${dept.name!\'\'}'/>">
                 <span class="ml90 "><@DefaultVal value="${dept.name!''}" defaultVal="请选择科室"/></span>
-                <span class="fr mr20 dp-inlb h icon-enter"></span>
+                <span class="fr mr20 dp-inlb h icon-enter" style="width: 0.265625rem;"></span>
             </div>
             <input id="deptId"   name="deptId"    type="hidden" value="${dept.deptId!''}" >
             <!--医师查询-->

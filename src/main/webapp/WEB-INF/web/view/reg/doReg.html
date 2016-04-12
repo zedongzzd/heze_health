@@ -13,7 +13,7 @@
     <div class=" bg-white pr bdtb mt15">
       <div class="txt-ellipsis ml20 fz28 hht50">
         <label class="fc-grey">医&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;院：</label>
-        <span class="fz26 txt-ellipsis">${hosp.hospName!""}</span>
+        <span class="fz26 txt-ellipsis">${hosp.name!""}</span>
       </div>
       <div class="txt-ellipsis ml20 fz28 hht50">
         <label class="fc-grey">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;室：</label>
@@ -109,7 +109,7 @@
                     }else{//挂号成功
                       resp.obj||(resp.obj={});
                       var param = {
-                        hospName    : "${hosp.hospName!''}",
+                        hospName    : "${hosp.name!''}",
                         deptName    : "${dept.name!''}",
                         address     : "${dept.address!''}",
                         date        : "${date!''}",

@@ -36,7 +36,7 @@ public class HospitalService {
 		hospId = Const.HospitalId;
 		Record record = CacheHandler.cache(Const.Cache_Name_request, Const.Cache_Key_Hospital+hospId);
 		if(record == null){
-//			record = Db.findById("t_hospital","hospitalId",hospId);
+			record = Db.findById("t_hospital","hospitalId",hospId);
 			CacheHandler.cache(Const.Cache_Name_request, Const.Cache_Key_Hospital+hospId, record);
 		}
 		return record;

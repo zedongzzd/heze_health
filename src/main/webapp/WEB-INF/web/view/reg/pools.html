@@ -30,14 +30,15 @@
       var $schedu = $this.parent(".schedule");
       var date   = $schedu.find("#time").html();
       var resNo  = $schedu.find(".left-num").html();
-      if(resNo*1 >0) {
+      if(resNo*1 >0 || true) {
+        var param = serialize($.extend({},parseQueryString(location.href),{rBASId: rBASId, date: date}));
         checkLogin(function (resp) {
           if (resp.resultCode) {
             requestLogin(function () {
-              window.location.href = "/reg/doReg" + location.search + "&rBASId=" + rBASId + "&date=" + date;
+              window.location.href = "/reg/doReg?" + param;
             });
           } else {
-            window.location.href = "/reg/doReg" + location.search + "&rBASId=" + rBASId + "&date=" + date;
+            window.location.href = "/reg/doReg?" + param;
           }
         });
       }else{
