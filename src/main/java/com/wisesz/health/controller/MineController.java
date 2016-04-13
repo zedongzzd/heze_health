@@ -149,7 +149,7 @@ public class MineController extends Controller{
   public void delete_patient(){
     User user = UserService.getUid(getRequest());
 
-    String patientId = getPara("patientId");
+    String patientId = getPara("id");
 
     if(StringHandler.isEmpty(patientId)){
       renderJson(Result.RespFactory.isFail("参数不全"));
@@ -166,7 +166,7 @@ public class MineController extends Controller{
     public void edit_patient(){
       User user = UserService.getUid(getRequest());
 
-      String patientId = getPara("patientId"); //病人id
+      String patientId = getPara("id"); //病人id
       String type      = getPara("type","");      //为reg时,表示挂号时选择就诊人
       String title     = StringHandler.isEmpty(patientId) ? "新增挂号人" : "编辑挂号人";
 
@@ -188,21 +188,23 @@ public class MineController extends Controller{
    */
     @Before({POST.class,WebLoginInterceptor.class})
     public void patient(){
+        String id        = getPara("id");
         String patientId = getPara("patientId");
         String cardNo    = getPara("cardNo");
         String idCard    = getPara("idCard");
         String phone     = getPara("phone");
         String name      = getPara("name");
         Integer type     = getParaToInt("type");
-
+        User user =UserService.getUid(getRequest());
+        String uid = user.getUid();
         if(StringHandler.isEmpty(cardNo) || StringHandler.isEmpty(idCard) || StringHandler.isEmpty(phone) || StringHandler.isEmpty(name) || type ==null){
             renderJson(Result.RespFactory.isFail("参数异常"));
         }
 
-        if(StringHandler.isEmpty(patientId)){//新增
-            renderJson(UserService.addPatient(cardNo,idCard,phone,name,type));
+        if(StringHandler.isEmpty(id)){//新增
+            renderJson(UserService.addPatient(cardNo,idCard,phone,name,type,uid));
         }else{//修改
-            renderJson(UserService.updatePatient(patientId,cardNo,idCard,phone,name,type));
+            renderJson(UserService.updatePatient(id,patientId,cardNo,idCard,phone,name,type,uid));
         }
 
     }

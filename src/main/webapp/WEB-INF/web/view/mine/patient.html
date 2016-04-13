@@ -55,6 +55,7 @@
 
   $(function(){
     const patientId = "${patient.patientId!''}";
+    const id        = "${patient.id!''}";
     const type      = "${type!''}";
     var   isAjax    = false;
 
@@ -70,6 +71,7 @@
         var data = {};
         data.name      = $.trim($("#name").val());
         data.patientId = patientId;
+        data.id        = id;
         data.phone     = $.trim($("#phone").val());
         data.cardNo    = $.trim($("#cardNo").val());
         data.idCard    = $.trim($("#idCard").val());

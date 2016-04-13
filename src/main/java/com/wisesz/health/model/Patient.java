@@ -69,4 +69,15 @@ public class Patient extends Model<Patient> {
 	public Patient setPhone(String phone) {
 		return set("phone", phone);
 	}
+
+	public Integer getId(){
+		return getInt("id");
+	}
+
+	public Patient setId(String id){
+		return set("id", id);
+	}
+
+
+
 }

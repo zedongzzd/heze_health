@@ -65,9 +65,10 @@ public class UserService {
 	 * @param phone
 	 * @param name
 	 * @param type
+	 * @param uid
 	 * @return
 	 */
-	public static Result<String> addPatient(String cardNo, String idCard, String phone, String name, Integer type) {
+	public static Result<String> addPatient(String cardNo, String idCard, String phone, String name, Integer type, String uid) {
 		try {
 			HisCheckPatientInfoResponse response = Service.getHisCheckPatientInfo(Const.TransactionId, cardNo, idCard,
 					name, type);
@@ -75,7 +76,7 @@ public class UserService {
 				UserInfo info = response.getUserInfo();
 				String patientId = info.getPatientId();
 				Patient patient = new Patient();
-				patient.setPatientId(patientId).setName(name).setIdCard(idCard).setPhone(phone).setCardNo(cardNo);
+				patient.setPatientId(patientId).setName(name).setIdCard(idCard).setPhone(phone).setCardNo(cardNo).setType(type).setUid(uid);
 				if(patient.save()){
 					return RespFactory.isOk();
 				}else{
@@ -92,8 +93,8 @@ public class UserService {
 
 	}
 
-	public static Result<String> updatePatient(String patientId, String cardNo, String idCard, String phone,
-			String name, Integer type) {
+	public static Result<String> updatePatient(String id, String patientId, String cardNo, String idCard, String phone,
+											   String name, Integer type, String uid) {
 		try {
 			HisCheckPatientInfoResponse response = Service.getHisCheckPatientInfo(Const.TransactionId, cardNo, idCard,
 					name, type);
@@ -102,7 +103,7 @@ public class UserService {
 					UserInfo info = response.getUserInfo();
 					String _patientId = info.getPatientId();
 					Patient patient = new Patient();
-					patient.setPatientId(_patientId).setName(name).setIdCard(idCard).setPhone(phone).setCardNo(cardNo);
+					patient.setId(id).setPatientId(_patientId).setName(name).setIdCard(idCard).setPhone(phone).setType(type).setCardNo(cardNo).setUid(uid);
 					boolean op = false;
 					if (_patientId.equals(patientId)) {
 						op = patient.update();
@@ -152,7 +153,7 @@ public class UserService {
 	 */
 	public static Record getPatient(String uid, String patientId) {
 		try {
-			return Db.findById("t_patient", "patientId,uid", patientId, uid);
+			return Db.findById("t_patient", "id,uid", patientId, uid);
 		} catch (Exception e) {
 			log.error("获取病人信息出错！", e);
 		}
@@ -168,7 +169,7 @@ public class UserService {
 	 */
 	public static boolean delPatient(String uid, String patientId) {
 		try {
-			return Db.deleteById("t_patient", "patientId ,uid", patientId, uid);
+			return Db.deleteById("t_patient", "id ,uid", patientId, uid);
 		} catch (Exception e) {
 			log.error("删除常用病人信息！", e);
 		}

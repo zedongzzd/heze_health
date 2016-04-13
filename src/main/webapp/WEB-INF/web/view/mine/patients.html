@@ -29,15 +29,15 @@
 
 
       $("#addPatient").on("click",function(){
-        window.location.href="/mine/edit_patient?"+replaceQueryString({patientId : ""});
+        window.location.href="/mine/edit_patient?"+replaceQueryString({id : ""});
       });
 
       $(".item-choice").on("click",function(){
-        var patientId = $(this).attr("patientId");
+        var patientId = $(this).attr("id");
         if(isReg){
-          window.location.href="/reg/doReg?"+replaceQueryString({patientId : patientId});
+          window.location.href="/reg/doReg?"+replaceQueryString({id : patientId});
         }else{
-          window.location.href="/mine/edit_patient?"+replaceQueryString({patientId : patientId});
+          window.location.href="/mine/edit_patient?"+replaceQueryString({id : patientId});
         }
       });
 
@@ -50,7 +50,7 @@
             doAjax({
               type    : "post",
               url     : "/mine/delete_patient",
-              data    : {patientId : $par.attr("patientId")},
+              data    : {id : $par.attr("id")},
               success : function(resp){
                 if(resp.resultCode == 0){
                   $this.parent(".item-choice").remove();
