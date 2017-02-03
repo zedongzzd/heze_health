@@ -28,7 +28,6 @@
 
     <ul id="dept" class="mt15 bdt tf-y fl tc fz28 bdt w-60 bg-f4">
       <#include "../ftl/reg/dept.ftl" />
-
     </ul>
   </div>
 </body>
@@ -65,17 +64,20 @@
 
     $type.find("li").click(function(){
       var $li      = $(this);
-      var typeId   = $li.attr("typeId");
-      $type.find("li.active").removeClass("active");
-      $li.addClass("active");
 
-      if(typeId != param.typeId){
-        $dept.empty();
+      if(!$li.hasClass('active')){
+        var typeId   = $li.attr("typeId");
+        $type.find("li.active").removeClass("active");
+        $li.addClass("active");
+
+        if (typeId != param.typeId) {
+          $dept.empty();
+        }
+        param.typeId = typeId;
+        param.page = 1;
+        noMore = false;
+        get_dept(param);
       }
-      param.typeId = typeId;
-      param.page   = 1;
-      noMore       = false;
-      get_dept(param);
     });
 
 

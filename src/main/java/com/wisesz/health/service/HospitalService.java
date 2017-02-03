@@ -74,13 +74,13 @@ public class HospitalService {
 			String sql = "SELECT de.deptId,de.name,de.address FROM t_schedual sc LEFT JOIN t_dept de ON sc.deptId = de.deptId AND sc.deptName = de.name WHERE sc.date>=? ";
 			String date = DateHandler.getDate();
 			if (typeId == null) {
-				sql += " limit ?,? ";
+				sql += " group by de.deptId limit ?,? ";
 				list = Db.find(sql, date, (page - 1) * pageSize, pageSize);
 			} else if (typeId == -1) {
-				sql += " and de.type is null  limit ?,? ";
+				sql += " and de.type is null  group by de.deptId limit ?,? ";
 				list = Db.find(sql, date, (page - 1) * pageSize, pageSize);
 			} else {
-				sql += " and de.type =?  limit ?,? ";
+				sql += " and de.type =?  group by de.deptId  limit ?,? ";
 				list = Db.find(sql, date, typeId, (page - 1) * pageSize, pageSize);
 			}
 			CacheHandler.cache(Const.Cache_Name_request, key, list);

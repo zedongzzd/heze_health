@@ -1,7 +1,11 @@
 package com.wisesz.health.webservice;
 
 import com.wisesz.health.common.Const;
+import com.wisesz.health.model.Dept;
+import com.wisesz.health.webservice.bean.Doctor;
+import com.wisesz.health.webservice.bean.Doctors;
 import com.wisesz.health.webservice.bean.RBAS;
+import com.wisesz.health.webservice.bean.RBASRec;
 import com.wisesz.health.webservice.req.DoCancelRegisterRequest;
 import com.wisesz.health.webservice.req.DoRegisterRequest;
 import com.wisesz.health.webservice.req.GetArrangementRequest;
@@ -27,6 +31,8 @@ import me.zzd.webapp.core.dom.XmlElement;
 import me.zzd.webapp.core.webService.SoapClient;
 import me.zzd.webapp.core.webService.SoapClient.EmptyBody;
 import me.zzd.webapp.core.webService.SoapClient.Message;
+
+import java.util.List;
 
 public class Service {
 	public static class HezeMessage extends Message {
@@ -87,11 +93,11 @@ public class Service {
 	/**
 	 * 1.3 医院排班信息
 	 * 
-	 * @param transactionId
-	 * @param rBASDate
-	 * @param rBASDay
-	 * @param doctorId
-	 * @param deptId
+	 * @param transactionId  唯一交易号
+	 * @param rBASDate	门诊排班日期 yyyy-MM-dd
+	 * @param rBASDay 获取排班天数 1-7
+	 * @param doctorId 医生id
+	 * @param deptId 科室id
 	 * @return
 	 */
 	public static GetArrangementResponse getArrangement(String transactionId, String rBASDate, Integer rBASDay,
@@ -112,6 +118,8 @@ public class Service {
 		}
 
 	}
+
+
 
 	/**
 	 * 1.4 查询可挂号数（医院无限号）

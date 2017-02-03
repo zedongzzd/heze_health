@@ -3,6 +3,8 @@ package com.wisesz.health.job;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wisesz.health.common.Result;
+import com.wisesz.health.webservice.res.GetDeptResponse;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -23,6 +25,23 @@ public class SchedualJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
+		GetDeptResponse deptRes = Service.getDept(Const.TransactionId, Const.HospitalId);
+
+		com.wisesz.health.webservice.bean.Dept[] depts = deptRes.getDepts().getDept();
+		List<Dept> batchs = new ArrayList<>();
+		for (com.wisesz.health.webservice.bean.Dept d : depts) {
+			Dept model = new Dept();
+			model.setAddress(d.getAdmitAddress());
+			model.setDeptId(d.getDeptId());
+			model.setHospitalId(Const.HospitalId);
+			model.setName(d.getDept());
+			batchs.add(model);
+		}
+		if (batchs.size() > 0) {
+			String sql = "INSERT INTO t_dept (deptId,name,address,hospitalId) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE address = VALUES (address)";
+			Db.batch(sql, "deptId,name,address,hospitalId", batchs, 100);
+		}
+
 		String date = DateHandler.getDate();
 		List<Dept> dpts = Dept.dao.find("select * from t_dept");
 		List<Schedual> scList = new ArrayList<>();

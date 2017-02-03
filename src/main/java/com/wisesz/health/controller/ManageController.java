@@ -22,6 +22,8 @@ import com.wisesz.health.interceptor.ManageLoginInterceptor.LoginUser;
 import com.wisesz.health.model.Dept;
 import com.wisesz.health.model.Doctor;
 import com.wisesz.health.webservice.Service;
+import com.wisesz.health.webservice.bean.RBASRec;
+import com.wisesz.health.webservice.res.GetArrangementResponse;
 import com.wisesz.health.webservice.res.GetDeptResponse;
 import com.wisesz.health.webservice.res.GetDoctorResponse;
 
@@ -134,7 +136,6 @@ public class ManageController extends Controller {
 			log.error("更新医生列表出错！", e);
 			renderJson(RespFactory.isFail("更新医生列表出错！	deptId:" + deptId));
 		}
-
 	}
 
 	@Before({ POST.class, ManageLoginInterceptor.class })
@@ -145,6 +146,24 @@ public class ManageController extends Controller {
 		} catch (Exception e) {
 			log.error("获取科室列表出错！", e);
 			renderJson(RespFactory.isFail());
+		}
+	}
+
+	@Before({GET.class})
+	public void testDocSchedule(){
+		List<Dept> dpts = Dept.dao.find("select * from t_dept");
+
+		for(int i=0; i<dpts.size(); i++) {
+			GetDoctorResponse doctorResponse = Service.getDoctor(Const.TransactionId, "19");
+			com.wisesz.health.webservice.bean.Doctor[] doctors = doctorResponse.getDoctors().getDoctor();
+
+			for (int j = 0; j < doctors.length; j++) {
+				com.wisesz.health.webservice.bean.Doctor doctor = doctors[j];
+				GetArrangementResponse arrangementResponse = Service.getArrangement(Const.TransactionId, "2016-09-24", 7, doctor.getDoctorId(), null);
+				RBASRec[] rbases = arrangementResponse.getRBAS().getRBASRec();
+
+				System.out.print(dpts.get(i).getName() + doctor.getDoctorName() + "最近7天排班:" + rbases.length);
+			}
 		}
 	}
 }
